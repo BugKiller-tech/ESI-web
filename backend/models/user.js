@@ -1,59 +1,54 @@
 // models/user.js
-const { Sequelize, DataTypes } = require('sequelize');
 const jwt = require('jsonwebtoken');
-const { sequelize } = require('../config/db');
 const bcrypt = require('bcryptjs');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema
 
-const User = sequelize.define('User', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  username: {
-    type: DataTypes.STRING,
-    unique: true,
-    allowNull: true,
-  },
+const schema = new mongoose.Schema({
+  // username: {
+  //   type: String,
+  //   unique: true,
+  // },
   email: {
-    type: DataTypes.STRING,
+    type: String,
     unique: true,
-    allowNull: false,
+    required: true,
   },
   password: {
-    type: DataTypes.STRING,
+    type: String,
     allowNull: false,
+    select: false,
   },
   emailConfirmed: {
-    type: DataTypes.INTEGER,
-    defaultValue: 1,
+    type: Number,
+    default: 1,
 
   },
   emailConfirmationToken: {
-    type: DataTypes.STRING,
-    defaultValue: '',
+    type: String,
+    default: '',
   },
   isAdmin: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0,
+    type: Number,
+    default: 0,
   },
 });
 
-User.beforeCreate(async (user) => {
+schema.pre('save', async function(next) {
   // Hash password before saving user
   const salt = await bcrypt.genSalt(10);
-  user.password = await bcrypt.hash(user.password, salt);
-  user.generateEmailConfirmationToken();
+  this.password = await bcrypt.hash(this.password, salt);
+  this.createEmailConfirmationToken();
 });
 
-User.prototype.comparePassword = async function (password) {
+schema.methods.comparePassword = async function (password) {
   return bcrypt.compare(password, this.password);
 };
-User.prototype.updatePassword = async function (newPassword) {
+schema.methods.updatePassword = async function (newPassword) {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(newPassword, salt);
 }
-User.prototype.generateEmailConfirmationToken = async function () {
+schema.methods.createEmailConfirmationToken = async function () {
   const token = jwt.sign(
     {
       email: this.email,
@@ -64,4 +59,4 @@ User.prototype.generateEmailConfirmationToken = async function () {
   this.emailConfirmationToken = token;
 }
 
-module.exports = User;
+module.exports = mongoose.model('User', schema);

@@ -1,24 +1,19 @@
 // config/db.js
-const { Sequelize } = require('sequelize');
+const mongoose = require('mongoose');
 require('dotenv').config();
 
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
-  {
-    host: 'localhost',  // You can replace this with your actual DB host
-    dialect: 'postgres',
-  }
-);
+// MongoDB connection
 
-const testDbConnection = async () => {
-  try {
-    await sequelize.authenticate();
-    console.log('Database connection established successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-  }
-};
+function establishDbConnection () {
+  mongoose.connect(`mongodb://${process.env.DB_HOST}:27017/${process.env.DB_NAME}`, {
+    user: process.env.DB_USER,
+    pass: process.env.DB_PASSWORD,
+    // authSource: 'admin', // Optional, depending on your MongoDB setup
+  }).then(() => {
+    console.log('Connected to MongoDB');
+  }).catch((error) => {
+    console.error('Error connecting to MongoDB:', error.message);
+  });
+}
 
-module.exports = { sequelize, testDbConnection };
+module.exports = { mongoose, establishDbConnection };
