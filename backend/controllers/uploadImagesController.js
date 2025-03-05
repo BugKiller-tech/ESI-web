@@ -1,53 +1,59 @@
-const sharp = require('sharp');
 const fs = require('fs');
 const path = require('path');
-const exifParser = require('exif-parser');
+const ImageProcessModel= require('../models/ImageProcessModel');
+const { imageProcessingJobForWeek } = require('../lib/ImageProcessor');
 
 
-
-async function getImageBuffer(imagePath) {
-    try {
-      // Read the image file as a buffer
-    //   console.log('testing mode is on', process.cwd(), imagePath);
-        const filePath = path.resolve(process.cwd(), imagePath);
-        console.log('ASDFADFADFADFADFADF',filePath);
-        // const data = await fs.readFile();
-        const data = fs.readFileSync(filePath);
-        console.log('Image buffer:', data);
-        return data;
-    } catch (err) {
-        console.error('Error reading the image file:', err);
-        return null;
-    }
-}
 
 const uploadImages = async (req, res) => {
-    console.log(req.files);
+    console.log('Horse images are like', req.files.horseImages);
+    console.log('json file is like', req.files.timestampJson);
 
+    if (req.files?.horseImages?.length == 0 || req.files?.timestampJson?.length == 0){
+        return res.status(400).json({
+            message: 'Please provide valid files'
+        })
+    }
+    const jsonFile = req.files.timestampJson[0];
+
+    let weekNumber = '';
     try {
-
-        if (req.files.length > 0) {
-            const imageBuffer = await getImageBuffer(req.files[0].path);
-            if (imageBuffer){
-                console.log('image buffer is something like', imageBuffer);
-                const metadata = await sharp(imageBuffer).metadata();
-                console.log('meta data is something like', metadata);
-
-                // Parse EXIF metadata
-                const parser = exifParser.create(imageBuffer);
-                const result = parser.parse();
-                const dateTimeOriginal = result.tags.DateTimeOriginal;
-                const dateImageTaken = new Date(dateTimeOriginal * 1000);
-
-                console.log('date time ooooooooooorigin',dateImageTaken);
-
-            }
-        }
+        const jsonRawData = fs.readFileSync(path.resolve(process.cwd(), jsonFile.path));
+        const jsonData = JSON.parse(jsonRawData);
+        weekNumber = jsonData.weekNumber;
     } catch (e) {
         console.log(e);
+        return res.status(400).json({
+            'message': 'your json file is not correct'
+        })
     }
+    if (!weekNumber) {
+        return res.status(400).json({
+            message: 'Please provide valid json file which has weekNumber & entries'
+        })
+    }
+
+    for (const img of req.files.horseImages){
+        console.log('imgimgimg', img);
+        const entry = new ImageProcessModel({
+            weekNumber: weekNumber,
+            jsonPath: jsonFile.path,
+            imagePath: img.path,
+            imageFileName: img.filename,
+        })
+        await entry.save();
+    }
+    imageProcessingJobForWeek(weekNumber)
+    .then(response => {
+        console.log('image procesing job is done.')
+        // Send email to admin about reporting images are processed for the specific weekNum
+    })
+    .catch(error => {
+        console.log('image processing job is incomplete', error)
+    });
+
     return res.json({
-        'message': 'testing mode',
+        'message': 'Successfully uploaded all images and image process will be executed in background',
     })
     // sharp(imageBuffer)
     // .metadata()

@@ -2,12 +2,19 @@ const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
 
-const uploadFolder = 'uploads/images'
+const imageUploadFolder = 'uploads/originImages'
+const timeStampJsonUploadFolder = 'uploads/timestampJson'
 
 // Set storage engine
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, uploadFolder);
+        if (file.fieldname === 'horseImages') {
+            cb(null, imageUploadFolder);
+        } else if (file.fieldname === 'timestampJson') {
+            cb(null, timeStampJsonUploadFolder);
+        } else { // just in case any other fields are selected
+            cb(null, imageUploadFolder)
+        }
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + path.extname(file.originalname));
@@ -18,6 +25,10 @@ const storage = multer.diskStorage({
 const upload = multer({
     storage,
     limits: { fileSize: 25 * 1024 * 1024 }, // 25 MB file size limit
-}).array('horseImages', 100); // Accept up to 100 files with the 'images' field
+}).fields([
+    { name: 'horseImages', maxCount: 200 },
+    { name: 'timestampJson', maxCount: 1 },
+])
+// .array('horseImages', 100); // Accept up to 100 files with the 'images' field
 
 module.exports = upload

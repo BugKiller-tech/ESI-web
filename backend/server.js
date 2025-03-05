@@ -21,11 +21,19 @@ if (!fs.existsSync(publicPath)) {
 // Serve static files from the 'public' folder
 app.use(express.static(publicPath));
 
-const imageUploadPath = path.join(__dirname, 'uploads/images');
-// Check if the 'public' folder exists, and create it if not
-if (!fs.existsSync(imageUploadPath)) {
-    fs.mkdirSync(imageUploadPath, { recursive: true });
-    console.log('image upload folder created!');
+const pathsToBeCreated = [
+    'uploads/originImages',
+    'uploads/timestampJson',
+    'uploads/processedImages/thumbWeb',
+    'uploads/processedImages/thumbnail',
+    'uploads/watermark',
+]
+for (const folderPath of pathsToBeCreated) {
+    const pathToCreate = path.join(__dirname, folderPath);
+    if (!fs.existsSync(pathToCreate)) {
+        fs.mkdirSync(pathToCreate, { recursive: true });
+        console.log(`path "${ pathToCreate }" folder created!`);
+    }
 }
 
 
