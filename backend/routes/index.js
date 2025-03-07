@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.use('/api/auth', authRoutes);
 router.use('/api/upload', imageRoutes);
+// router.use()
 
 router.get('/api/test', (req, res) => {
     imageProcessingJobForWeek('W_292');

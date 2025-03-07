@@ -35,13 +35,11 @@ const imageProcessingJobForWeek = async (weekNumber) => {
 
         const thumbWebImageSize = { width: 700, height: 700 };
 
-        const watermarkImgSharp = await sharp(path.resolve(process.cwd(), 'uploads/watermark/WEB_WMARK-300x300.png'));
+        const watermarkImgSharp = await sharp(path.resolve(process.cwd(), 'public/watermark/WEB_WMARK-300x300.png'));
         const watermarkImgBufferForThumbWeb = await watermarkImgSharp
             .resize(thumbWebImageSize.width, thumbWebImageSize.height, { fit: 'cover'})
             .toBuffer();
 
-        // console.log('BBBBBBBBBBBBBBBBBBBB', watermarkImgSharp)
-        // const watermarkImgSharp1 = await sharp(path.resolve(process.cwd(), 'uploads/watermark/WEB_WMARK-300x300.png'));
         const watermarkImgBufferForThumbnail = await watermarkImgSharp.resize(400, 400).toBuffer();
 
         let errorMsg = 'Failed to process some images\n';
@@ -67,6 +65,7 @@ const imageProcessingJobForWeek = async (weekNumber) => {
                     // console.log('Image path is like', record.imagePath);
                     try {
                         const processedThumbWebImg = await sharp(imageBuffer)
+                            .rotate()
                             .resize(thumbWebImageSize.width, thumbWebImageSize.height, { fit: 'cover', position: 'top' })
                             .composite([{
                                 input: watermarkImgBufferForThumbWeb,
@@ -74,16 +73,21 @@ const imageProcessingJobForWeek = async (weekNumber) => {
                                 blend: 'over'
                             }])
                             .jpeg({ quality: 90 })
-                            .toFile(`uploads/processedImages/thumbWeb/${record.imageFileName}_${generateUniqueImageFileName()}`);
+                            .toFile(`public/processedImages/thumbWeb/${record.imageFileName}_${generateUniqueImageFileName()}`);
                     } catch (err) {
-                        console.log('ererererre', err);
+                        console.log('error on', err);
                     }
 
-                    const processedThumbnailImg = await sharp(imageBuffer).resize(400, 400).composite([{
-                        input: watermarkImgBufferForThumbnail,
-                        gravity: 'center',
-                        blend: 'over'
-                    }]).jpeg().toFile(`uploads/processedImages/thumbnail/${ record.imageFileName }__${generateUniqueImageFileName()}`);
+                    const processedThumbnailImg = await sharp(imageBuffer)
+                        .rotate()
+                        .resize(400, 400, { fit: 'cover', position: 'top' })
+                        .composite([{
+                            input: watermarkImgBufferForThumbnail,
+                            gravity: 'center',
+                            blend: 'over'
+                        }])
+                        .jpeg()
+                        .toFile(`public/processedImages/thumbnail/${ record.imageFileName }__${generateUniqueImageFileName()}`);
 
                     record.isProcessed = 1;
                     await record.save();

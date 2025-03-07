@@ -7,8 +7,10 @@ const {
     uploadImages,
 } = require('../controllers/uploadImagesController');
 
+
+// router.use(adminCheckMiddleware);
+
 router.post('/horses', 
-    adminCheckMiddleware,
     uploadHorseImagesMiddleware,
     uploadImages);
 

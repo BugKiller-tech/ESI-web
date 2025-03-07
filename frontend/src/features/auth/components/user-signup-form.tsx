@@ -98,7 +98,7 @@ export default function UserSignupForm() {
           />
 
           <Button disabled={loading} className='ml-auto w-full' type='submit'>
-            Log in
+            Sign up
           </Button>
         </form>
       </Form>

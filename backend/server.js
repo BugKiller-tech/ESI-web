@@ -24,9 +24,9 @@ app.use(express.static(publicPath));
 const pathsToBeCreated = [
     'uploads/originImages',
     'uploads/timestampJson',
-    'uploads/processedImages/thumbWeb',
-    'uploads/processedImages/thumbnail',
-    'uploads/watermark',
+    'public/processedImages/thumbWeb',
+    'public/processedImages/thumbnail',
+    'public/watermark',
 ]
 for (const folderPath of pathsToBeCreated) {
     const pathToCreate = path.join(__dirname, folderPath);

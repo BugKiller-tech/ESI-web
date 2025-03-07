@@ -20,10 +20,14 @@ const authConfig = {
       async authorize(credentials, req) {
         const { email, password } = credentials;
 
+        if (email != 'admin@gmail.com' && password != 'admin') { // temp code 
+          return null;
+        }
+
         // const user = null;
         const user = {
           id: '1',
-          name: 'John',
+          name: 'ESI Admin',
           email: credentials?.email as string
         };
         if (user) {
