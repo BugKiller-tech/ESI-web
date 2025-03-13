@@ -15,8 +15,13 @@ const schema = new mongoose.Schema({
         type: String,
         default: '',
     },
-    tax: {
-
+    tax: { // this is percentage
+        type: Number,
+        default: 0,
+    },
+    flatShippingFee: {
+        type: Number,
+        default: 0,
     }
 })
 

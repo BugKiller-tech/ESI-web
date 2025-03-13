@@ -1,0 +1,218 @@
+[
+    {
+        "category": "Prints",
+        "name": "05x07",
+        "price": 80,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Prints",
+        "name": "08x10",
+        "price": 90,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Prints",
+        "name": "08x12",
+        "price": 90,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Prints",
+        "name": "11x14",
+        "price": 105,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Prints",
+        "name": "12x16",
+        "price": 125,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Prints",
+        "name": "12x18",
+        "price": 130,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Prints",
+        "name": "16x20",
+        "price": 180,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Prints",
+        "name": "16x24",
+        "price": 205,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Prints",
+        "name": "20x30",
+        "price": 255,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Prints",
+        "name": "24x36",
+        "price": 350,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Digital",
+        "name": "Low",
+        "price": 85,
+        "isDigitalProduct": true
+    },
+    {
+        "category":"Digital",
+        "name": "Medium",
+        "price": 155,
+        "isDigitalProduct": true
+    },
+    {
+        "category":"Digital",
+        "name": "High",
+        "price": 255,
+        "isDigitalProduct": true
+    },
+    {
+        "category":"Mini Poster",
+        "name": "11x14",
+        "price": 115,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Mini Poster",
+        "name": "16x20",
+        "price": 200,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Mini Poster",
+        "name": "18x24",
+        "price": 275,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Ematt",
+        "name": "8x10",
+        "price": 95,
+        "isDigitalProduct": false
+    },
+    {
+        "category": "Ematt",
+        "name": "11x14",
+        "price": 115,
+        "isDigitalProduct": false
+    }, 
+    {
+        "category":"Ematt",
+        "name": "16x20",
+        "price": 200,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Ematt",
+        "name": "20x24",
+        "price": 250,
+        "isDigitalProduct": false
+    },
+    {
+        "category": "Canvas",
+        "name": "8x10",
+        "price": 160,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Canvas",
+        "name": "8x12",
+        "price": 160,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Canvas",
+        "name": "11x14",
+        "price": 185,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Canvas",
+        "name": "16x20",
+        "price": 290,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Canvas",
+        "name": "16x24",
+        "price": 315,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Canvas",
+        "name": "20x30",
+        "price": 390,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Canvas",
+        "name": "24x36",
+        "price": 470,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Float Mount",
+        "name": "8x10",
+        "price": 175,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Float Mount",
+        "name": "8x12",
+        "price": 175,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Float Mount",
+        "name": "11x14",
+        "price": 205,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Float Mount",
+        "name": "16x20",
+        "price": 320,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Float Mount",
+        "name": "16x24",
+        "price": 375,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Float Mount",
+        "name": "20x30",
+        "price": 440,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Float Mount",
+        "name": "24x36",
+        "price": 525,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Composite",
+        "name": "16x24",
+        "price": 400,
+        "isDigitalProduct": false
+    },
+    {
+        "category":"Composite",
+        "name": "18x24",
+        "price": 435,
+        "isDigitalProduct": false
+    }
+]

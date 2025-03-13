@@ -5,7 +5,10 @@ const path = require('path');
 const cors = require('cors');
 const morgan = require('morgan');
 
-const { establishDbConnection } = require('./config/db');
+const {
+    establishDbConnection,
+    createDefaultDbData,
+} = require('./config/db');
 require('dotenv').config();
 
 const app = express();
@@ -45,13 +48,25 @@ app.use(cors()); // cors resolve
 // Use Morgan middleware with 'dev' preset
 app.use(morgan('dev'));
 
-// Test DB connection
-establishDbConnection();
-
 // Set up routes
 app.use('/', require('./routes/index'));
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+// Make available to access public path with public folder
+app.use('/public', (req, res) => {
+    console.log('testing', req.path);
+    res.redirect(req.path);
+})
+
+// Test DB connection
+establishDbConnection()
+.then(() => {
+    console.log('Connected to MongoDB');
+    createDefaultDbData();
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+}).catch((error) => {
+    console.error('Error connecting to MongoDB:', error.message);
 });
+

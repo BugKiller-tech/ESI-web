@@ -12,6 +12,8 @@ import { Product } from '@/constants/data';
 import { Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { toast } from 'sonner';
+import * as APIs from '@/apis';
 
 interface CellActionProps {
   data: Product;
@@ -22,14 +24,26 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  const onConfirm = async () => {};
+  const onConfirmDelete = async () => {
+    // console.log('deleteeeee', data);
+    try {
+      const response = await APIs.deleteProduct({
+        _id: data._id
+      })
+      toast.success('Successfully deleted the product');
+      router.refresh();
+    } catch ( error ) {
+      console.log(error);
+      toast.error('Failed to delete product');
+    }
+  };
 
   return (
     <>
       <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
-        onConfirm={onConfirm}
+        onConfirm={onConfirmDelete}
         loading={loading}
       />
       <DropdownMenu modal={false}>
@@ -43,7 +57,10 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
           <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/product/${data.id}`)}
+            onClick={() => {
+              console.log('testing for', data._id);
+              router.push(`/dashboard/product/${data._id}`)
+            }}
           >
             <Edit className='mr-2 h-4 w-4' /> Update
           </DropdownMenuItem>

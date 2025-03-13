@@ -1,9 +1,10 @@
 'use client'
 
+import { useState, useEffect, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
-import { useEffect, useTransition } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { useDropzone } from 'react-dropzone';
 import {
     Card,
     CardContent,
@@ -26,29 +27,29 @@ import * as APIs from '@/apis';
 
 
 const formSchema = z.object({
-    thumbnailPercentage: z.number().min(1).max(100),
-    thumbWebPercentage: z.number().min(1).max(100)
-});
-
-type ImageSettingFormValue = z.infer<typeof formSchema>;
+    tax: z.number().min(0).max(100),
+    flatShippingFee: z.number().min(0)
+})
 
 export default () => {
     const [ loadingForSave, startTransitionForSave ] = useTransition();
-    const form = useForm<ImageSettingFormValue>({
+
+    const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            thumbnailPercentage: 0,
-            thumbWebPercentage: 0
+            tax: 0,
+            flatShippingFee: 0,
         }
-    });
+    })
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await APIs.getImageProcessSetting()
-                if (response.data.imageSetting) {
-                    form.reset(response.data.imageSetting)
-                }
+                const response = await APIs.getTaxAndShippingFeeSetting()
+                form.reset({
+                    tax: response.data.tax,
+                    flatShippingFee: response.data.flatShippingFee
+                })
             } catch (error) {
                 toast.error('Failed to fetch image setting')
             }
@@ -56,31 +57,26 @@ export default () => {
         fetchData();
     }, [])
 
-    const onSubmit = async (data: ImageSettingFormValue) => {
-        startTransitionForSave(async () => {
-            console.log(data);
-            try {
-                const response = await APIs.saveImageProcessSetting({
-                    imageSetting: {
-                        ...data
-                    }
-                })
-                console.log(response);
-                toast.success('Successfully updated')
-            } catch (e) {
-                toast.error('fail');
-            }
 
-        })
-    };
+    const onSubmit = async (data: any) => {
+        console.log('testing',data);
+        startTransitionForSave(async () => {
+            try {
+                await APIs.updateTaxAndShippingFeeSetting(data)
+                toast.success('Tax and shipping fee setting has been updated')
+            } catch (error) {
+                toast.error('Failed to update tax and shipping fee setting')
+            }
+        });
+    }
 
     return (
         <Card>
             <CardHeader className='flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row'>
                 <div className='flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6'>
-                    <CardTitle>Image process settings</CardTitle>
+                    <CardTitle>Tax for physical delivery</CardTitle>
                     <CardDescription>
-                        Here you can setup all settings for image processing
+                        Here you can make set up for the tax for physical delivery
                     </CardDescription>
                 </div>
             </CardHeader>
@@ -90,14 +86,14 @@ export default () => {
                         onSubmit={form.handleSubmit(onSubmit)}>
                         <FormField
                             control={form.control}
-                            name='thumbnailPercentage'
+                            name='tax'
                             render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Thumbnail Size (%)</FormLabel>
+                                <FormLabel>Tax rate (%)</FormLabel>
                                 <FormControl>
                                 <Input
                                     type='number'
-                                    placeholder='Please enter thumbnail size in percentage'
+                                    placeholder='Please enter tax rate'
                                     disabled={loadingForSave}
                                     {...field}
                                     onChange={(e) => {
@@ -111,25 +107,30 @@ export default () => {
                         />
                         <FormField
                             control={form.control}
-                            name='thumbWebPercentage'
+                            name='flatShippingFee'
                             render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Thumbweb Size (%)</FormLabel>
+                                <FormLabel>Flat Shipping fee ($)</FormLabel>
                                 <FormControl>
                                 <Input
                                     type='number'
-                                    placeholder='Please enter thumbweb size in percentage'
+                                    placeholder='Please enter shipping rate'
                                     disabled={loadingForSave}
                                     {...field}
+                                    onChange={(e) => {
+                                        form.setValue(field.name, parseFloat(e.target.value))
+                                    }}
                                 />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                             )}
                         />
+                        test: { loadingForSave }
                         <Button type="submit" disabled={loadingForSave} >Save Settings</Button>
                     </form>
                 </Form>
+                
             </CardContent>
         </Card>
     )

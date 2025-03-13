@@ -1,12 +1,11 @@
 import { NavItem } from 'types';
 
 export type Product = {
-  photo_url: string;
   name: string;
   description: string;
   created_at: string;
   price: number;
-  id: number;
+  _id: number;
   category: string;
   updated_at: string;
 };
@@ -20,9 +19,15 @@ export const navItems: NavItem[] = [
     isActive: false,
   },
   {
-    title: 'Upload Image',
+    title: 'Upload images',
     url:'/dashboard/upload-images',
     icon: 'dashboard',
+    isActive: false,
+  },
+  {
+    title: 'Products',
+    url: '/dashboard/product',
+    icon: 'product',
     isActive: false,
   },
   {

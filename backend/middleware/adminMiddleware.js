@@ -1,25 +1,20 @@
 // middleware/authMiddleware.js
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
+const  Joi = require('joi');
 
-const adminCheckMiddleware = (req, res, next) => {
-    const token = req.header('Authorization')?.split(' ')[1];
-
-    if (!token) return res.status(403).json({
-        message: 'Access denied'
-    });
-
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-        if (err) return res.status(403).json({ message: 'Invalid or expired token' });
-
-        if (!user.isAdmin) {
+const bodyValidatorMiddleware = (schema) => (req, res, next) => {
+    try {
+        const { error } = schema.validate(req.body);
+        if (error) {
             return res.status(400).json({
-                message: 'No permision to access',
+                message: error.details[0].message
             })
         }
-        req.user = user;
         next();
-    });
+    } catch (error) {
+        return res.status(400).json({
+            message: 'Invalid request body'
+        })
+    } 
 };
 
-module.exports = adminCheckMiddleware;
+module.exports = bodyValidatorMiddleware;

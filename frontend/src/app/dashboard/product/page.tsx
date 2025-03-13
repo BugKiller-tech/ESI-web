@@ -34,7 +34,7 @@ export default async function Page(props: pageProps) {
         <div className='flex items-start justify-between'>
           <Heading
             title='Products'
-            description='Manage products (Server side table functionalities.)'
+            description='Manage products (Just for the printed images.)'
           />
           <Link
             href='/dashboard/product/new'

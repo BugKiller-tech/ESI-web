@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
-const ImageProcessModel= require('../models/ImageProcessModel');
+const ImageProcessModel = require('../models/ImageProcessModel');
+const ProjectSettingModel = require('../models/ProjectSettingModel');
 const { imageProcessingJobForWeek } = require('../lib/ImageProcessor');
-
 
 
 const uploadImages = async (req, res) => {

@@ -64,6 +64,7 @@ const imageProcessingJobForWeek = async (weekNumber) => {
 
                     // console.log('Image path is like', record.imagePath);
                     try {
+                        const thumbWebPath = `public/processedImages/thumbWeb/${record.imageFileName}_${generateUniqueImageFileName()}`
                         const processedThumbWebImg = await sharp(imageBuffer)
                             .rotate()
                             .resize(thumbWebImageSize.width, thumbWebImageSize.height, { fit: 'cover', position: 'top' })
@@ -73,11 +74,12 @@ const imageProcessingJobForWeek = async (weekNumber) => {
                                 blend: 'over'
                             }])
                             .jpeg({ quality: 90 })
-                            .toFile(`public/processedImages/thumbWeb/${record.imageFileName}_${generateUniqueImageFileName()}`);
+                            .toFile(thumbWebPath);
                     } catch (err) {
                         console.log('error on', err);
                     }
 
+                    const thumbnailPath = `public/processedImages/thumbnail/${ record.imageFileName }__${generateUniqueImageFileName()}`
                     const processedThumbnailImg = await sharp(imageBuffer)
                         .rotate()
                         .resize(400, 400, { fit: 'cover', position: 'top' })
@@ -87,7 +89,7 @@ const imageProcessingJobForWeek = async (weekNumber) => {
                             blend: 'over'
                         }])
                         .jpeg()
-                        .toFile(`public/processedImages/thumbnail/${ record.imageFileName }__${generateUniqueImageFileName()}`);
+                        .toFile(thumbnailPath);
 
                     record.isProcessed = 1;
                     await record.save();
