@@ -57,7 +57,7 @@ const JsonUploadComp = ({ onJsonFileSelected }: JsonUploadProps) => {
   
     return (
       <div>
-        <div className='mb-5'
+        <div
           {...getRootProps()}
           style={{
             border: '2px dashed #ccc',
@@ -98,7 +98,7 @@ const ImagesUploadWithPreview = ({ onImagesSelect }: ImageUploadProps) => {
   
     return (
       <div>
-        <div className='mb-5'
+        <div
           {...getRootProps()}
           style={{
             border: '2px dashed #ccc',
@@ -125,7 +125,7 @@ export default () => {
     const [imageFiles, setImageFiles] = useState<File[]>([]);
 
 
-    const allInfoIsSelected = selectedState && selectedJsonFile || imageFiles.length > 0
+    const allInfoIsSelected = selectedState && selectedJsonFile && imageFiles.length > 0
 
     const imagesSelected = (imageFiles: File[]) => {
         setImageFiles(imageFiles)
@@ -148,7 +148,17 @@ export default () => {
 
     const uploadImagesForSort = async () => {
         try {
-           
+            const formData = new FormData();
+            formData.append('state', selectedState);
+            if (selectedJsonFile) {
+                formData.append('timestampJson', selectedJsonFile);
+            }
+            for (const file of imageFiles) {
+                formData.append('horseImages', file);
+            }
+            const response = await APIs.uploadHorseImages(formData)
+            console.log(response.data);
+            
         } catch (error) {
             console.log(error);
             toast.error('Failed to upload watermark image');
@@ -190,9 +200,10 @@ export default () => {
                 <JsonUploadComp onJsonFileSelected={(file) => {
                     setSelectedJsonFile(file)
                 }} />
+                { selectedJsonFile  && <div>{ selectedJsonFile.name } is selected</div> }
 
 
-                <h3 className='text-xl font-bold mb-5'>Horse Images for above json</h3>
+                <h3 className='text-xl font-bold mt-5 mb-5'>Horse Images for above json</h3>
                 <ImagesUploadWithPreview onImagesSelect={imagesSelected} />
 
                 {/* show selected watermark */}

@@ -21,6 +21,26 @@ export const uploadWatermarkImage = (formData: any) => {
     });
 }
 
+export const uploadHorseImages = (formData: any) => {
+    return axios.post('/api/admin/upload/horses', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+}
+
+export const uploadFtpFolderAndTimestamp = (FormData: any) => {
+    return axios.post('/api/admin/upload/timestamp-and-ftp-folder', FormData,{
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+}
+
+export const getHorsesFtpFolders = () => {
+    return axios.get('/api/admin/upload/list-horses-ftp-folders')
+}
+
 export const getTaxAndShippingFeeSetting = () => {
     return axios.get('/api/admin/setting/tax-and-shipping-fee');
 }

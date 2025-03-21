@@ -101,7 +101,9 @@ export default () => {
                                     disabled={loadingForSave}
                                     {...field}
                                     onChange={(e) => {
-                                        form.setValue(field.name, parseInt(e.target.value))
+                                        if (e?.target) {
+                                            form.setValue(field.name, parseInt(e?.target?.value))
+                                        }
                                     }}
                                 />
                                 </FormControl>
@@ -121,6 +123,11 @@ export default () => {
                                     placeholder='Please enter thumbweb size in percentage'
                                     disabled={loadingForSave}
                                     {...field}
+                                    onChange={(e) => {
+                                        if (e?.target) {
+                                            form.setValue(field.name, parseInt(e.target.value))
+                                        }
+                                    }}
                                 />
                                 </FormControl>
                                 <FormMessage />

@@ -1,5 +1,6 @@
 /node_modules
 .env
 /uploads
-/public/procesedImages/*
+/public/processedImages/*
 /public/watermark
+/Ftp_root_folder

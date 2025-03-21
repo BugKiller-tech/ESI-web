@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
 const morgan = require('morgan');
+const constants = require('./config/constants');
 
 const {
     establishDbConnection,
@@ -25,11 +26,12 @@ if (!fs.existsSync(publicPath)) {
 app.use(express.static(publicPath));
 
 const pathsToBeCreated = [
-    'uploads/originImages',
-    'uploads/timestampJson',
-    'public/processedImages/thumbWeb',
-    'public/processedImages/thumbnail',
-    'public/watermark',
+    constants.originImagePath,
+    constants.timestampJsonPath,
+    constants.thumbwebPath,
+    constants.thumbnailPath,
+    constants.watermarkPath,
+    constants.ftpPath
 ]
 for (const folderPath of pathsToBeCreated) {
     const pathToCreate = path.join(__dirname, folderPath);
