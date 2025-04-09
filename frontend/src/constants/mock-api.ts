@@ -207,45 +207,6 @@ export const fakeProducts = {
     return products;
   },
 
-  // Get paginated results with optional category filtering and search
-  async getProducts({
-    page = 1,
-    limit = 10,
-    categories,
-    search
-  }: {
-    page?: number;
-    limit?: number;
-    categories?: string;
-    search?: string;
-  }) {
-    await delay(1000);
-    const categoriesArray = categories ? categories.split('.') : [];
-    const allProducts = await this.getAll({
-      categories: categoriesArray,
-      search
-    });
-    const totalProducts = allProducts.length;
-
-    // Pagination logic
-    const offset = (page - 1) * limit;
-    const paginatedProducts = allProducts.slice(offset, offset + limit);
-
-    // Mock current time
-    const currentTime = new Date().toISOString();
-
-    // Return paginated response
-    return {
-      success: true,
-      time: currentTime,
-      message: 'Sample data for testing and learning purposes',
-      total_products: totalProducts,
-      offset,
-      limit,
-      products: paginatedProducts
-    };
-  },
-
   // Get a specific product by its ID
   async getProductById(id: number) {
     await delay(1000); // Simulate a delay

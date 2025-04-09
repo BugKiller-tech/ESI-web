@@ -4,9 +4,9 @@ import { DataTable as ProductTable } from '@/components/ui/table/data-table';
 import { columns } from './product-tables/columns';
 import * as APIs from '@/apis';
 
-type ProductListingPage = {};
+type ProductListingPageProps = {};
 
-export default async function ProductListingPage({}: ProductListingPage) {
+export default async function ProductListingPage({}: ProductListingPageProps) {
   // Showcasing the use of search params cache in nested RSCs
   const page = searchParamsCache.get('page');
   const search = searchParamsCache.get('q');
@@ -21,7 +21,6 @@ export default async function ProductListingPage({}: ProductListingPage) {
   };
 
   const response = await APIs.getProducts(filters);
-  console.log('HHHHHHHHHHHHHHHH', response.data);
 
   // useEffect(() => {
   //   const fetchData = async() => {

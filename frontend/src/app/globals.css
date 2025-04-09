@@ -125,3 +125,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+
+.custom-image-masonry {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-rows: masonry;
+  gap: 16px;
+
+  img {
+      width: 100%;
+      height: auto;
+  }
+} 

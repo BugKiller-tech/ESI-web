@@ -10,6 +10,15 @@ export type Product = {
   updated_at: string;
 };
 
+export type WeekCategory = {
+  _id: string;
+  state: string;
+  year: number;
+  yearStr: string;
+  weekNumber: string;
+  isDeleted: number;
+}
+
 //Info: The following data is used for the sidebar navigation and Cmd K bar.
 export const navItems: NavItem[] = [
   {
@@ -25,19 +34,25 @@ export const navItems: NavItem[] = [
     isActive: false,
   },
   {
+    title: 'Manage weeks',
+    url: '/dashboard/weeks',
+    icon: 'week',
+    isActive: false,
+  },
+  {
     title: 'Products',
     url: '/dashboard/product',
     icon: 'product',
     isActive: false,
   },
-  {
-    title: 'Dashboard',
-    url: '/dashboard/overview',
-    icon: 'dashboard',
-    isActive: false,
-    shortcut: ['d', 'd'],
-    items: [] // Empty array as there are no child items for Dashboard
-  },
+  // {
+  //   title: 'Dashboard',
+  //   url: '/dashboard/overview',
+  //   icon: 'dashboard',
+  //   isActive: false,
+  //   shortcut: ['d', 'd'],
+  //   items: [] // Empty array as there are no child items for Dashboard
+  // },
   // {
   //   title: 'Product',
   //   url: '/dashboard/product',

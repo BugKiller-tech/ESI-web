@@ -1,6 +1,21 @@
-import { NextAuthConfig } from 'next-auth';
+import { NextAuthConfig, DefaultSession, UserObject } from 'next-auth';
 import CredentialProvider from 'next-auth/providers/credentials';
 // import GithubProvider from 'next-auth/providers/github';
+
+
+
+
+declare module "next-auth" {
+  export interface UserObject {
+    _id: string;
+    name: string;
+    email: string;
+    isAdmin: number;
+  }
+  interface Session {
+    user: UserObject
+  }
+}
 
 const authConfig = {
   providers: [
@@ -21,27 +36,50 @@ const authConfig = {
         const { email, password } = credentials;
 
         if (email != 'admin@gmail.com' && password != 'admin') { // temp code 
-          return null;
+          return new Error('Invalid credentials');
         }
 
-        // const user = null;
         const user = {
-          id: '1',
+          _id: '1',
           name: 'ESI Admin',
-          email: credentials?.email as string
+          email: credentials?.email as string,
+          isAdmin: 1,
         };
+
+
+        // function delay(ms: number) {
+        //   return new Promise(resolve => setTimeout(resolve, ms));
+        // }
+
+        // await delay(2000);
+
+
         if (user) {
           // Any object returned will be saved in `user` property of the JWT
-          return user;
+          return user as UserObject;
         } else {
           // If you return null then an error will be displayed advising the user to check their details.
           return null;
-
           // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
         }
       }
     })
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.user = user
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.user = token.user as UserObject;
+        console.log('in auth call back token', token);
+      }
+      return session;
+    },
+  },
   pages: {
     signIn: '/auth/signin' //sigin page
   }

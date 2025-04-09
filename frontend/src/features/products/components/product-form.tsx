@@ -58,7 +58,7 @@ export default function ProductForm({
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await APIs.getCategories();
+            const response = await APIs.getProductCategories();
             if (response) {
                 setCategories(response.data.categories);
             }

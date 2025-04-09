@@ -32,6 +32,7 @@ import {
   UserX2Icon,
   X,
   SettingsIcon,
+  MagnetIcon,
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -84,5 +85,6 @@ export const Icons = {
     </svg>
   ),
   twitter: Twitter,
-  check: Check
+  check: Check,
+  week: MagnetIcon,
 };

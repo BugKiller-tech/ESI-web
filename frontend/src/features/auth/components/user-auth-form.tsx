@@ -1,4 +1,5 @@
 'use client';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -12,22 +13,31 @@ import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
-import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
+import { useTopLoader } from 'nextjs-toploader';
+import { useFullScreenLoader } from '@/context/FullScreenLoaderContext';
+import { useRouter } from 'next/navigation';
+
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Enter a valid email address' }),
-  password: z.string({ message: 'please input your password' })
+  password: z.string().min(1, 'please input your password')
 });
 
 type UserFormValue = z.infer<typeof formSchema>;
 
 export default function UserAuthForm() {
+  const toploader = useTopLoader();
+  const fullScreenLoader = useFullScreenLoader();
+  const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState(false);
+
+
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl');
-  const [loading, startTransition] = useTransition();
   const defaultValues = {
     email: '',
     password: ''
@@ -38,14 +48,25 @@ export default function UserAuthForm() {
   });
 
   const onSubmit = async (data: UserFormValue) => {
-    startTransition(() => {
-      signIn('credentials', {
-        email: data.email,
-        password: data.password,
-        callbackUrl: callbackUrl ?? '/dashboard'
-      });      
-      // toast.success('Signed In Successfully!');
+    // fullScreenLoader.showLoader();
+    // setIsLoading(true);
+    toploader.start();
+
+    const result = await signIn('credentials', {
+      email: data.email,
+      password: data.password,
+      redirectTo: callbackUrl ?? '/dashboard'
     });
+    
+    // fullScreenLoader.hideLoader();
+    // setIsLoading(false);
+
+    if (result?.error) {
+      toast.error('Failed to sign in, please check your credentials');
+    }
+    if (result?.ok) {
+      router.push('/dashboard');
+    }
   };
 
   return (
@@ -65,7 +86,7 @@ export default function UserAuthForm() {
                   <Input
                     type='email'
                     placeholder='Enter your email...'
-                    disabled={loading}
+                    disabled={isLoading}
                     {...field}
                   />
                 </FormControl>
@@ -83,7 +104,7 @@ export default function UserAuthForm() {
                   <Input
                     type='password'
                     placeholder='Enter your password...'
-                    disabled={loading}
+                    disabled={isLoading}
                     {...field}
                   />
                 </FormControl>
@@ -92,7 +113,7 @@ export default function UserAuthForm() {
             )}
           />
 
-          <Button disabled={loading} className='ml-auto w-full' type='submit'>
+          <Button disabled={isLoading} className='ml-auto w-full' type='submit'>
             Log in
           </Button>
         </form>

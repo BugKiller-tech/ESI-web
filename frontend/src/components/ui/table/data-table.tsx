@@ -92,6 +92,34 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className='flex flex-1 flex-col space-y-4'>
+      {/* {
+          table.getHeaderGroups().map((headerGroup) => (
+          <div key={headerGroup.id}>
+            {headerGroup.headers.map((header) => (
+              <div key={header.id}>
+                {header.isPlaceholder
+                  ? null
+                  : 'goood goood'}
+              </div>
+            ))}
+          </div>
+        ))
+      } */}
+      {
+        // table.getRowModel().rows.map((row, idx) => {
+        //   return (<div key={idx}>
+        //     { row.getVisibleCells().map((cell) => (
+        //       <div key={cell.id}>
+        //         test good
+        //       </div>
+        //       // <div key={cell.id} className='flex items-center space-x-2'>
+        //       //   {/* <span className='text-sm font-medium'>{cell.column.columnDef.header}</span> */}
+        //       //   <span>{cell.getValue() as string}</span>
+        //       // </div>
+        //     )) }
+        //   </div>)
+        // })
+      }
       <div className='relative flex flex-1'>
         <div className='absolute bottom-0 left-0 right-0 top-0 flex overflow-scroll rounded-md border md:overflow-auto'>
           <ScrollArea className='flex-1'>

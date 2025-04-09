@@ -11,6 +11,9 @@ const {
 const { listTopLevelFolders } = require('../lib/ftpAccess');
 
 
+
+
+
 const uploadImages = async (req, res) => {
     console.log('Horse images are like', req.files.horseImages);
     console.log('json file is like', req.files.timestampJson);
@@ -81,9 +84,9 @@ const uploadTimeStampJsonWithFtpFolder = async (req, res) => {
     }
 
     let weekNumber = req.body.weekNumber;
+    const jsonRawData = fs.readFileSync(path.resolve(process.cwd(), jsonFile.path));
     if (!weekNumber) {
         try {
-            const jsonRawData = fs.readFileSync(path.resolve(process.cwd(), jsonFile.path));
             const jsonData = JSON.parse(jsonRawData);
             weekNumber = jsonData.weekNumber;
         } catch (e) {
@@ -101,10 +104,12 @@ const uploadTimeStampJsonWithFtpFolder = async (req, res) => {
     }
     
     const entry = new FtpImageProcessModel({
+        state: req.body.state,
         year: req.body.year,
         weekNumber,
         ftpFolderName: req.body.ftpFolder,
         jsonPath: jsonFile.path,
+        imageJsonData: jsonRawData,
     })
     const record = await entry.save();
 

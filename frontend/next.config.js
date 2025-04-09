@@ -14,7 +14,16 @@ const nextConfig = {
       }
     ]
   },
-  transpilePackages: ['geist']
+  transpilePackages: ['geist'],
+  async redirects() {
+    return [
+      {
+        source: '/dashboard/weeks/:weekId',
+        destination: '/dashboard/weeks/:weekId/horses',
+        permanent: true,
+      }
+    ]
+  }
 };
 
 module.exports = nextConfig;

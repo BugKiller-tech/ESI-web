@@ -2,5 +2,6 @@
 .env
 /uploads
 /public/processedImages/*
-/public/watermark
+/public/watermark/*
+!/public/watermark/default.png
 /Ftp_root_folder

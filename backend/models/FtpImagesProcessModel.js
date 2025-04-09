@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 
 
 const schema = new mongoose.Schema({
+    state: {
+        type: String,
+    },
     year: {
         type: Number,
     },
@@ -13,6 +16,10 @@ const schema = new mongoose.Schema({
         type: String,
     },
     jsonPath: {
+        type: String,
+        required: true,
+    },
+    imageJsonData: {
         type: String,
         required: true,
     },

@@ -49,7 +49,7 @@ export const updateTaxAndShippingFeeSetting = (formData: any) => {
     return axios.post('/api/admin/setting/tax-and-shipping-fee', formData);
 }
 
-export const getCategories = () => {
+export const getProductCategories = () => {
     return axios.get('/api/products/categories');
 }
 
@@ -71,4 +71,20 @@ export const getProduct = (productId: string) => {
 
 export const updateProduct = (productId: string, data: any) => {
     return axios.post(`/api/products/update/${productId}`, data);
+}
+
+export const getHorseWeeks = (filters: any) => {
+    return axios.post('/api/admin/weeks/get', filters);
+}
+
+export const updateHorseWeekVisibility = (data: any) => {
+    return axios.post('/api/admin/weeks/update-visibility', data);
+}
+
+export const getHorsesByWeekId = (weekId: string) => {
+    return axios.get(`/api/admin/horses/${weekId}/horse-names`);
+}
+
+export const getHorseImagesByHorseNumberForAdmin = (weekId: string, horseNumber: string) => {
+    return axios.get(`/api/admin/horses/${weekId}/horses/${horseNumber}`);
 }
