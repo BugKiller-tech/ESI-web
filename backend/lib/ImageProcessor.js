@@ -13,7 +13,7 @@ const HorsesImageModel = require('../models/HorsesImageModel.js');
 
 
 const constants = require('../config/constants');
-const { getAllImagesFromFtpFolder } = require('../lib/ftpAccess');
+const { getAllImagesFromFtpFolder, deleteFtpFolderAndFiles } = require('../lib/ftpAccess');
 const { uploadAllImagesToS3 } = require('./uploadToS3Lib');
 
 
@@ -245,7 +245,7 @@ const getHorseNumberByPhotoTakenTime = (photoTakenTimeString, entries)=> {
 
 
 const imageProcessingJobUploadedViaFtp = async (_id) => {
-    let errorMsg = 'Failed to process some images\n';
+    let errorMsg = '';
     try {
         record = await FtpImagesProcessModel.findOne({
             _id: new mongoose.Types.ObjectId(_id),
@@ -385,9 +385,15 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
                     console.log('can not read image')
                 }
             } catch (e) {
+                if (!errorMsg) {
+                    errorMsg += 'Failed to process some images\n';
+                }
                 errorMsg += `\n Image file name is ${record.imageFileName}`
                 console.log(e);
             }
+        }
+        if (!errorMsg) {
+            deleteFtpFolderAndFiles(record.ftpFolderName);
         }
 
     } catch (e) {

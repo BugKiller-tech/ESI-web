@@ -81,7 +81,33 @@ async function getAllImagesFromFtpFolder(ftpFolderName) {
       }
 }
 
+async function deleteFtpFolderAndFiles(ftpFolderName) {
+    try {
+        const folderPath = path.resolve(directoryPath, ftpFolderName);
+        // Check if the directory exists
+        if (fs.existsSync(folderPath)) {
+            // Read the contents of the directory
+            const files = fs.readdirSync(folderPath);
+    
+            // Delete all files in the directory
+            for (const file of files) {
+                const filePath = path.join(folderPath, file);
+                fs.unlinkSync(filePath);
+            }
+    
+            // Remove the directory itself
+            fs.rmdirSync(folderPath);
+            console.log(`Deleted folder: ${folderPath}`);
+        } else {
+            console.log(`Folder does not exist: ${folderPath}`);
+        }
+    } catch (error) {
+        console.error("Error deleting folder:", error);
+    }
+}
+
 module.exports = {
     listTopLevelFolders,
     getAllImagesFromFtpFolder,
+    deleteFtpFolderAndFiles,
 }
