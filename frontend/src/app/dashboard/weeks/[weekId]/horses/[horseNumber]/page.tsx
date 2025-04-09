@@ -7,10 +7,10 @@ import { toast } from 'sonner';
 import ListHorseImages from './ListHorseImages';
 
 type pageProps = {
-    params: {
+    params: Promise<{
         weekId: string;
         horseNumber: string;
-    }
+    }>
 }
 
 export default async function ({

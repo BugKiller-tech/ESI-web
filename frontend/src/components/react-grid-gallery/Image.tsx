@@ -15,7 +15,7 @@ export const Image = <T extends ImageExtended>({
   index,
   onSelect,
   onClick,
-}: ImageProps<T>): JSX.Element => {
+}: ImageProps<T>): React.JSX.Element => {
   const styleContext = { item };
 
   const [hover, setHover] = useState(false);

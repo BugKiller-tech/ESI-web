@@ -19,7 +19,7 @@ export const Gallery = <T extends ImageInterface>({
   thumbnailStyle,
   tagStyle,
   thumbnailImageComponent,
-}: GalleryProps<T>): JSX.Element => {
+}: GalleryProps<T>): React.JSX.Element => {
   const { containerRef, containerWidth } = useContainerWidth(
     defaultContainerWidth
   );

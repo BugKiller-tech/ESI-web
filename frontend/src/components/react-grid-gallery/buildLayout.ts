@@ -103,5 +103,6 @@ export const buildLayoutFlat = <T extends Image = Image>(
   options: BuildLayoutOptions
 ): ImageExtendedRow<T> => {
   const rows = buildLayout(images, options);
-  return [].concat.apply([], rows);
+  // return [].concat.apply([], rows);
+  return [].concat(...rows);
 };

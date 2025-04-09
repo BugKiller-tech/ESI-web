@@ -10,9 +10,9 @@ import * as APIs from "@/apis";
 
 
 type pageProps = {
-    params: {
+    params: Promise<{
         weekId: string;
-    }
+    }>
 }
 
 export default async function ({ params }: pageProps) {
