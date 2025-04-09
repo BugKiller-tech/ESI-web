@@ -60,6 +60,14 @@ const uploadAllImagesToS3 = async (
         // let originImageS3Link = await uploadToS3(thumbnailImgPath, 'private/originImages', false);
         let thumbWebS3Link = await uploadToS3(thumbWebImgPath, 'public/thumbwebs', true);
         let thumbnailS3Link = await uploadToS3(thumbnailImgPath, 'public/thumbnails', true);
+
+        try {
+            fs.unlinkSync(originImagePath);
+            fs.unlinkSync(thumbWebImgPath);
+            fs.unlinkSync(thumbnailImgPath)
+        } catch (err) {
+            console.log('Error deleting files from the local server after s3 upload', err);
+        }
         return {
             originImageS3Link,
             thumbWebS3Link,
