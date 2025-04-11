@@ -55,7 +55,8 @@ app.use('/', require('./routes/index'));
 // Make available to access public path with public folder
 app.use('/public', (req, res) => {
     console.log('testing', req.path);
-    res.redirect(req.path);
+    // res.redirect(req.path);
+    return res.sendFile(path.join(__dirname, 'public', req.path));
 })
 
 // Test DB connection
