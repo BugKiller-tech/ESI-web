@@ -17,7 +17,7 @@ const horsesAdminRoutes = require('./horsesAdminRouter');
 
 const router = express.Router();
 
-router.use('/api/auth', authRoutes);
+router.use('/api/backend-auth', authRoutes);
 
 router.use('/api/products', productRoutes);
 
