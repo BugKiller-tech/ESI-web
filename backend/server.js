@@ -31,7 +31,6 @@ const pathsToBeCreated = [
     constants.thumbwebPath,
     constants.thumbnailPath,
     constants.watermarkPath,
-    constants.ftpPath
 ]
 for (const folderPath of pathsToBeCreated) {
     const pathToCreate = path.join(__dirname, folderPath);

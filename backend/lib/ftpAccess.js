@@ -38,7 +38,7 @@ async function listTopLevelFoldersWithFtpAccess() {
     return [];
 }
 
-const directoryPath = path.resolve(process.cwd(), Constants.ftpPath)
+const directoryPath = path.resolve(process.env.FTP_SERVER_ROOT_PATH);
 
 async function listTopLevelFolders() {
     
