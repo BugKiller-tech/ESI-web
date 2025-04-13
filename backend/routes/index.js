@@ -17,18 +17,18 @@ const horsesAdminRoutes = require('./horsesAdminRouter');
 
 const router = express.Router();
 
-router.use('/api/backend-auth', authRoutes);
+router.use('/api/v1/backend-auth', authRoutes);
 
-router.use('/api/products', productRoutes);
+router.use('/api/v1/products', productRoutes);
 
-router.use('/api/admin/upload', imageRoutes);
-router.use('/api/admin/setting', adminSettingRoutes);
+router.use('/api/v1/admin/upload', imageRoutes);
+router.use('/api/v1/admin/setting', adminSettingRoutes);
 
-router.use('/api/admin/weeks', weekAdminRoutes);
-router.use('/api/admin/horses', horsesAdminRoutes);
+router.use('/api/v1/admin/weeks', weekAdminRoutes);
+router.use('/api/v1/admin/horses', horsesAdminRoutes);
 
 
-router.get('/api/test', async (req, res) => {
+router.get('/api/v1/test', async (req, res) => {
     // imageProcessingJobUploadedViaFtp('67db965aa99bbac91e70ce25');
     return res.json({
         'message': 'testing',
