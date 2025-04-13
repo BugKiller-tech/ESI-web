@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import ClientPage from './clientpage';
+import Link from 'next/link';
 
 
 export const metadata: Metadata = {
@@ -17,8 +17,13 @@ export default function () {
                     Welcome to ESI
                 </div>
             </div>
-            <div className='mt-5'>
-                <ClientPage />
+            <div className='mt-5 flex gap-5'>
+                <Link href='/events/NY' className='bg-white rounded-lg p-3 text-black textbo'>
+                    HITS Saugerties, NY
+                </Link>
+                <Link href='/events/FL' className='bg-white rounded-lg p-3 text-black'>
+                    HITS Ocala, FL
+                </Link>
             </div>
         </div>
     )

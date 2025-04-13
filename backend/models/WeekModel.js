@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 var aggregatePaginate = require("mongoose-aggregate-paginate-v2");
 
 const schema = new mongoose.Schema({
-    state: {
+    state: { // FL or NY
         type: String,
         default: '',
     },
@@ -23,5 +23,14 @@ const schema = new mongoose.Schema({
 
 // schema.plugin(mongoosePaginate);
 schema.plugin(aggregatePaginate);
+
+
+// Virtual for full name
+schema.virtual('displayName').get(function () {
+    return `${this.year} - ${this.weekNumber}`;
+});
+
+schema.set('toJSON', { virtuals: true });
+// schema.set('toObject', { virtuals: true });
 
 module.exports = mongoose.model('Weeks', schema);

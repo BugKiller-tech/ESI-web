@@ -22,6 +22,10 @@ const schema = new mongoose.Schema({
         type: Number,
         default: 1,
     },
+    photoTakenTime: {
+        type: Date,
+        default: Date.now,
+    },
     isDeleted: {
         type: Number,
         default: 0,

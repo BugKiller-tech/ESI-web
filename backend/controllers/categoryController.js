@@ -1,6 +1,6 @@
 const WeekModel = require('../models/WeekModel');
 
-const getCategories  = async (req, res) => {
+const getWeeksWithPagination  = async (req, res) => {
     try {
         const page = req.body.page || 1;
         const limit = req.body.limit || 10;
@@ -74,6 +74,6 @@ const updateVisibility = async (req, res) => {
 
 
 module.exports = {
-    getCategories,
+    getWeeksWithPagination,
     updateVisibility,
 }

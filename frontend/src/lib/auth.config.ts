@@ -5,18 +5,18 @@ import CredentialProvider from 'next-auth/providers/credentials';
 
 
 
-declare module "next-auth" {
-  export interface UserObject {
-    _id: string;
-    name: string;
-    email: string;
-    image?: string;
-    isAdmin: number;
-  }
-  interface Session {
-    user: UserObject
-  }
-}
+// declare module "next-auth" {
+//   export interface UserObject {
+//     _id: string;
+//     name: string;
+//     email: string;
+//     image?: string;
+//     isAdmin: number;
+//   }
+//   interface Session {
+//     user: UserObject
+//   }
+// }
 
 const authConfig = {
   providers: [
@@ -68,14 +68,17 @@ const authConfig = {
   ],
   callbacks: {
     async jwt({ token, user }) {
+      // First time login: add custom fields to token
       if (user) {
-        token.user = user
+        token._id = user._id;
+        token.isAdmin = user.isAdmin;
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
-        session.user = token.user as UserObject;
+        session.user._id = token._id as string;
+        session.user.isAdmin = token.isAdmin as number;
         console.log('in auth call back token', token);
       }
       return session;

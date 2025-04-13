@@ -23,7 +23,7 @@ export default async function ({ params }: pageProps) {
     let horses: string[] = [];
 
     try {
-        const response = await APIs.getHorsesByWeekId(weekId as string);
+        const response = await APIs.getHorsesByWeekIdAdmin(weekId as string);
         console.log('this is very very', response.data);
         week = response.data.week;
         horses = response.data.horses;

@@ -23,9 +23,13 @@ router.use('/api/v1/products', productRoutes);
 
 router.use('/api/v1/admin/upload', imageRoutes);
 router.use('/api/v1/admin/setting', adminSettingRoutes);
-
 router.use('/api/v1/admin/weeks', weekAdminRoutes);
 router.use('/api/v1/admin/horses', horsesAdminRoutes);
+
+
+
+router.use('/api/v1/front/weeks', require('./weekUserRoutes'));
+router.use('/api/v1/front/horses', require('./horsesUserRoutes'));
 
 
 router.get('/api/v1/test', async (req, res) => {

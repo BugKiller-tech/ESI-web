@@ -31,12 +31,24 @@ export interface FooterItem {
 }
 
 export interface WeekInfo {
-  name: string;
-  date?: string;
+  _id: string;
+  state: string;
+  year: number;
+  weekNumber: string;
+  isDeleted: number;
+
+  displayName: string;
 }
 
 export interface HorseInfo {
-  name: string;
+  _id: string;
+  horseNumber: string;
+  originImageS3Link: string;
+  thumbWebS3Link: string;
+  thumbnailS3Link: string;
+  week: string;
+  aspectRatio: number;
+  isDeleted: number;
 }
 
 export type MainNavItem = NavItemWithOptionalChildren;

@@ -41,6 +41,12 @@ export default function SignInViewPage() {
             </p>
           </div>
           <UserAuthForm />
+          <div className='text-center mt-5'>
+            <Link
+              href='/events'>
+                View horses
+              </Link>
+          </div>
         </div>
       </div>
     </div>

@@ -104,6 +104,7 @@ const saveHorseInfoToDb =  async (
         thumbWebS3Link,
         thumbnailS3Link,
         aspectRatio,
+        photoTakenTime: photoTakenTime,
     })
     await imageRecord.save();
 }
@@ -248,7 +249,7 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
     let errorMsg = '';
     try {
         record = await FtpImagesProcessModel.findOne({
-            _id: new mongoose.Types.ObjectId(_id),
+            _id: new mongoose.Types.ObjectId(String(_id)),
         })
         if (record.isProcessed) {
             console.log('Already processed for this ftp folder');
@@ -371,6 +372,7 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
                             thumbWebS3Link,
                             thumbnailS3Link,
                             aspectRatio,
+                            dateImageTaken,
                         )
 
                     } catch (err1) {

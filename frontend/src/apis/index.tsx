@@ -81,10 +81,18 @@ export const updateHorseWeekVisibility = (data: any) => {
     return axios.post('/api/v1/admin/weeks/update-visibility', data);
 }
 
-export const getHorsesByWeekId = (weekId: string) => {
+export const getHorsesByWeekIdAdmin = (weekId: string) => {
     return axios.get(`/api/v1/admin/horses/${weekId}/horse-names`);
 }
 
 export const getHorseImagesByHorseNumberForAdmin = (weekId: string, horseNumber: string) => {
     return axios.get(`/api/v1/admin/horses/${weekId}/horses/${horseNumber}`);
+}
+
+export const getWeeksByState = (postData: any) => {
+    return axios.post('/api/v1/front/weeks/get-weeks-for-state', postData);
+}
+
+export const getHorsesByWeek = (postData: any) => {
+    return axios.post('/api/v1/front/horses/get-horses-for-week', postData);
 }
