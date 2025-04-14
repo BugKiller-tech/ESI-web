@@ -96,3 +96,7 @@ export const getWeeksByState = (postData: any) => {
 export const getHorsesByWeek = (postData: any) => {
     return axios.post('/api/v1/front/horses/get-horses-for-week', postData);
 }
+
+export const getHorseImagesByWeekAndHorseNumber = (postData: any) => {
+    return axios.post('/api/v1/front/horses/get-horse-images-by-week-and-horsenumber', postData);
+}

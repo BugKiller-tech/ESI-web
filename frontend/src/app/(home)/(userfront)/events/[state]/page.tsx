@@ -1,5 +1,5 @@
 import { WeekInfo } from 'types';
-import Weeks from './(weeks)/index';
+import Weeks from './(weeks)/weeks';
 import * as APIs from '@/apis'
 
 type pageProps = {

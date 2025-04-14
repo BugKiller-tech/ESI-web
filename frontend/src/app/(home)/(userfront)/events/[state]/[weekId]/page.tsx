@@ -3,9 +3,12 @@
 import { HorseInfo } from 'types';
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { Button } from '@/components/ui/button';
 import { useFullScreenLoader } from '@/context/FullScreenLoaderContext';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+
 import * as APIs from '@/apis';
+import { containsAllWords } from '@/utils';
 
 export default ({ }: {
 
@@ -18,11 +21,38 @@ export default ({ }: {
     // console.log('testingforforfor', params);
 
     const [horses, setHorses] = useState<HorseInfo[]>([]);
+    const [filteredHorses, setFilteredHorses] = useState<HorseInfo[]>([]);
+
+    const [ searchTerm, setSearchTerm ] = useState('');
+    const [forceApplyFilter, setForceApplyFilter] = useState(false);
+
+
+    const filterBySearchTermAction = (term='') => {
+        if (!term) {
+            term = searchTerm;
+        }
+        if (!term) {
+            setFilteredHorses(horses);
+        } else {
+            setFilteredHorses(horses.filter(h => {
+                return containsAllWords(h.horseNumber, term)            
+            }))
+            localStorage.setItem('horsesSearchTerm', searchTerm);
+        }
+    }
 
 
     useEffect(() => {
+        // const term = localStorage.getItem('horsesSearchTerm');
+        // if (term) {
+        //     setSearchTerm(term);
+        // }
         fetchHorses();
     }, []);
+
+    useEffect(() => {
+        filterBySearchTermAction();
+    }, [ forceApplyFilter ]);
 
     const fetchHorses = async () => {
         try {
@@ -32,6 +62,7 @@ export default ({ }: {
             })
             if (response.data.horses) {
                 setHorses(response.data.horses);
+                setForceApplyFilter(!forceApplyFilter);
             }
         } catch (error) {
             console.log(error);
@@ -41,28 +72,43 @@ export default ({ }: {
     }
 
 
+    const searchHorsesBySearchTerm = () => {
+        filterBySearchTermAction();
+    }
+
+
 
 
     const loadMoreHorses = () => {
 
     }
 
-    const gotoHorseImages = ( horseId: string ) => {
-        router.push(`/events/${state}/${weekId}/${horseId}`)
+    const gotoHorseImages = ( horseNumber: string ) => {
+        router.push(`/events/${state}/${weekId}/${horseNumber}`)
     }
     return (
         <div>
-            <div className='grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4'>
-                { horses.map((horse, index) => {
+            <div className='flex items-center gap-2'>
+                <Input type='text' value={searchTerm} onChange={(e) => { setSearchTerm(e.target.value) }}
+                    placeholder='Search for horse' className='bg-white'
+                    onKeyUp={(e) => {
+                        if (e.key == 'Enter') {
+                            searchHorsesBySearchTerm();
+                        }
+                    }}/>
+                <Button onClick={searchHorsesBySearchTerm}>Search</Button>
+            </div>
+            <div className='mt-5 grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4'>
+                { filteredHorses.map((horse, index) => {
                     return (
                         <div key={horse.horseNumber + index}
-                            className='bg-orange-400 cursor-pointer
+                            className='bg-main-horse cursor-pointer
                             hover:scale-110 transition-transform duration-300
                             active:scale-90
                             rounded-lg overflow-hidden
                             flex gap-3'
                             onClick={() => {
-                                gotoHorseImages(horse._id);
+                                gotoHorseImages(horse.horseNumber);
                             }}>
                             <img src="/horse_folder.png" className='w-[80px]' />
                             <div className='flex-1 flex items-center'>

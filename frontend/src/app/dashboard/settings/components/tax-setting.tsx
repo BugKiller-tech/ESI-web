@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useDropzone } from 'react-dropzone';
+import { useFullScreenLoader } from '@/context/FullScreenLoaderContext';
 import {
     Card,
     CardContent,
@@ -32,7 +33,7 @@ const formSchema = z.object({
 })
 
 export default () => {
-    const [ loadingForSave, startTransitionForSave ] = useTransition();
+    const fullScreenLoader = useFullScreenLoader();
 
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -60,14 +61,15 @@ export default () => {
 
     const onSubmit = async (data: any) => {
         console.log('testing',data);
-        startTransitionForSave(async () => {
-            try {
-                await APIs.updateTaxAndShippingFeeSetting(data)
-                toast.success('Tax and shipping fee setting has been updated')
-            } catch (error) {
-                toast.error('Failed to update tax and shipping fee setting')
-            }
-        });
+        fullScreenLoader.showLoader();
+        try {
+            await APIs.updateTaxAndShippingFeeSetting(data)
+            toast.success('Tax and shipping fee setting has been updated')
+        } catch (error) {
+            toast.error('Failed to update tax and shipping fee setting')
+        } finally {
+            fullScreenLoader.hideLoader();
+        }
     }
 
     return (
@@ -94,7 +96,6 @@ export default () => {
                                 <Input
                                     type='number'
                                     placeholder='Please enter tax rate'
-                                    disabled={loadingForSave}
                                     {...field}
                                     onChange={(e) => {
                                         form.setValue(field.name, parseInt(e.target.value))
@@ -115,7 +116,6 @@ export default () => {
                                 <Input
                                     type='number'
                                     placeholder='Please enter shipping rate'
-                                    disabled={loadingForSave}
                                     {...field}
                                     onChange={(e) => {
                                         form.setValue(field.name, parseFloat(e.target.value))
@@ -126,8 +126,7 @@ export default () => {
                             </FormItem>
                             )}
                         />
-                        test: { loadingForSave }
-                        <Button type="submit" disabled={loadingForSave} >Save Settings</Button>
+                        <Button type="submit">Save Settings</Button>
                     </form>
                 </Form>
                 

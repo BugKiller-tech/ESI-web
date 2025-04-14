@@ -78,6 +78,7 @@ const saveHorseInfoToDb =  async (
     thumbWebS3Link,
     thumbnailS3Link,
     aspectRatio,
+    photoTakenTime,
 ) => {
     let week;
     week = await WeekModel.findOne({
@@ -251,6 +252,10 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
         record = await FtpImagesProcessModel.findOne({
             _id: new mongoose.Types.ObjectId(String(_id)),
         })
+        if (!record) {
+            console.log('can not find ftp process model record in db');
+            return;
+        }
         if (record.isProcessed) {
             console.log('Already processed for this ftp folder');
             return;
@@ -301,8 +306,6 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
                     }
 
 
-
-
                     const dateImageTaken = new Date(dateTimeOriginal * 1000);
                     let dt = DateTime.fromMillis(dateTimeOriginal * 1000)
                     let inUtcTime = dt.setZone("UTC");
@@ -310,6 +313,10 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
                     //     `Date image taken (hkg debug)==>
                     //         width: ${width}, height: ${height}, date image taken: ${dateImageTaken}`, inUtcTime.toFormat('yyyy-MM-dd HH:mm:ss'));
                     const horseNumber = getHorseNumberByPhotoTakenTime(inUtcTime.toFormat('yyyy-MM-dd HH:mm:ss'), horseJsonEntries);
+
+                    if (!horseNumber) {
+                        continue;
+                    }
 
                     const thumbWebWidth = Math.round(width / 100 * thumbWebPercentage)
                     const thumbWebHeight = Math.round(height / 100 * thumbWebPercentage)
@@ -355,7 +362,9 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
                         .toFile(thumbnailPath);
 
 
+                    console.log("Image processing is done", imageInfo.imagePath, thumbWebPath, thumbnailPath);
                     try {
+                        console.log("Starting uploading images to s3");
                         const {
                             originImageS3Link,
                             thumbWebS3Link,
@@ -379,10 +388,6 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
                         console.log(err1);
                     }
 
-                    record.isProcessed = 1;
-                    await record.save();
-
-
                 } else {
                     console.log('can not read image')
                 }
@@ -395,8 +400,12 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
             }
         }
         if (!errorMsg) {
-            deleteFtpFolderAndFiles(record.ftpFolderName);
+            record.isProcessed = 1;
+            await record.save();
         }
+        // if (!errorMsg) {
+        //     deleteFtpFolderAndFiles(record.ftpFolderName);
+        // }
 
     } catch (e) {
         console.log(e);

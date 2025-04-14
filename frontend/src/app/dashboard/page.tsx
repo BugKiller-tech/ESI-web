@@ -17,8 +17,14 @@ export default async function Dashboard() {
             <h2 className='text-2xl font-bold tracking-tight mb-5'>
                 Welcome to admin dashboard
             </h2>
-            <div className="flex flex-wrap gap-5">
-            { JSON.stringify(session) }
+            <div className="flex flex-col gap-5">
+              <div>
+                Please ignore info below because it's just for test purposes. <br />
+                It will be removed later
+              </div>
+              <div>
+                { JSON.stringify(session) }
+              </div>
             </div>
         </div>
     </PageContainer>
