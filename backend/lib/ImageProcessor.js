@@ -229,6 +229,7 @@ const getJsonHorseEntries = (record) => {  // record is FtpImagesProcessModel do
         const jsonData = JSON.parse(rawData);
         return jsonData.entries || [];
     } catch ( error ) {
+        console.log('error parsing timestamp json file');
         return [];
     }
 }
@@ -241,6 +242,7 @@ const getHorseNumberByPhotoTakenTime = (photoTakenTimeString, entries)=> {
             }
         }
     } catch (error) {
+        console.log('Error on getHorseNumberByPhotoTakenTime function', error);
         return ''
     }
 }
