@@ -294,7 +294,7 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
                     const result = parser.parse();
                     // console.log('exifparser result', result);
                     let { width, height } = result.imageSize;
-                    const dateTimeOriginal = result.tags.DateTimeOriginal;
+                    const dateTimeOriginal = result.tags?.DateTimeOriginal || 0;
                     const orientation = result.tags?.Orientation | 0
                     // Orientation referencevalues
                     // 1 = Normal (no rotation needed)
