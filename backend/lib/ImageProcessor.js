@@ -92,9 +92,9 @@ const saveHorseInfoToDb =  async (
             state: record.state,
             weekNumber: record.weekNumber,
         })
-        await category.save();
+        await week.save();
     }
-    if (week.isDeleted) { // if category is deleted but got image on it, then recover it as undeleted.
+    if (week.isDeleted) { // if week is deleted but got image on it, then recover it as undeleted.
         week.isDeleted = 0;
         await week.save();
     }
