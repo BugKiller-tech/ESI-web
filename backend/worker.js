@@ -72,7 +72,8 @@ imageProcessingQueueWithFtpOption.client.on('ready', async () => {
         try {
             await imageProcessingJobUploadedViaFtp(_id);
         } catch (error) {
-
+            console.log('very quick job failure is detected');
+            console.log(error);
         }
     });
 })
