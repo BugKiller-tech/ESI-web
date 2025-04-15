@@ -1,9 +1,9 @@
 'use client';
-import { WeekCategory } from '@/constants/data';
+import { WeekInfo } from 'types';
 import { ColumnDef } from '@tanstack/react-table';
 import CellAction from './CellAction';
 
-export const columns: ColumnDef<WeekCategory>[] = [
+export const columns: ColumnDef<WeekInfo>[] = [
     {
         accessorKey: 'state',
         header: 'State',

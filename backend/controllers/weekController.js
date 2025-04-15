@@ -37,13 +37,13 @@ const getWeeksWithPagination  = async (req, res) => {
         );
 
         return res.json({
-            categories: response.docs,
+            weeks: response.docs,
             totalCount: response.totalDocs,
         })
     } catch (error) {
-        console.log('Error fetching categories:', error);
+        console.log('Error fetching weeks:', error);
         return res.status(400).json({
-            'message': 'Failed to get categories'
+            'message': 'Failed to get weeks'
         })
     }
 }

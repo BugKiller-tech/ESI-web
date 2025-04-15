@@ -1,23 +1,5 @@
 import { NavItem } from 'types';
 
-export type Product = {
-  name: string;
-  description: string;
-  created_at: string;
-  price: number;
-  _id: number;
-  category: string;
-  updated_at: string;
-};
-
-export type WeekCategory = {
-  _id: string;
-  state: string;
-  year: number;
-  yearStr: string;
-  weekNumber: string;
-  isDeleted: number;
-}
 
 //Info: The following data is used for the sidebar navigation and Cmd K bar.
 export const navItems: NavItem[] = [

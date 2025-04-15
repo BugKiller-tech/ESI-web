@@ -30,10 +30,23 @@ export interface FooterItem {
   }[];
 }
 
+
+export type Product = {
+  _id: number;
+  name: string;
+  description: string;
+  created_at: string;
+  price: number;
+  category: string;
+  updated_at: string;
+};
+
+
 export interface WeekInfo {
   _id: string;
   state: string;
   year: number;
+  yearStr?: string;
   weekNumber: string;
   isDeleted: number;
 
@@ -50,6 +63,13 @@ export interface HorseInfo {
   aspectRatio: number;
   isDeleted: number;
 }
+
+export interface CartItem {
+  horseImageId: string;
+  productId: string;
+  quantity: number;
+}
+
 
 export type MainNavItem = NavItemWithOptionalChildren;
 

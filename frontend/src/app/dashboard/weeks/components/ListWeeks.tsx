@@ -8,7 +8,7 @@ import { DataTable } from '@/components/ui/table/data-table';
 import * as APIs from '@/apis';
 import { toast } from 'sonner';
 import { searchParamsCache } from '@/lib/searchparams';
-import { WeekCategory } from '@/constants/data';
+import { WeekInfo } from 'types';
 import { columns } from './columns';
 
 
@@ -24,7 +24,7 @@ export default async function () {
     // const [categories, setCategories] = useState([]);
     // const [totalCount, setTotalCount] = useState(0);
 
-    let categories: WeekCategory[] = [];
+    let weeks: WeekInfo[] = [];
     let totalCount = 0;
 
 
@@ -38,12 +38,12 @@ export default async function () {
             const response = await APIs.getHorseWeeks(filters)
             console.log('this is working or not', response.data);
             // const response = await APIs.getImageProcessSetting()
-            if (response.data.categories) {
+            if (response.data.weeks) {
                 // setCategories(response.data.categories);
                 // setTotalCount(response.data.totalCount)
-                categories = response.data.categories;
+                weeks = response.data.weeks;
                 totalCount = response.data.totalCount;
-                console.log('this is working or not', categories);
+                console.log('this is working or not', weeks);
 
             }
         } catch (error) {
@@ -70,7 +70,7 @@ export default async function () {
     return (
         <DataTable 
             columns={columns}
-            data={categories}
+            data={weeks}
             totalItems={totalCount}
         />
     )

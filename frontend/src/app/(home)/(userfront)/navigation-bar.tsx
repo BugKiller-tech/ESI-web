@@ -15,12 +15,15 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
+import { useCart } from '@/context/CartContext';
 
 export default () => {
 
     const router = useRouter();
     const params = useParams();
     const { weekId, horseNumber } = params;
+
+    const cart = useCart();
 
     useEffect(() => {
     }, [])
@@ -57,7 +60,12 @@ export default () => {
                 <div className='flex items-center gap-1 cursor-pointer hover:text-blue-500'
                     onClick={goToCartPage}>
                     <ShoppingCart />
-                    Cart
+                    <div className='relative flex items-center gap-1'>
+                        Cart 
+                        <span className="text-xs font-semibold text-white bg-main-btn rounded-full px-2 py-0.5">
+                            { cart.totalCount }
+                        </span>
+                    </div>
                 </div>
                 <div className='flex items-center gap-1 cursor-pointer hover:text-blue-500'
                     onClick={goToContactUs}>

@@ -26,6 +26,10 @@ export default ({ initialWeeks }: {
     
 
     const filterBySearchTermAction = (term='') => {
+        // don't need to have search filter on weeks for now
+        setFilteredWeeks(weeks);
+        return;
+
         if (!term) {
             term = searchTerm;
         }
@@ -66,7 +70,7 @@ export default ({ initialWeeks }: {
 
     return (
         <div>
-            <div className='flex items-center gap-2'>
+            {/* <div className='flex items-center gap-2'>
                 <Input type='text' value={searchTerm} onChange={(e) => { setSearchTerm(e.target.value) }}
                     placeholder='Search for week' className='bg-white'
                     onKeyUp={(e) => {
@@ -75,7 +79,7 @@ export default ({ initialWeeks }: {
                         }
                     }}/>
                 <Button onClick={searchWeeksByTerm}>Search</Button>
-            </div>
+            </div> */}
             <div className='mt-5 grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4'>
                 { filteredWeeks.map((weekInfo: WeekInfo, index) => {
                     return (

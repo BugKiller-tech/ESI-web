@@ -102,17 +102,18 @@ export default ({ }: {
                 { filteredHorses.map((horse, index) => {
                     return (
                         <div key={horse.horseNumber + index}
-                            className='bg-main-horse cursor-pointer
-                            hover:scale-110 transition-transform duration-300
-                            active:scale-90
+                            className='cursor-pointer
                             rounded-lg overflow-hidden
-                            flex gap-3'
+                            flex flex-col
+                            bg-center bg-no-repeat bg-cover'
+                            // style={{ backgroundImage: `url(${horse.thumbnailS3Link})` }}
+                            style={{ backgroundImage: `url(/horse_folder.png)` }}
                             onClick={() => {
                                 gotoHorseImages(horse.horseNumber);
                             }}>
-                            <img src="/horse_folder.png" className='w-[80px]' />
-                            <div className='flex-1 flex items-center'>
-                                <div>
+                            <div className='min-h-[200px]'></div>
+                            <div className='flex-1 flex items-center bg-main-horse px-3 py-2'>
+                                <div className='font-bold'>
                                     { horse.horseNumber }
                                 </div>
                             </div>

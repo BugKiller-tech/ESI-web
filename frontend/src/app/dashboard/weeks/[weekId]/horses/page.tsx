@@ -3,7 +3,7 @@ import PageContainer from '@/components/layout/page-container';
 import { Heading } from '@/components/ui/heading';
 import { Separator } from '@/components/ui/separator';
 import { Suspense } from 'react';
-import { WeekCategory } from '@/constants/data';
+import { WeekInfo } from 'types';
 import ListHorses from './ListHorses';
 
 import * as APIs from "@/apis";
@@ -19,7 +19,7 @@ export default async function ({ params }: pageProps) {
 
     const { weekId } = await params;
 
-    let week: WeekCategory | null = null;
+    let week: WeekInfo | null = null;
     let horses: string[] = [];
 
     try {

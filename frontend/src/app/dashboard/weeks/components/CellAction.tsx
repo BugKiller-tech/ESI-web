@@ -1,13 +1,13 @@
 'use client'
 
 import { Button } from '@/components/ui/button';
-import { WeekCategory } from '@/constants/data';
+import { WeekInfo } from 'types';
 import { useRouter } from 'next/navigation';
 import * as APIs from '@/apis';
 import { toast } from 'sonner';
 
 interface CellActionProps {
-  data: WeekCategory;
+  data: WeekInfo;
 }
 
 export default function ({ data }: CellActionProps) {

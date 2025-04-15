@@ -39,7 +39,7 @@ export default () => {
                 GET IN TOUCH
             </h1>
             <div className="text-main-text text-2xl mb-5">
-                We would love to speak with you. Fill the form below or Email us at Esihorseshowphotography@gmail.com
+                Email us at Esihorseshowphotography@gmail.com
             </div>
             <div>
                 <form onSubmit={handleSubmit(onSubmit, onError)} className="flex flex-col gap-4">

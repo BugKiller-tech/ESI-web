@@ -4,8 +4,21 @@ import { useParams } from 'next/navigation';
 
 import { RowsPhotoAlbum } from "react-photo-album";
 import "react-photo-album/rows.css";
+
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
+
+// import optional lightbox plugins
+import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
+import Slideshow from "yet-another-react-lightbox/plugins/slideshow";
+import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
+import { toast } from "sonner";
+import {
+    ShoppingCart
+} from 'lucide-react';
+
 
 import { HorseInfo } from 'types';
 import * as APIs from '@/apis';
@@ -55,25 +68,34 @@ export default () => {
     })
 
 
+    const addToCart = (e: any, index: number) => {
+
+        toast.success('test is cool');
+        console.log(horseImages[index]);
+        e.stopPropagation();
+    }
+
 
     return (
         <div>
             <RowsPhotoAlbum photos={photos} render={{
-                    link: (props) => <a {...props} />,
-                    // extras: (_, { photo, index }) => (
-                    //     <FavoriteIcon photo={photo} index={index} />
-                    //     <div className='bg-orange-500'>
-                    //         <button onClick={() => {
-                    //             console.log('testing for cart btn')
-                    //         }}>Add to cart</button>
+                    // photo: ({ onClick }, { photo, width, height }) => (
+                    //     <div key={photo.src}>
+                    //         <img src={photo.src} width="100%" />
                     //     </div>
-                    // ),
-                    // button: (props) => (
-                    //     <button {...props}>
-                    //         testing
-                    //     </button>
-                    // ),
-                    // container: ({ ref, ...rest }) => <div ref={ref} {...rest}></div>,
+                    //   ),
+                    extras: (_, { photo, index }) => (
+                        // <FavoriteIcon photo={photo} index={index} />
+                        <div className='bg-main-horse flex items-center justify-center px-3 py-2' key={index}>
+                            <div onClick={(e) => addToCart(e, index)}
+                                className='text-main-btn rounded-md border-2 border-main-btn
+                                            px-3 py-1 flex gap-2
+                                            cursor-pointer'>
+                                <ShoppingCart />
+                                Add to cart
+                            </div>
+                        </div>
+                    ),
                 }}
                 onClick={({ event, photo, index }) => {
                     console.log('testing', event, photo, index);
@@ -82,12 +104,14 @@ export default () => {
                     setCurrentImageIndex(index);
                     setOpenImageModal(true);
                 }}
+                
             />
             <Lightbox
                 open={openImageModal}
                 close={() => setOpenImageModal(false)}
                 index={currentImageIndex}
                 slides={images}
+                plugins={[Fullscreen, Slideshow, Thumbnails, Zoom]}
             />
         </div>
     )

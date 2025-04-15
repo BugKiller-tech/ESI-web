@@ -6,6 +6,7 @@ import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { Lato } from 'next/font/google';
 import NextTopLoader from 'nextjs-toploader';
 import { FullScreenLoaderProvider } from '@/context/FullScreenLoaderContext';
+import { CartProvider } from '@/context/CartContext';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -31,10 +32,12 @@ export default async function RootLayout({
         <NextTopLoader showSpinner={false} />
         <NuqsAdapter>
           <Providers session={session}>
-            <FullScreenLoaderProvider>
-              <Toaster />
-              {children}
-            </FullScreenLoaderProvider>
+            <CartProvider>
+              <FullScreenLoaderProvider>
+                <Toaster />
+                {children}
+              </FullScreenLoaderProvider>
+            </CartProvider>
           </Providers>
         </NuqsAdapter>
       </body>
