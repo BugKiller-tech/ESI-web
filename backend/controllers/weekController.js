@@ -55,19 +55,19 @@ const updateVisibility = async (req, res) => {
 
         if (!_id) {
             return res.status(400).json({
-                'message': 'Category ID is required'
+                'message': 'week ID is required'
             })
         }
 
         await WeekModel.updateOne({ _id: _id }, { $set: { isDeleted: isDeleted } });
 
         return res.json({
-            'message': 'Category visibility updated successfully'
+            'message': 'week visibility updated successfully'
         })
     } catch (error) {
-        console.log('Error updating category visibility:', error);
+        console.log('Error updating week visibility:', error);
         return res.status(400).json({
-            'message': 'Failed to update category visibility'
+            'message': 'Failed to update week visibility'
         })
     }
 }
