@@ -274,6 +274,8 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
 
         const images = await getAllImagesFromFtpFolder(record.ftpFolderName);
 
+        console.log(`We found ${images.length} images inside the folder.`)
+
         for ([index, imageInfo] of images.entries()) {
             try {
                 const imageBuffer = await getImageBufferFromFullPath(imageInfo.imagePath);
@@ -315,6 +317,7 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
                     const horseNumber = getHorseNumberByPhotoTakenTime(inUtcTime.toFormat('yyyy-MM-dd HH:mm:ss'), horseJsonEntries);
 
                     if (!horseNumber) {
+                        console.log('Can not find horse number inside json file');
                         continue;
                     }
 
