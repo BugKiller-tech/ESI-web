@@ -276,7 +276,10 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
 
         const images = await getAllImagesFromFtpFolder(record.ftpFolderName);
 
-        console.log(`We found ${images.length} images inside the folder.`)
+        const totalImagesCount = images.length;
+        console.log(`We found ${totalImagesCount} images inside the folder.`)
+        
+        let processedImagesCount = 0;
 
         for ([index, imageInfo] of images.entries()) {
             try {
@@ -313,9 +316,9 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
                     const dateImageTaken = new Date(dateTimeOriginal * 1000);
                     let dt = DateTime.fromMillis(dateTimeOriginal * 1000)
                     let inUtcTime = dt.setZone("UTC");
-                    // console.log(
-                    //     `Date image taken (hkg debug)==>
-                    //         width: ${width}, height: ${height}, date image taken: ${dateImageTaken}`, inUtcTime.toFormat('yyyy-MM-dd HH:mm:ss'));
+                    console.log(
+                        `Date image taken (dev debug)==>
+                            width: ${width}, height: ${height}, date image taken: ${dateImageTaken}`, inUtcTime.toFormat('yyyy-MM-dd HH:mm:ss'));
                     const horseNumber = getHorseNumberByPhotoTakenTime(inUtcTime.toFormat('yyyy-MM-dd HH:mm:ss'), horseJsonEntries);
 
                     if (!horseNumber) {
@@ -392,7 +395,7 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
                     } catch (err1) {
                         console.log(err1);
                     }
-
+                    processedImagesCount++;
                 } else {
                     console.log('can not read image')
                 }
@@ -411,6 +414,8 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
         // if (!errorMsg) {
         //     deleteFtpFolderAndFiles(record.ftpFolderName);
         // }
+
+        console.log(`All done. processed for ${processedImagesCount} / ${totalImagesCount} images.`)
 
     } catch (e) {
         console.log(e);
