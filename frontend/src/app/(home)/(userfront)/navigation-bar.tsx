@@ -48,62 +48,64 @@ export default () => {
     
 
     return (
-        <div className='p-3 md:p-5 bg-white flex gap-3 shadow-gray-500/50'>
-            <div className="flex items-center gap-2
-                font-bold text-2xl cursor-pointer text-black"
-                onClick={goHome}>
-                <img src="/logo.png" className='w-24 h-auto' />
-            </div>
-            <div className="flex-1"></div>
-            <div className='items-center gap-5 text-main-btn font-bold
-                hidden md:flex'>
-                <div className='flex items-center gap-1 cursor-pointer hover:text-blue-500'
-                    onClick={goToCartPage}>
-                    <ShoppingCart />
-                    <div className='relative flex items-center gap-1'>
-                        Cart 
-                        <span className="text-xs font-semibold text-white bg-main-btn rounded-full px-2 py-0.5">
-                            { cart.totalCount }
-                        </span>
+        <div className='bg-white shadow-gray-500/50'>
+            <div className='container mx-auto py-3 md:py-5 flex gap-3'>
+                <div className="flex items-center gap-2
+                    font-bold text-2xl cursor-pointer text-black"
+                    onClick={goHome}>
+                    <img src="/logo.png" className='w-24 h-auto' />
+                </div>
+                <div className="flex-1"></div>
+                <div className='items-center gap-5 text-main-color font-bold
+                    hidden md:flex'>
+                    <div className='flex items-center gap-1 cursor-pointer hover:text-blue-500'
+                        onClick={goToCartPage}>
+                        <ShoppingCart />
+                        <div className='relative flex items-center gap-1'>
+                            Cart 
+                            <span className="text-xs font-semibold text-white bg-main-color rounded-full px-2 py-0.5">
+                                { cart.totalCount }
+                            </span>
+                        </div>
+                    </div>
+                    <div className='flex items-center gap-1 cursor-pointer hover:text-blue-500'
+                        onClick={goToContactUs}>
+                        <Contact />
+                        Contact us
+                    </div>
+                    <div className='flex items-center gap-1 cursor-pointer hover:text-blue-500'
+                    onClick={goToFullfillmentPolicy}>
+                        <Handshake />
+                        Fulfillment policy
                     </div>
                 </div>
-                <div className='flex items-center gap-1 cursor-pointer hover:text-blue-500'
-                    onClick={goToContactUs}>
-                    <Contact />
-                    Contact us
+                <div className='flex items-center md:hidden'>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger>
+                            <Menu className='text-main-color' />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuItem onClick={goToCartPage}>
+                                <div className='flex items-center text-main-color gap-2'>
+                                    <ShoppingCart />
+                                    <span>Cart</span>
+                                </div>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={goToContactUs}>
+                                <div className='flex items-center text-main-color gap-2'>
+                                    <Contact />
+                                    <span>Contact us</span>
+                                </div>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={goToFullfillmentPolicy}>
+                                <div className='flex items-center text-main-color gap-2'>
+                                    <Handshake />
+                                    <span>Fullfillment policy</span>
+                                </div>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
-                <div className='flex items-center gap-1 cursor-pointer hover:text-blue-500'
-                onClick={goToFullfillmentPolicy}>
-                    <Handshake />
-                    Fulfillment policy
-                </div>
-            </div>
-            <div className='flex items-center md:hidden'>
-                <DropdownMenu>
-                    <DropdownMenuTrigger>
-                        <Menu className='text-main-btn' />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuItem onClick={goToCartPage}>
-                            <div className='flex items-center text-main-btn gap-2'>
-                                <ShoppingCart />
-                                <span>Cart</span>
-                            </div>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={goToContactUs}>
-                            <div className='flex items-center text-main-btn gap-2'>
-                                <Contact />
-                                <span>Contact us</span>
-                            </div>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={goToFullfillmentPolicy}>
-                            <div className='flex items-center text-main-btn gap-2'>
-                                <Handshake />
-                                <span>Fullfillment policy</span>
-                            </div>
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
             </div>
         </div>
     )

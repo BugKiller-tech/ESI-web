@@ -84,7 +84,7 @@ export default ({ initialWeeks }: {
                 { filteredWeeks.map((weekInfo: WeekInfo, index) => {
                     return (
                         <div key={weekInfo.displayName + weekInfo._id}
-                            className='bg-main-btn cursor-pointer
+                            className='bg-main-color cursor-pointer
                             hover:scale-110 transition-transform duration-300
                             active:scale-90
                             rounded-lg overflow-hidden'

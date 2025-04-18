@@ -69,7 +69,7 @@ module.exports = {
         'color-5': 'hsl(var(--color-5))',
 
 
-        'main-btn': 'hsl(var(--main-btn))',
+        'main-color': 'hsl(var(--main-color))',
         'main-horse': 'var(--main-horse)',
         'main-text': 'var(--main-text)',
       },

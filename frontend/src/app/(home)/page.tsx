@@ -19,13 +19,13 @@ export default function () {
             </div>
             <div className='mt-12 flex flex-col gap-5'>
                 <Link href='/events/NY'
-                    className='bg-main-btn border-2 border-main-btn py-3 px-10 text-white text-5xl font-bold
+                    className='bg-main-color border-2 border-main-color py-3 px-10 text-white text-5xl font-bold
                     hover:scale-110 transition-all duration-300
                     hover:bg-slate-900'>
                     HITS Saugerties, NY
                 </Link>
                 <Link href='/events/FL'
-                    className='bg-main-btn border-2 border-main-btn py-3 px-10 text-white text-5xl font-bold
+                    className='bg-main-color border-2 border-main-color py-3 px-10 text-white text-5xl font-bold
                     hover:scale-110 transition-all duration-300
                     hover:bg-slate-900'>
                     HITS Ocala, FL

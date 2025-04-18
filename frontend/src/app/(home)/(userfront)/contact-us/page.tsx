@@ -35,7 +35,7 @@ export default () => {
 
     return (
         <div>
-            <h1 className="text-main-btn text-4xl font-bold mb-5">
+            <h1 className="text-main-color text-4xl font-bold mb-5">
                 GET IN TOUCH
             </h1>
             <div className="text-main-text text-2xl mb-5">
@@ -55,7 +55,7 @@ export default () => {
                     <textarea placeholder="Your Message" {...register("message", { required: true })} className="border border-gray-300 p-2 rounded h-32"></textarea>
                     {errors.message && <span className="text-red-500">This field is required</span>}
                     
-                    <button type="submit" className="bg-main-btn text-white py-2 px-4 rounded">Send Message</button>
+                    <button type="submit" className="bg-main-color text-white py-2 px-4 rounded">Send Message</button>
                 </form>
             </div>
         </div>

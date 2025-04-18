@@ -56,6 +56,9 @@ export const getProductCategories = () => {
 export const getProducts = (filters: any) => {
     return axios.post('/api/v1/products/get', filters);
 }
+export const getAllProducts = () => {
+    return axios.get('/api/v1/products/get-all');
+}
 
 export const createProduct = (data: any)=> {
     return axios.post('/api/v1/products/create', data);
@@ -74,7 +77,7 @@ export const updateProduct = (productId: string, data: any) => {
 }
 
 export const getHorseWeeks = (filters: any) => {
-    return axios.post('/api/v1/admin/weeks/get', filters);
+    return axios.post('/api/v1/admin/weeks/get-paginated', filters);
 }
 
 export const updateHorseWeekVisibility = (data: any) => {
@@ -99,4 +102,21 @@ export const getHorsesByWeek = (postData: any) => {
 
 export const getHorseImagesByWeekAndHorseNumber = (postData: any) => {
     return axios.post('/api/v1/front/horses/get-horse-images-by-week-and-horsenumber', postData);
+}
+
+export const createStripeCheckoutSession = (postData: any) => {
+    return axios.post('/api/v1/checkout/stripe/create-checkout-session', postData);
+}
+
+
+export const getOrdersWithPaginated = (filters: any) => {
+    return axios.post('/api/v1/admin/orders/get-paginated', filters);
+}
+
+export const getOneOrder = (orderId: string) => {
+    return axios.get(`/api/v1/admin/orders/get/${orderId}`);
+}
+
+export const updateOrderStatus = (postData: any) => {
+    return axios.post(`/api/v1/admin/orders/update-order-status`, postData);
 }

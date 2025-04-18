@@ -21,13 +21,15 @@ import {
 
 
 import { HorseInfo } from 'types';
+import { AddCartModal } from './AddCartModal';
 import * as APIs from '@/apis';
 
 export default () => {
 
     const params = useParams();
     const { state, weekId, horseNumber } = params;
-
+    const [ isOpenCartModal, setIsOpenCartModal ] = useState(false);
+    const [ selectedHorse, setSelectedHorse ] = useState<HorseInfo | null>(null);
 
 
     const [ horseImages, setHorseImages ] = useState<HorseInfo[]>([]);
@@ -68,10 +70,10 @@ export default () => {
     })
 
 
-    const addToCart = (e: any, index: number) => {
+    const displayAddToCartPopup = (e: any, index: number) => {
 
-        toast.success('test is cool');
-        console.log(horseImages[index]);
+        setSelectedHorse(horseImages[index]);
+        setIsOpenCartModal(true);
         e.stopPropagation();
     }
 
@@ -87,12 +89,12 @@ export default () => {
                     extras: (_, { photo, index }) => (
                         // <FavoriteIcon photo={photo} index={index} />
                         <div className='bg-main-horse flex items-center justify-center px-3 py-2' key={index}>
-                            <div onClick={(e) => addToCart(e, index)}
-                                className='text-main-btn rounded-md border-2 border-main-btn
+                            <div onClick={(e) => displayAddToCartPopup(e, index)}
+                                className='text-main-color rounded-md border-2 border-main-color
                                             px-3 py-1 flex gap-2
                                             cursor-pointer'>
                                 <ShoppingCart />
-                                Add to cart
+                                <div>Add to cart</div>
                             </div>
                         </div>
                     ),
@@ -113,6 +115,18 @@ export default () => {
                 slides={images}
                 plugins={[Fullscreen, Slideshow, Thumbnails, Zoom]}
             />
+
+
+            <AddCartModal
+                isOpen={isOpenCartModal}
+                onClose={() => {
+                    setIsOpenCartModal(false);
+                }}
+                onConfirm={() => {
+
+                }}
+                horse={selectedHorse}
+                />
         </div>
     )
 }

@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
 const morgan = require('morgan');
-const constants = require('./config/constants');
+const Constants = require('./constants/constants');
 
 const {
     establishDbConnection,
@@ -13,6 +13,11 @@ const {
 require('dotenv').config();
 
 const app = express();
+
+const API_VERSION = Constants.API_VERSION
+app.use(`/api/${API_VERSION}/webhooks`, require('./routes/webhooks'));
+
+
 app.use(express.json());  // Parse JSON requests
 app.use(express.urlencoded({ extended: true })); // Parse application/x-www-form-urlencoded
 
@@ -26,11 +31,11 @@ if (!fs.existsSync(publicPath)) {
 app.use(express.static(publicPath));
 
 const pathsToBeCreated = [
-    constants.originImagePath,
-    constants.timestampJsonPath,
-    constants.thumbwebPath,
-    constants.thumbnailPath,
-    constants.watermarkPath,
+    Constants.originImagePath,
+    Constants.timestampJsonPath,
+    Constants.thumbwebPath,
+    Constants.thumbnailPath,
+    Constants.watermarkPath,
 ]
 for (const folderPath of pathsToBeCreated) {
     const pathToCreate = path.join(__dirname, folderPath);

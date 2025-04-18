@@ -8,11 +8,11 @@ export default ({
     children: React.ReactNode
 }) => {
     return (
-        <div className='h-screen flex flex-col bg-gray-300'>
+        <div className='h-screen flex flex-col bg-gray-200'>
             <NavigationBar />
-            <div className='px-3 md:px-5 xl:px-10 flex-1 overflow-auto'>
-                <BreadcrumbNav />
-                <div className='mt-5'>
+            <div className='px-3 md:px-5 xl:px-15 flex-1 overflow-auto'>
+                <div className='container mx-auto mt-5'>
+                    <BreadcrumbNav />
                     { children }
                 </div>
             </div>

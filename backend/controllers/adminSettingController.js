@@ -1,4 +1,5 @@
 const ProjectSettingModel = require('../models/ProjectSettingModel');
+const commonDbFuncs = require('../lib/common_db_func');
 
 const getImageProcessSetting = async (req, res) => {
     try {
@@ -81,16 +82,13 @@ const uploadWatermarkImage = async (req, res) => {
 
 const getTaxAndShippingFee = async (req, res) => {
     try {
-        const setting = await ProjectSettingModel.findOne({});
+        const setting = await commonDbFuncs.getTaxAndShippingFee();
         if (!setting) {
             return res.status(404).json({
                 message: 'No setting found'
             })
         }
-        return res.json({
-            tax: setting.tax || 0,
-            flatShippingFee: setting.flatShippingFee || 0,
-        })
+        return res.json(setting)
         
     } catch (error) {
         console.log(error);

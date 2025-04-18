@@ -9,7 +9,7 @@ export default () => {
         <div
             // className="px-2 md:px-12 lg:px-24"
         >
-            <h1 className="text-5xl font-bold mb-10 text-main-btn">
+            <h1 className="text-5xl font-bold mb-10 text-main-color">
                 Fulfillment policy
             </h1>
             <div className="text-3xl text-gray-700">

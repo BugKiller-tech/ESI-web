@@ -1,3 +1,10 @@
+const ORDER_STATUS = {
+    Draft: 'Draft',
+    New: 'New',
+    Processing: 'Processing',
+    Shipped: 'Shipped/Completed',
+    Refunded: 'Refunded',
+}
 module.exports = {
     originImagePath: 'uploads/originImages',
     timestampJsonPath: 'uploads/timestampJson',
@@ -8,4 +15,9 @@ module.exports = {
     S3_ORIGIN_IMAGE_KEY: 'images/origin',
     S3_THUMBNAIL_IMAGE_KEY: 'images/thumbnail',
     S3_THUMBWEB_IMAGE_KEY: 'images/thumbweb',
+
+
+    API_VERSION: 'v1',
+    ORDER_STATUS: ORDER_STATUS,
+    AVAILABLE_ORDER_STATUS: Object.values(ORDER_STATUS),
 }

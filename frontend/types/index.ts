@@ -32,12 +32,13 @@ export interface FooterItem {
 
 
 export type Product = {
-  _id: number;
+  _id: string;
   name: string;
   description: string;
   created_at: string;
   price: number;
   category: string;
+  isDigitalProduct: boolean,
   updated_at: string;
 };
 
@@ -65,9 +66,34 @@ export interface HorseInfo {
 }
 
 export interface CartItem {
-  horseImageId: string;
-  productId: string;
+  horse: HorseInfo,
+  product: Product,
   quantity: number;
+}
+
+
+export interface Order {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  shippingAddress: string;
+  zipCode: string;
+  cartItems: CartItem[];
+  subTotal: number;
+  taxAmount: number;
+  shippingFee: number;
+  paidTotal: number;
+  paymentStatus: string;
+  paymentMethod: string;
+  stripeCustomerId: string;
+  stripeCheckoutSessionId: string;
+  paymentIntentId: string;
+  chargeId: string;
+  orderedAt: string;
+  orderStatus: string;
+  createdAt: string;
 }
 
 

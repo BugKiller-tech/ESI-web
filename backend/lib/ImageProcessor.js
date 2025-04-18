@@ -12,7 +12,7 @@ const WeekModel = require('../models/WeekModel.js');
 const HorsesImageModel = require('../models/HorsesImageModel.js');
 
 
-const constants = require('../config/constants');
+const constants = require('../constants/constants.js');
 const { getAllImagesFromFtpFolder, deleteFtpFolderAndFiles } = require('../lib/ftpAccess');
 const { uploadAllImagesToS3 } = require('./uploadToS3Lib');
 

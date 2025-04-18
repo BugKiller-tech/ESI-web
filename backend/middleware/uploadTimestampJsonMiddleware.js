@@ -1,10 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
-const constants = require('../config/constants');
+const Constants = require('../constants/constants');
 
-const imageUploadFolder = constants.originImagePath;
-const timeStampJsonUploadFolder = constants.timestampJsonPath
+const imageUploadFolder = Constants.originImagePath;
+const timeStampJsonUploadFolder = Constants.timestampJsonPath
 
 // Set storage engine
 const storage = multer.diskStorage({

@@ -4,7 +4,7 @@ const controller = require('../controllers/weekController');
 
 const router = express.Router();
 
-router.post('/get', controller.getWeeksWithPagination);
+router.post('/get-paginated', controller.getWeeksWithPagination);
 router.post('/update-visibility', controller.updateVisibility);
 
 

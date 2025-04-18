@@ -29,8 +29,6 @@ export default async ({
 
 
     return (
-        <div>
             <Weeks initialWeeks={weeks} />
-        </div>
     )
 }

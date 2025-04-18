@@ -3,6 +3,7 @@ const Joi = require('joi');
 const {
     getCategories,
     getProducts,
+    getAllProducts,
     getProduct,
     createProduct,
     updateProduct,
@@ -23,6 +24,7 @@ router.get('/categories', getCategories);
 
 router.get('/get/:productId', getProduct);
 router.post('/get', getProducts);
+router.get('/get-all', getAllProducts);
 
 router.post('/create', bodyValidatorMiddleware(Joi.object({
     name: Joi.string().required(),

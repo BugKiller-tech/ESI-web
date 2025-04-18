@@ -2,21 +2,39 @@
 
 import {
     createContext, ReactNode, useContext,
-    useEffect, useState
+    useEffect, useState,
 } from 'react';
-import { CartItem } from 'types';
+import {
+    Product,
+    CartItem
+} from 'types';
+import * as APIs from '@/apis';
 
 const CartContext = createContext({
     addToCart: (_: CartItem) => { },
     reduceOneFromCart: (_: CartItem) => { },
     removeFromCart: (_: CartItem) => { },
     clearCart: () => { },
-    cartItems: [],
+    products: [] as Product[],
+    cartItems: [] as CartItem[],
+    subTotal: 0,
+    taxTotal: 0,
+    flatShippingFee: 0,
+    totalToPay: 0,
+
     totalCount: 0,
 });
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [products, setProducts] = useState<Product[]>([]);
+    const [taxAndShippingFee, setTaxAndShippingFee] = useState<{
+        tax: number,
+        flatShippingFee: number    
+    }>({
+        tax: 0,
+        flatShippingFee: 0,
+    });
 
 
     // 🔄 Load from localStorage on mount
@@ -25,7 +43,23 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         if (storedCart) {
             setCartItems(JSON.parse(storedCart));
         }
+        fetchProducts();
+        fetchTaxAndFee();
     }, []);
+    const fetchProducts = async () => {
+        const response = await APIs.getAllProducts();
+        if (response.data) {
+            console.log('fetching products inside context', response.data.products);
+            setProducts(response.data.products);
+        }
+    }
+    const fetchTaxAndFee = async () => {
+        const response = await APIs.getTaxAndShippingFeeSetting();
+        if (response.data) {
+            console.log('tax and fee fetching is like', response.data);
+            setTaxAndShippingFee(response.data);
+        }
+    }
 
     // 💾 Save to localStorage on changes
     useEffect(() => {
@@ -35,7 +69,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
 
     function isSameImageAndProduct(item1: CartItem, item2: CartItem) {
-        return item1.horseImageId === item2.horseImageId && item1.productId === item2.horseImageId
+        return item1.horse._id === item2.horse._id && item1.product._id === item2.product._id
     }
 
     const addToCart = (newCartItem: CartItem) => {
@@ -51,7 +85,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
                         : item
                 );
             }
-            return [...prev, { ...newCartItem, quantity: 1 }];
+            return [...prev, { ...newCartItem, quantity: newCartItem.quantity || 1 }];
         });
     };
 
@@ -85,11 +119,30 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     const clearCart = () => setCartItems([]);
 
     const totalCount = cartItems.reduce((acc, item) => acc + (item.quantity || 0), 0);
+    let subTotal = 0;
+    let subTotalForPrints = 0;
+    cartItems.map(item => {
+        subTotal += ( item.quantity * item.product.price );
+        if (!item.product.isDigitalProduct) {
+            subTotalForPrints += ( item.quantity * item.product.price );
+        }
+    });
+
+    const taxTotal = subTotalForPrints / 100 * taxAndShippingFee.tax;
+    const flatShippingFee = cartItems.filter(item => !item.product.isDigitalProduct).length > 0 ? taxAndShippingFee.flatShippingFee : 0;
+    const totalToPay = subTotal + taxTotal + flatShippingFee;
 
     return (
         <CartContext.Provider value={{
             addToCart, reduceOneFromCart, removeFromCart, clearCart,
-            cartItems, totalCount,
+            products,
+            cartItems,
+            subTotal,
+            taxTotal,
+            flatShippingFee,
+            totalToPay,
+
+            totalCount,
         }}>
             {children}
         </CartContext.Provider>

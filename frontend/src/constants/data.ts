@@ -27,6 +27,12 @@ export const navItems: NavItem[] = [
     icon: 'product',
     isActive: false,
   },
+  {
+    title: 'Orders',
+    url: '/dashboard/orders',
+    icon: 'basket',
+    isActive: false,
+  }
   // {
   //   title: 'Dashboard',
   //   url: '/dashboard/overview',

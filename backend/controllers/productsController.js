@@ -52,6 +52,21 @@ const getProducts = async (req, res) => {
         })
     }
 }
+const getAllProducts = async (req, res) => {
+    try {
+        const products = await ProductsModel.find({}).sort({
+            createdAt: 1,
+        })
+        return res.json({
+            products: products,
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({
+            message: 'Failed to fetch all products'
+        })
+    }
+}
 
 const getProduct = async (req, res) => {
     try {
@@ -155,6 +170,7 @@ const deleteProduct = async (req, res) => {
 module.exports = {
     getCategories,
     getProducts,
+    getAllProducts,
     getProduct,
     createProduct,
     updateProduct,

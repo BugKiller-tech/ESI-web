@@ -39,7 +39,7 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    --main-btn: 0 100% 50%;
+    --main-color: 0 100% 50%;
     --main-horse: rgb(255 190 136);
     --main-text: rgb(102, 102, 102);
   }
@@ -78,7 +78,7 @@
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 253 91% 58%;
 
-    --main-btn: 0 100% 50%;
+    --main-color: 0 100% 50%;
     --main-horse: rgb(255 190 136);
     --main-text: rgb(102, 102, 102);
   }
