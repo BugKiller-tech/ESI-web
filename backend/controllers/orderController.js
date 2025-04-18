@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 const OrderModel = require('../models/OrderModel');
+const {
+    ORDER_STATUS
+} = require('../constants/constants')
 
 
 const getOrdersWithPagination  = async (req, res) => {
@@ -21,6 +24,9 @@ const getOrdersWithPagination  = async (req, res) => {
                 {
                     $match: {
                         // isDeleted: 0,
+                        orderStatus: {
+                            $ne: ORDER_STATUS.Draft,
+                        },
                         $or: [
                             { "fullName": { "$regex": search, "$options": "i" } },
                             { "email": { "$regex": search, "$options": "i" } },
