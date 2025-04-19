@@ -61,7 +61,7 @@ const makeLineItemsForStripe = async (cartItems) => {
                     product_data: {
                         name: `${product.category} - ${ product.name }`,
                     },
-                    unit_amount: product.price * 100, // in cents
+                    unit_amount: Math.round(product.price * 100), // in cents
                 },
                 quantity: item.quantity,
             });
@@ -86,7 +86,7 @@ const makeLineItemsForStripe = async (cartItems) => {
                     product_data: {
                         name: `Tax`,
                     },
-                    unit_amount: taxAmount * 100, // in cents
+                    unit_amount: Math.round(taxAmount * 100), // in cents
                 },
                 quantity: 1
             })
@@ -96,7 +96,7 @@ const makeLineItemsForStripe = async (cartItems) => {
                     product_data: {
                         name: `Shipping`,
                     },
-                    unit_amount: shippingFee * 100, // in cents
+                    unit_amount: Math.round(shippingFee * 100), // in cents
                 },
                 quantity: 1,
             })
