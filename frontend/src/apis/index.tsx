@@ -114,9 +114,18 @@ export const getOrdersWithPaginated = (filters: any) => {
 }
 
 export const getOneOrder = (orderId: string) => {
-    return axios.get(`/api/v1/admin/orders/get/${orderId}`);
+    return axios.get(`/api/v1/admin/orders/${orderId}/get`);
 }
 
 export const updateOrderStatus = (postData: any) => {
     return axios.post(`/api/v1/admin/orders/update-order-status`, postData);
+}
+
+export const downloadImagesZipForOrder = (orderId: string) => {
+    return axios.get(`/api/v1/admin/orders/${orderId}/download-images-zip`, {
+        responseType: 'blob',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
 }

@@ -11,7 +11,15 @@
             "Effect": "Deny",
             "Principal": "*",
             "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:::horses-images-dev/private/*"
+            "Resource": "arn:aws:s3:::horses-images-dev/private/*",
+            "Condition": {
+                "Bool": {
+                    "aws:PrincipalIsAWSService": "false"
+                },
+                "StringEquals": {
+                    "aws:PrincipalType": "Anonymous"
+                }
+            }
         }
     ]
 }

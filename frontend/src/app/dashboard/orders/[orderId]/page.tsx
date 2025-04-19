@@ -75,7 +75,26 @@ export default () => {
     }
 
     const downloadImages = async () => {
-        toast.info('This is not done yet. it is under the development yet. coming soon..');
+        try {
+            toast.info('Preparing the download..');
+            fullScreenLoader.showLoader();
+            const response = await APIs.downloadImagesZipForOrder(order._id);
+            
+            toast.info('Download is started...');
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `Order_${order._id}_images.zip`);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            
+        } catch (error) {
+            console.log(error);
+            toast.error('Failed to download');
+        } finally {
+            fullScreenLoader.hideLoader();
+        }
     }
 
 

@@ -1,11 +1,21 @@
 const mongoose = require('mongoose');
+const archiver = require('archiver');
+const stream = require('stream');
+
 const OrderModel = require('../models/OrderModel');
 const {
     ORDER_STATUS
-} = require('../constants/constants')
+} = require('../constants/constants');
+
+const {
+    s3,
+    BUCKET_NAME,
+    getFileKeyFromS3Link,
+    GetObjectCommand,
+} = require('../lib/s3Client');
 
 
-const getOrdersWithPagination  = async (req, res) => {
+const getOrdersWithPagination = async (req, res) => {
     try {
         const page = req.body.page || 1;
         const limit = req.body.limit || 10;
@@ -82,7 +92,7 @@ const getOneOrder = async (req, res) => {
     }
 }
 
-const updateOrderStatus = async(req, res) => {
+const updateOrderStatus = async (req, res) => {
     try {
         const orderId = req.body.orderId;
         const newStatus = req.body.orderStatus;
@@ -96,7 +106,7 @@ const updateOrderStatus = async(req, res) => {
         const order = await OrderModel.findOne({
             _id: new mongoose.Types.ObjectId(String(orderId)),
         })
-        
+
         order.orderStatus = newStatus;
         await order.save();
         return res.json({
@@ -110,10 +120,70 @@ const updateOrderStatus = async(req, res) => {
     }
 }
 
+const downloadImagesZip = async (req, res) => {
+    try {
+        const orderId = req.params.orderId;
+        const order = await OrderModel.findOne({
+            _id: new mongoose.Types.ObjectId(orderId),
+        })
+        if (!order) {
+            return res.status(400).json({
+                message: 'Failed to find order'
+            })
+        }
+
+        const s3Links = order.cartItems.map(item => {
+            return item.horse?.originImageS3Link
+        })
+
+        const s3FileKeys = s3Links.map(link => getFileKeyFromS3Link(link));
+        // return res.json({
+        //     links: s3Keys
+        // })
+
+        res.setHeader('Content-Type', 'application/zip');
+        res.setHeader('Content-Disposition', `attachment; filename=images.zip`);
+
+        const archive = archiver('zip', { zlib: { level: 9 } });
+
+        archive.on('error', err => res.status(500).send({ error: err.message }));
+
+        archive.pipe(res);
+
+        let index = 0;
+        for (const fileKey of s3FileKeys) {
+            const command = new GetObjectCommand({
+                Bucket: BUCKET_NAME,
+                Key: fileKey,
+            });
+
+            const data = await s3.send(command);
+
+            if (!data.Body || typeof data.Body.pipe !== 'function') {
+                throw new Error(`Failed to stream S3 object: ${key}`);
+            }
+
+            const item = order.cartItems[index]
+            
+            const extension = fileKey.split('.').pop();
+            const fileName = `Horse#${item.horse?.horseNumber}_Product#${item.product?.category}_${item.product?.name}_Quantity#${item.quantity}.${extension}`;
+            archive.append(data.Body, { name: fileName });
+            index++;
+        }
+        await archive.finalize();
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({
+            message: 'Failed to download',
+        })
+    }
+}
+
 
 module.exports = {
     getOrdersWithPagination,
     getOneOrder,
     updateOrderStatus,
+    downloadImagesZip,
 }
 
