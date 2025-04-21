@@ -30,7 +30,7 @@ export default () => {
     const { orderId } = params;
 
     const fullScreenLoader = useFullScreenLoader();
-    const [ order, setOrder ] = useState<Order | null>(null);
+    const [order, setOrder] = useState<Order | null>(null);
 
     const [newOrderStatus, setNewOrderStatus] = useState('');
 
@@ -79,7 +79,7 @@ export default () => {
             toast.info('Preparing the download..');
             fullScreenLoader.showLoader();
             const response = await APIs.downloadImagesZipForOrder(order._id);
-            
+
             toast.info('Download is started...');
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
@@ -88,13 +88,31 @@ export default () => {
             document.body.appendChild(link);
             link.click();
             link.remove();
-            
+
         } catch (error) {
             console.log(error);
             toast.error('Failed to download');
         } finally {
             fullScreenLoader.hideLoader();
         }
+    }
+
+
+    const downloadInvoicePDF = async () => {
+        try {
+
+            const response = await APIs.downloadInvoiceForOrder(order._id);
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `Order_${order._id}.pdf`); // Name the downloaded file
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        } catch (error) {
+            console.error('Error downloading the file', error);
+        }
+
     }
 
 
@@ -109,7 +127,7 @@ export default () => {
                     />
                 </div>
                 <Separator />
-                { order && (
+                {order && (
                     <div className='flex flex-wrap gap-5'>
                         <div className='flex-1 min-w-[350px]'>
                             <OrderSummary
@@ -129,36 +147,36 @@ export default () => {
                                     <CardContent className="px-0 pt-5">
                                         <table className='ordered-user-info-table'>
                                             <tbody>
-                                            <tr>
-                                                <td>Fisrt name </td>
-                                                <td>{ order.firstName }</td>
-                                            </tr>
-                                            <tr>
-                                                <td>last name</td>
-                                                <td>{ order.lastName }</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Customer email</td>
-                                                <td>{ order.email }</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Phone number</td>
-                                                <td>{ order.phoneNumber }</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Shipping address</td>
-                                                <td>{ order.shippingAddress }</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Payment status</td>
-                                                <td>{ order.paymentStatus }</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Order status</td>
-                                                <td>
-                                                    <OrderStatus orderStatus={order.orderStatus} />
-                                                </td>
-                                            </tr>
+                                                <tr>
+                                                    <td>Fisrt name </td>
+                                                    <td>{order.firstName}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>last name</td>
+                                                    <td>{order.lastName}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Customer email</td>
+                                                    <td>{order.email}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Phone number</td>
+                                                    <td>{order.phoneNumber}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Shipping address</td>
+                                                    <td>{order.shippingAddress}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Payment status</td>
+                                                    <td>{order.paymentStatus}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Order status</td>
+                                                    <td>
+                                                        <OrderStatus orderStatus={order.orderStatus} />
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </CardContent>
@@ -197,7 +215,15 @@ export default () => {
                                             Download images
                                         </div>
                                         <Button className='bg-main-color' onClick={downloadImages}>
-                                            Download
+                                            Download images
+                                        </Button>
+
+                                        <Separator></Separator>
+                                        <div>
+                                            Download invoice PDF
+                                        </div>
+                                        <Button className='bg-main-color' onClick={downloadInvoicePDF}>
+                                            Download pdf
                                         </Button>
                                     </CardContent>
                                 </CardHeader>

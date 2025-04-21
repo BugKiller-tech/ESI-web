@@ -5,3 +5,4 @@
 /public/watermark/*
 !/public/watermark/default.png
 /Ftp_root_folder
+/invoices/*

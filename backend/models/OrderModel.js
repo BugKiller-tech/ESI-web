@@ -67,10 +67,13 @@ const schema = new mongoose.Schema({
         type: Date,
 
     },
-
     orderStatus: {
         type: String,
         default: ORDER_STATUS.Draft,
+    },
+    invoicePdf: {
+        type: String,
+        default: '',
     }
 
 }, {

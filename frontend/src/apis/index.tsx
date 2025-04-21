@@ -129,3 +129,9 @@ export const downloadImagesZipForOrder = (orderId: string) => {
         }
     });
 }
+
+export const downloadInvoiceForOrder = (orderId: string) => {
+    return axios.get(`/api/v1/admin/orders/${orderId}/download-invoice`, {
+        responseType: 'blob',
+    })
+}

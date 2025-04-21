@@ -11,6 +11,7 @@ module.exports = {
     thumbwebPath: 'public/processedImages/thumbWeb',
     thumbnailPath: 'public/processedImages/thumbnail',
     watermarkPath: 'public/watermark',
+    INVOICES_PATH: 'invoices',
 
     S3_ORIGIN_IMAGE_KEY: 'images/origin',
     S3_THUMBNAIL_IMAGE_KEY: 'images/thumbnail',

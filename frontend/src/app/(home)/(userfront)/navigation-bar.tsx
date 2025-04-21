@@ -49,7 +49,7 @@ export default () => {
 
     return (
         <div className='bg-white shadow-gray-500/50'>
-            <div className='container mx-auto py-3 md:py-5 flex gap-3'>
+            <div className='px-3 md:container mx-auto py-3 md:py-5 flex gap-3'>
                 <div className="flex items-center gap-2
                     font-bold text-2xl cursor-pointer text-black"
                     onClick={goHome}>

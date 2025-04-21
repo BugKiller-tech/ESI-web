@@ -41,7 +41,7 @@ async function getImageBufferFromFullPath(imageFullPath) {
 }
 
 // Generate a unique filename with timestamp
-function generateUniqueImageFileName(extension = 'jpg') {
+function generateUniqueImageFileName(extension = 'JPG') {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     return `${timestamp}.${extension}`;
 }
@@ -73,6 +73,7 @@ async function getSettings() {
 
 const saveHorseInfoToDb =  async (
     horseNumber,
+    originImageName,
     record,
     originImageS3Link,
     thumbWebS3Link,
@@ -101,6 +102,7 @@ const saveHorseInfoToDb =  async (
     let imageRecord = new HorsesImageModel({
         week: week._id,
         horseNumber: horseNumber,
+        originImageName: originImageName,
         originImageS3Link,
         thumbWebS3Link,
         thumbnailS3Link,
@@ -326,6 +328,9 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
                         continue;
                     }
 
+                    const originImageName = imageInfo.imageFileName.split('.')[0];
+                    const newImageFileName = `${horseNumber}_${originImageName}`
+
                     const thumbWebWidth = Math.round(width / 100 * thumbWebPercentage)
                     const thumbWebHeight = Math.round(height / 100 * thumbWebPercentage)
 
@@ -334,7 +339,7 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
                         .toBuffer();
 
                     // console.log('Image path is like', imageInfo.imagePath);
-                    const thumbWebPath = `${constants.thumbwebPath}/${imageInfo.imageFileName}_${generateUniqueImageFileName()}`
+                    const thumbWebPath = `${constants.thumbwebPath}/${newImageFileName}_${generateUniqueImageFileName()}`
                     try {
 
                         const processedThumbWebImg = await sharp(imageBuffer)
@@ -357,7 +362,7 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
                     const watermarkImgBufferForThumbnail = await watermarkImgSharp.resize(thumbnailWidth, thumbnailHeight).toBuffer();
 
 
-                    const thumbnailPath = `${constants.thumbnailPath}/${imageInfo.imageFileName}__${generateUniqueImageFileName()}`
+                    const thumbnailPath = `${constants.thumbnailPath}/${newImageFileName}__${generateUniqueImageFileName()}`
                     const processedThumbnailImg = await sharp(imageBuffer)
                         .rotate()
                         .resize(thumbnailWidth, thumbnailHeight, { fit: 'cover', position: 'centre' })
@@ -384,6 +389,7 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
                         );
                         await saveHorseInfoToDb(
                             horseNumber,
+                            originImageName,
                             record,
                             originImageS3Link,
                             thumbWebS3Link,
@@ -407,13 +413,14 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
                 console.log(e);
             }
         }
-        if (!errorMsg) {
-            record.isProcessed = 1;
-            await record.save();
-        }
         // if (!errorMsg) {
-        //     deleteFtpFolderAndFiles(record.ftpFolderName);
+        //     record.isProcessed = 1;
+        //     await record.save();
         // }
+        
+        if (!errorMsg) {
+            deleteFtpFolderAndFiles(record.ftpFolderName);
+        }
 
         console.log(`All done. processed for ${processedImagesCount} / ${totalImagesCount} images.`)
 

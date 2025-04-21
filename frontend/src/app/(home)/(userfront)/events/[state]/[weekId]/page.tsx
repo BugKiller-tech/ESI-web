@@ -88,7 +88,7 @@ export default ({ }: {
     }
     return (
         <div>
-            <div className='flex items-center gap-2'>
+            <div className='flex items-center gap-2 mb-3'>
                 <Input type='text' value={searchTerm} onChange={(e) => { setSearchTerm(e.target.value) }}
                     placeholder='Search for horse' className='bg-white'
                     onKeyUp={(e) => {
@@ -98,7 +98,7 @@ export default ({ }: {
                     }}/>
                 <Button onClick={searchHorsesBySearchTerm}>Search</Button>
             </div>
-            <div className='mt-5 grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4'>
+            <div className='grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4'>
                 { filteredHorses.map((horse, index) => {
                     return (
                         <div key={horse.horseNumber + index}
@@ -111,7 +111,7 @@ export default ({ }: {
                             onClick={() => {
                                 gotoHorseImages(horse.horseNumber);
                             }}>
-                            <div className='min-h-[200px]'></div>
+                            <div className='min-h-[100px] md:min-h-[200px]'></div>
                             <div className='flex-1 flex items-center bg-main-horse px-3 py-2'>
                                 <div className='font-bold'>
                                     { horse.horseNumber }

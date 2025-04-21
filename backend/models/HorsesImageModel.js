@@ -9,6 +9,9 @@ const schema = new mongoose.Schema({
     horseNumber: {
         type: String,
     },
+    originImageName: {
+        type: String,
+    },
     originImageS3Link: {
         type: String,
     },

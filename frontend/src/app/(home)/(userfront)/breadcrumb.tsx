@@ -30,13 +30,17 @@ export default () => {
                                 setIsOpenedStateModal(!isOpenedStateModal)
                             }
                         }>/ { state }</div>}
-            { weekId && <div className="cursor-pointer">/ { weekId }</div> }
+            { weekId && <div className="cursor-pointer" onClick={() => {
+                if (horseNumber) {
+                    router.push(`/events/${ state }`)
+                }
+            }}>/ { weekId }</div> }
             { horseNumber && <div className="cursor-pointer">/ { horseNumber }</div> }
 
 
             <Modal
                 title='Select the state'
-                description='YOu can switch the state to see events for the state'
+                description='You can switch the state to see events for the state'
                 isOpen={isOpenedStateModal}
                 onClose={() => {
                     setIsOpenedStateModal(false);

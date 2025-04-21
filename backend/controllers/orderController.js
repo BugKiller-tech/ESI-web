@@ -1,8 +1,13 @@
 const mongoose = require('mongoose');
 const archiver = require('archiver');
 const stream = require('stream');
+const path = require('path');
 
 const OrderModel = require('../models/OrderModel');
+const {
+    INVOICES_PATH
+} = require('../constants/constants')
+
 const {
     ORDER_STATUS
 } = require('../constants/constants');
@@ -13,6 +18,11 @@ const {
     getFileKeyFromS3Link,
     GetObjectCommand,
 } = require('../lib/s3Client');
+
+const {
+    createInvoicePDFWithPdfKit,
+    createInvoicePdfWithPuppeteer
+} = require('../lib/invoicePdf');
 
 
 const getOrdersWithPagination = async (req, res) => {
@@ -179,11 +189,43 @@ const downloadImagesZip = async (req, res) => {
     }
 }
 
+const downloadInvoice = async (req, res) => {
+    try {
+        const orderId = req.params.orderId;
+        const order = await OrderModel.findOne({
+            _id: new mongoose.Types.ObjectId(orderId),
+        })
+        if (!order) {
+            return res.status(400).json({
+                message: 'Failed to find order'
+            })
+        }
+
+        let filePath;
+        if (!order.invoicePdf) {
+            // await createInvoicePDFWithPdfKit(order, path.resolve(process.cwd(), `${INVOICES_PATH}/${order._id}.pdf`));
+            filePath = await createInvoicePdfWithPuppeteer(order, path.resolve(process.cwd(), `${INVOICES_PATH}/${order._id}.pdf`));
+            order.invoicePdf = filePath
+            await order.save();
+        } else {
+            filePath = order.invoicePdf
+        }
+        res.download(filePath, `Order_${order._id}.pdf`);
+        
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({
+            message: 'Failed to download',
+        })
+    }
+}
+
 
 module.exports = {
     getOrdersWithPagination,
     getOneOrder,
     updateOrderStatus,
     downloadImagesZip,
+    downloadInvoice,
 }
 

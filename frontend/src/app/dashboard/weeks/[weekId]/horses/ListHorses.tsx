@@ -27,9 +27,9 @@ export default function ({
     }
 
     return (
-        <div className="flex gap-4 flex-wrap">
+        <div className="flex gap-2 md:gap-4 flex-wrap">
             { horses.map((horseNumber) => (
-                <Card key={horseNumber} className='min-w-[250px]'>
+                <Card key={horseNumber} className='lg:min-w-[250px]'>
                     <CardHeader className='flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row'>
                         <div className='flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6'>
                             <CardTitle>{ horseNumber }</CardTitle>

@@ -80,7 +80,7 @@ export default ({ initialWeeks }: {
                     }}/>
                 <Button onClick={searchWeeksByTerm}>Search</Button>
             </div> */}
-            <div className='mt-5 grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4'>
+            <div className='grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4'>
                 { filteredWeeks.map((weekInfo: WeekInfo, index) => {
                     return (
                         <div key={weekInfo.displayName + weekInfo._id}

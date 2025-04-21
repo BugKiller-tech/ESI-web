@@ -1,4 +1,5 @@
 const express = require('express')
+const path = require('path');
 const fs = require('fs');
 const HorsesImageModel = require('../models/HorsesImageModel');
 
@@ -17,6 +18,12 @@ const horsesAdminRoutes = require('./horsesAdminRouter');
 const {
     API_VERSION,
 } = require('../constants/constants');
+
+const OrderModel = require('../models/OrderModel');
+const {
+    createInvoicePDFWithPdfKit,
+    createInvoicePdfWithPuppeteer
+} = require('../lib/invoicePdf');
 
 const router = express.Router();
 
