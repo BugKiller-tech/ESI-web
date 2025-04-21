@@ -100,7 +100,7 @@ export default () => {
 
     const downloadInvoicePDF = async () => {
         try {
-
+            fullScreenLoader.showLoader();
             const response = await APIs.downloadInvoiceForOrder(order._id);
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
@@ -111,6 +111,8 @@ export default () => {
             link.remove();
         } catch (error) {
             console.error('Error downloading the file', error);
+        } finally {
+            fullScreenLoader.hideLoader();
         }
 
     }
