@@ -113,7 +113,10 @@ export default () => {
             <div className="grid-container">
                 {photos.map((photo, index) => (
                     <div className="cell" key={index}>
-                        <div className="image-wrapper">
+                        <div className="image-wrapper cursor-pointer" onClick={() => {
+                            setCurrentImageIndex(index);
+                            setOpenImageModal(true);
+                        }}>
                             <img src={photo.src} alt="Image" />
                         </div>
                         <div className='bg-main-horse flex items-center justify-center px-3 py-2' key={index}>
