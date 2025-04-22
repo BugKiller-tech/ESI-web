@@ -24,7 +24,7 @@ import { HorseInfo } from 'types';
 import { AddCartModal } from './AddCartModal';
 import * as APIs from '@/apis';
 
-import './page.scss';
+import './style.scss';
 
 export default () => {
 
