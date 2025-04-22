@@ -24,17 +24,19 @@ import { HorseInfo } from 'types';
 import { AddCartModal } from './AddCartModal';
 import * as APIs from '@/apis';
 
+import './page.scss';
+
 export default () => {
 
     const params = useParams();
     const { state, weekId, horseNumber } = params;
-    const [ isOpenCartModal, setIsOpenCartModal ] = useState(false);
-    const [ selectedHorse, setSelectedHorse ] = useState<HorseInfo | null>(null);
+    const [isOpenCartModal, setIsOpenCartModal] = useState(false);
+    const [selectedHorse, setSelectedHorse] = useState<HorseInfo | null>(null);
 
 
-    const [ horseImages, setHorseImages ] = useState<HorseInfo[]>([]);
-    const [ openImageModal, setOpenImageModal ] = useState(false);
-    const [ currentImageIndex, setCurrentImageIndex ] = useState(0);
+    const [horseImages, setHorseImages] = useState<HorseInfo[]>([]);
+    const [openImageModal, setOpenImageModal] = useState(false);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     const fetchHorseImages = async () => {
         try {
@@ -80,7 +82,7 @@ export default () => {
 
     return (
         <div>
-            <RowsPhotoAlbum photos={photos} render={{
+            {/* <RowsPhotoAlbum photos={photos} render={{
                     // photo: ({ onClick }, { photo, width, height }) => (
                     //     <div key={photo.src}>
                     //         <img src={photo.src} width="100%" />
@@ -107,7 +109,25 @@ export default () => {
                     setOpenImageModal(true);
                 }}
                 
-            />
+            /> */}
+            <div className="grid-container">
+                {photos.map((photo, index) => (
+                    <div className="cell" key={index}>
+                        <div className="image-wrapper">
+                            <img src={photo.src} alt="Image" />
+                        </div>
+                        <div className='bg-main-horse flex items-center justify-center px-3 py-2' key={index}>
+                            <div onClick={(e) => displayAddToCartPopup(e, index)}
+                                className='text-main-color rounded-md border-2 border-main-color
+                                            px-3 py-1 flex gap-2
+                                            cursor-pointer'>
+                                <ShoppingCart />
+                                <div>Add to cart</div>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
             <Lightbox
                 open={openImageModal}
                 close={() => setOpenImageModal(false)}
@@ -126,7 +146,7 @@ export default () => {
 
                 }}
                 horse={selectedHorse}
-                />
+            />
         </div>
     )
 }

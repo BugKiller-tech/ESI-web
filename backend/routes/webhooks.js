@@ -8,7 +8,8 @@ const path = require('path');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { convertStripeStatusToOurStatus } = require('../lib/stripe_convention');
 const {
-    INVOICES_PATH
+    INVOICES_PATH,
+    ORDER_STATUS
 } = require('../constants/constants')
 const {
     createInvoicePDFWithPdfKit,
@@ -37,8 +38,29 @@ router.post('/stripe-hook', express.raw({ type: 'application/json' }), async (re
     // Handle the event
     switch (event.type) {
         case 'charge.refunded':
-            const chargeRefunded = event.data.object;
             // Then define and call a function to handle the event charge.refunded
+            const charge = event.data.object;
+            const paymentIntentId = charge.payment_intent;
+            if (!paymentIntentId) return res.sendStatus(200); // No action needed
+            try {
+                // Find order using paymentIntentId
+                const order = await Order.findOne({ paymentIntentId });
+                
+                if (order) {
+                    order.paymentStatus = 'refunded';
+                    order.orderStatus = ORDER_STATUS.Refunded;
+                    order.refundInfo = {
+                        amount: charge.amount_refunded,
+                        refundDate: new Date(),
+                        refundId: charge.refunds?.data?.[0]?.id,
+                    };
+                    await order.save();
+                }
+            } catch (error) {
+                console.log(error);
+                return res.status(400).send();
+            }
+
             break;
         case 'checkout.session.completed':
             const checkoutSessionCompleted = event.data.object;

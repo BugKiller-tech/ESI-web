@@ -74,6 +74,9 @@ const schema = new mongoose.Schema({
     invoicePdf: {
         type: String,
         default: '',
+    },
+    refundInfo: {
+        type: Object,
     }
 
 }, {

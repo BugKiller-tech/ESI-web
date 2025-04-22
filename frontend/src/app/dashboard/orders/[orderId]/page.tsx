@@ -74,6 +74,24 @@ export default () => {
         }
     }
 
+    const refundOrderAction = async () => {
+        try {
+            fullScreenLoader.showLoader();
+            const response = await APIs.refundForOrderByAdmin(orderId as string);
+            if (response.data) {
+                let od: Order = response.data?.order;
+                setOrder(od);
+                toast.success('Successfully refunded the order');
+            }
+            
+        } catch (error) {
+            console.log(error);
+            toast.error('Failed to refund the order');
+        } finally {
+            fullScreenLoader.hideLoader();
+        }
+    }
+
     const downloadImages = async () => {
         try {
             toast.info('Preparing the download..');
@@ -211,6 +229,11 @@ export default () => {
                                         <Button className='bg-main-color' onClick={updateOrderStatus}
                                             disabled={order.orderStatus == newOrderStatus}>
                                             Update
+                                        </Button>
+                                        <Separator></Separator>
+                                        <Button className='bg-main-color' onClick={refundOrderAction}
+                                            disabled={order.orderStatus == 'Refunded' || order.paymentStatus == 'refunded'}>
+                                            Refund
                                         </Button>
                                         <Separator></Separator>
                                         <div>

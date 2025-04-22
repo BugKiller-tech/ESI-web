@@ -3,6 +3,8 @@ const archiver = require('archiver');
 const stream = require('stream');
 const path = require('path');
 
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
 const OrderModel = require('../models/OrderModel');
 const {
     INVOICES_PATH
@@ -174,7 +176,7 @@ const downloadImagesZip = async (req, res) => {
             }
 
             const item = order.cartItems[index]
-            
+
             const extension = fileKey.split('.').pop();
             const fileName = `Horse#${item.horse?.horseNumber}_Product#${item.product?.category}_${item.product?.name}_Quantity#${item.quantity}.${extension}`;
             archive.append(data.Body, { name: fileName });
@@ -211,11 +213,40 @@ const downloadInvoice = async (req, res) => {
             filePath = order.invoicePdf
         }
         res.download(filePath, `Order_${order._id}.pdf`);
-        
+
     } catch (error) {
         console.log(error);
         return res.status(400).json({
             message: 'Failed to download',
+        })
+    }
+}
+
+
+const refundOrder = async (req, res) => {
+    try {
+        const { orderId } = req.params;
+        // Fetch the order from DB
+        const order = await OrderModel.findById(orderId);
+
+        if (!order || !order.paymentIntentId) {
+            return res.status(404).json({ error: 'Order not found or not paid' });
+        }
+
+        // Call Stripe to create a refund
+        const refund = await stripe.refunds.create({
+            payment_intent: order.paymentIntentId,
+        });
+
+        // Update the order status
+        order.orderStatus = ORDER_STATUS.Refunded;
+        await order.save();
+
+        res.json({ order: order });
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({
+            message: 'Failed to refund',
         })
     }
 }
@@ -227,5 +258,6 @@ module.exports = {
     updateOrderStatus,
     downloadImagesZip,
     downloadInvoice,
+    refundOrder,
 }
 
