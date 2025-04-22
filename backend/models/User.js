@@ -31,6 +31,8 @@ const schema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
+}, {
+    timestamps: true
 });
 
 schema.pre('save', async function (next) {

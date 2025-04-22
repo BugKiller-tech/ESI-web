@@ -2,9 +2,21 @@ const express = require('express');
 const Joi = require('joi');
 const OrderModel = require('../models/OrderModel');
 const mongoose = require('mongoose');
+const path = require('path');
+
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { convertStripeStatusToOurStatus } = require('../lib/stripe_convention');
+const {
+    INVOICES_PATH
+} = require('../constants/constants')
+const {
+    createInvoicePDFWithPdfKit,
+    createInvoicePdfWithPuppeteer
+} = require('../lib/invoicePdf');
+const {
+    sendOrderInvoice,
+} = require('../lib/emails');
 
 
 const router = express.Router();
@@ -43,7 +55,14 @@ router.post('/stripe-hook', express.raw({ type: 'application/json' }), async (re
                     order.stripeCustomerId = checkoutSessionCompleted.customer;
                 }
                 order.orderedAt = new Date(checkoutSessionCompleted.created * 1000);
+
+                if (!order.invoicePdf) {
+                    const filePath = await createInvoicePdfWithPuppeteer(order, path.resolve(process.cwd(), `${INVOICES_PATH}/${order._id}.pdf`));
+                    order.invoicePdf = filePath
+                }
                 await order.save();
+
+                await sendOrderInvoice(order);
 
             }
             break;

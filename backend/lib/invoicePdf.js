@@ -240,7 +240,7 @@ const createInvoicePdfWithPuppeteer = async (order, outputPath) => {
         <html>
         <head>
           <style>
-            body { font-family: Arial, sans-serif; padding: 60px 40px; 0px 40px; }
+            body { font-family: Arial, sans-serif; padding: 60px 40px 0px 40px; }
             h1 { text-align: center; }
             h3 {
               margin-top: 30px;
@@ -321,33 +321,46 @@ const createInvoicePdfWithPuppeteer = async (order, outputPath) => {
 
     fs.writeFileSync('debug.html', html);
 
-    const browser = await puppeteer.launch({
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle0' });
+    // Using async/await
+    const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-    // Wait for all images to load
-    await page.evaluate(async () => {
-        const images = Array.from(document.images);
-        console.log('images found length is like', images.length);
-        await Promise.all(images.map(img => {
-            if (img.complete) return;
-            return new Promise((resolve, reject) => {
-                img.addEventListener('load', resolve);
-                img.addEventListener('error', resolve); // resolve anyway to avoid hanging
+    let retry = 3;
+    while(retry--) { // 3 times retry at max to 
+        try {
+            const browser = await puppeteer.launch({
+                args: ['--no-sandbox', '--disable-setuid-sandbox'],
             });
-        }));
-    });
+            const page = await browser.newPage();
+            await page.setContent(html, { waitUntil: 'networkidle0' });
 
-    // const htmlContent = await page.content();
-    // console.log(htmlContent);
+            // Wait for all images to load
+            await page.evaluate(async () => {
+                const images = Array.from(document.images);
+                console.log('images found length is like', images.length);
+                await Promise.all(images.map(img => {
+                    if (img.complete) return;
+                    return new Promise((resolve, reject) => {
+                        img.addEventListener('load', resolve);
+                        img.addEventListener('error', resolve); // resolve anyway to avoid hanging
+                    });
+                }));
+            });
 
-    await page.pdf({ path: outputPath, format: 'A4' });
+            // const htmlContent = await page.content();
+            // console.log(htmlContent);
 
-    await browser.close();
-    console.log("PDF generated at", outputPath);
-    return outputPath;
+            await page.pdf({ path: outputPath, format: 'A4' });
+
+            await browser.close();
+            console.log("PDF generated at", outputPath);
+            return outputPath;
+        } catch (error) {
+            console.log(error);
+            await wait(2000);
+            console.log('Retrying to create invoice pdf');
+        }
+
+    }
 }
 
 

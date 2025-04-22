@@ -2,7 +2,7 @@ import { NextAuthConfig, DefaultSession, User } from 'next-auth';
 import CredentialProvider from 'next-auth/providers/credentials';
 // import GithubProvider from 'next-auth/providers/github';
 
-
+import * as APIs from '@/apis';
 
 
 // declare module "next-auth" {
@@ -36,16 +36,22 @@ const authConfig = {
       async authorize(credentials, req) {
         const { email, password } = credentials;
 
-        if (email != 'admin@gmail.com' || password != 'admin') { // temp code 
-          return new Error('Invalid credentials');
-        }
+        let user = null;
+        let token = '';
+        try {
+          const response = await APIs.signIn({
+            email: email,
+            password: password,
+          })
 
-        const user = {
-          _id: '1',
-          name: 'ESI Admin',
-          email: email as string,
-          isAdmin: 1,
-        };
+          if (response.data.user) {
+            user = response.data.user;
+            token = response.data.token;
+          }
+
+        } catch (error) {
+          console.log(error);
+        }
 
 
         // function delay(ms: number) {
@@ -71,6 +77,9 @@ const authConfig = {
   callbacks: {
     async jwt({ token, user }) {
       // First time login: add custom fields to token
+      console.log('------------- jwt --------------');
+      console.log('user is ', user);
+      console.log('token is', token);
       if (user) {
         token._id = user._id;
         token.image = user.image;

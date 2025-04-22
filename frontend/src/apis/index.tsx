@@ -1,6 +1,10 @@
 import axios from '@/apis/axios';
 
 
+export const signIn =(data: any) => {
+    return axios.post('/api/v1/auth/signin', data);
+}
+
 export const getImageProcessSetting = () => {
     return axios.get('/api/v1/admin/setting/image-process-setting');
 }

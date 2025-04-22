@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const ProjectSettingModel = require('../models/ProjectSettingModel');
+const User = require("../models/User");
 
 const productsJson = require('../seeds/products.json');
 const ProductsModel = require('../models/ProductsModel');
@@ -49,10 +50,30 @@ async function createDefaultProducts () {
   }
 }
 
+async function createDefaultAdminUser () {
+  try {
+    const users = await User.find({}).limit(1);
+    if (users.length === 0) {
+      const admin = new User({
+        email: 'glen@gmail.com',
+        password: 'adminadmin',
+        emailConfirmed: 1,
+        isAdmin: 1,
+      })
+      await admin.save();
+      console.log('default admin user is created');
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 
 async function createDefaultDbData() {
-  createDefaultProjectSetting();
   await createDefaultProducts();
+  await createDefaultAdminUser();
+  createDefaultProjectSetting();
+  
 
 }
 
