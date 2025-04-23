@@ -188,7 +188,7 @@ export default () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Shipping address</td>
-                                                    <td>{order.shippingAddress} [ { order.zipCode } ]</td>
+                                                    <td>{order.shippingAddress} { order.zipCode }</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Payment status</td>
