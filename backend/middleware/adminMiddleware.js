@@ -1,20 +1,32 @@
-// middleware/authMiddleware.js
-const  Joi = require('joi');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+const adminCheckMiddleware = (req, res, next) => {
+    console.log('ADMMMMMMMMMMMMMMMMMMIIIIIIIIIIIIIIIIIIIINNNNNNNNNNNNNNNNNNNNNNNNN', req);
+    const authHeader = req.headers && req.headers.authorization;
 
-const bodyValidatorMiddleware = (schema) => (req, res, next) => {
-    try {
-        const { error } = schema.validate(req.body);
-        if (error) {
-            return res.status(400).json({
-                message: error.details[0].message
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ message: 'Missing or invalid Authorization header' });
+    }
+
+    const token = authHeader.split(' ')[1];
+
+    if (!token) return res.status(403).json({
+        message: 'Access denied'
+    });
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        if (err) return res.status(403).json({
+            message: 'Invalid or expired token'
+        });
+        console.log('UUUUUUUUUUUUUUUUUUUUUUU', user);
+        if (!user.isAdmin) {
+            return res.status(403).json({
+                message: 'Access denied. Please check your permission',
             })
         }
+        req.user = user;
         next();
-    } catch (error) {
-        return res.status(400).json({
-            message: 'Invalid request body'
-        })
-    } 
+    });
 };
 
-module.exports = bodyValidatorMiddleware;
+module.exports = adminCheckMiddleware;

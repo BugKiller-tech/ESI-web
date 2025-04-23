@@ -1,11 +1,18 @@
 const ProductsModel = require('../models/ProductsModel');
+const {
+    AVAILABLE_PRODUCT_CATEGORIES,
+} = require('../config/product_categories');
 
 const getCategories = async (req, res) => {
     try {
-        const categories = await ProductsModel.distinct('category');
+        
+        // const categories = await ProductsModel.distinct('category');
+        // return res.json({
+        //     categories: categories
+        // });
         return res.json({
-            categories: categories
-        });
+            categories: AVAILABLE_PRODUCT_CATEGORIES,
+        })
     } catch (error) {
         return res.status(400).json({
             'message': 'Failed to fetch categories'
@@ -21,6 +28,9 @@ const getProducts = async (req, res) => {
 
         const response = await ProductsModel.paginate(
             {
+                category: {
+                    $in: AVAILABLE_PRODUCT_CATEGORIES,
+                },
                 isDeleted: 0,
                 $or: [
                     { "name": { "$regex": search, "$options": "i" } },
@@ -54,7 +64,11 @@ const getProducts = async (req, res) => {
 }
 const getAllProducts = async (req, res) => {
     try {
-        const products = await ProductsModel.find({}).sort({
+        const products = await ProductsModel.find({
+            category: {
+                $in: AVAILABLE_PRODUCT_CATEGORIES,
+            }
+        }).sort({
             createdAt: 1,
         })
         return res.json({

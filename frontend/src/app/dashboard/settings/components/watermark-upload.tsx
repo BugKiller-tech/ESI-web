@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useTransition } from 'react';
+import { useSession } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -70,6 +71,7 @@ const ImageUploadWithPreview = ({ onImageSelect }: ImageUploadProps) => {
 
 
 export default () => {
+    const { data: session } = useSession();
     const [ loadingForSave, startTransitionForSave ] = useTransition();
 
     const [ currentWatermarkUrl, setCurrentWatermarkUrl ] = useState('');
@@ -83,7 +85,7 @@ export default () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await APIs.getWatermarkImage()
+                const response = await APIs.getWatermarkImage(session?.user?.accessToken)
                 if (response.data.watermarkImage) {
                     setCurrentWatermarkUrl(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/${response.data.watermarkImage}`);
                 }
@@ -100,7 +102,7 @@ export default () => {
             if (imageFile) {
                 const formData = new FormData()
                 formData.append('watermarkImage', imageFile);
-                const response = await APIs.uploadWatermarkImage(formData)
+                const response = await APIs.uploadWatermarkImage(formData, session?.user?.accessToken)
                 console.log(response);
                 toast.success('Successfully uploaded')
             }

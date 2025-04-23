@@ -19,6 +19,16 @@ const {
 
 const router = express.Router();
 
+router.get('/tax-and-shipping-fee', getTaxAndShippingFee);
+router.post('/tax-and-shipping-fee', bodyValidatorMiddleware(Joi.object({
+        tax: Joi.number().min(0).required(),
+        flatShippingFee: Joi.number().min(0).required(),
+    })),
+    updateTaxAndShippingFee
+);
+
+
+router.use(adminCheckMiddleware);
 router.get('/image-process-setting', getImageProcessSetting)
 router.post('/image-process-setting', bodyValidatorMiddleware(Joi.object({
     imageSetting: {
@@ -34,13 +44,6 @@ router.post('/upload-watermark-image',
 );
 
 
-router.get('/tax-and-shipping-fee', getTaxAndShippingFee);
-router.post('/tax-and-shipping-fee', bodyValidatorMiddleware(Joi.object({
-        tax: Joi.number().min(0).required(),
-        flatShippingFee: Joi.number().min(0).required(),
-    })),
-    updateTaxAndShippingFee
-);
 
 // Protected route
 

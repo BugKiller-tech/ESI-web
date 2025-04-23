@@ -1,3 +1,4 @@
+import { auth } from '@/lib/auth';
 import { WeekInfo } from 'types';
 import Weeks from './(weeks)/weeks';
 import * as APIs from '@/apis'
@@ -11,14 +12,14 @@ type pageProps = {
 export default async ({
     params
 }: pageProps) => {
-
+    const session = await auth();
     const { state } = await params;
    
     let weeks: WeekInfo[] = [];
     try {
         const response = await APIs.getWeeksByState({
             state
-        });
+        }, session?.user?.accessToken);
         if (response.data.weeks) {
             console.log(response.data.weeks);
             weeks =  response.data.weeks;
@@ -29,6 +30,6 @@ export default async ({
 
 
     return (
-            <Weeks initialWeeks={weeks} />
+        <Weeks initialWeeks={weeks} />
     )
 }

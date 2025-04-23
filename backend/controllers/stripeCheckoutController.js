@@ -143,14 +143,17 @@ const createStripeCheckoutSession = async (req, res) => {
             paidTotal,
         } = data;
 
-
+        const shippingAddress = `${req.body.street} ${req.body.city} ${req.body.state}`;
         const order = new OrderModel({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             email: req.body.email,
             phoneNumber: req.body.phoneNumber,
-            shippingAddress: req.body.shippingAddress || '',
-            zipCode: req.body.zipCode || '',
+            shippingAddress: shippingAddress || '',
+            // street: req.body.street || '',
+            // city: req.body.city || '',
+            // state: req.body.state || '',
+            // zipCode: req.body.zipCode || '',
             cartItems: cartItems,
             subTotal: subTotal,
             taxAmount: taxAmount,

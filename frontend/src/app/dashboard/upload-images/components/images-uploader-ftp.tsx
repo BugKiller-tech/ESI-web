@@ -1,5 +1,6 @@
 'use client'
 
+import { useSession } from 'next-auth/react';
 import { useState, useEffect, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -76,6 +77,7 @@ const JsonUploadComp = ({ onJsonFileSelected }: JsonUploadProps) => {
 
 type StateType = 'FL' | 'NY'
 export default () => {
+    const { data: session } = useSession();
     const [ loading, startTransition ] = useTransition();
 
     const currentYear = new Date().getFullYear();
@@ -108,7 +110,7 @@ export default () => {
     }
 
     const fetchFtpFolders = async () => {
-        const response = await APIs.getHorsesFtpFolders();
+        const response = await APIs.getHorsesFtpFolders(session?.user?.accessToken);
         if (response.data) {
             setAvailableFtpFolders(response.data.folders);
             setSelectedFtpFolder('');
@@ -132,16 +134,15 @@ export default () => {
                 }
                 formData.append('ftpFolder', selectedFtpFolder);
                
-                const response = await APIs.uploadFtpFolderAndTimestamp(formData)
+                const response = await APIs.uploadFtpFolderAndTimestamp(formData, session?.user?.accessToken)
                 console.log(response.data);
                 toast.success('Successfully uploaded. sorting is started behind the scene');
                 
             } catch (error) {
-                console.log(error);
-                toast.error('Failed to upload watermark image');
+                console.log('TTTT', error.response?.data?.message);
+                toast.error('Failed to process ftp folder');
             }
         })
-        
     }
 
     return (

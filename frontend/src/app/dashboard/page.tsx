@@ -19,11 +19,7 @@ export default async function Dashboard() {
             </h2>
             <div className="flex flex-col gap-5">
               <div>
-                Please ignore info below because it's just for test purposes. <br />
-                It will be removed later
-              </div>
-              <div>
-                { JSON.stringify(session) }
+                <p>User: { session.user?.email }</p>
               </div>
             </div>
         </div>

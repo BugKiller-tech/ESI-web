@@ -1,5 +1,6 @@
 'use client'
 
+import { useSession } from 'next-auth/react';
 import { useState, useEffect, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -33,6 +34,7 @@ const formSchema = z.object({
 })
 
 export default () => {
+    const { data: session } = useSession();
     const fullScreenLoader = useFullScreenLoader();
 
     const form = useForm({
@@ -46,7 +48,7 @@ export default () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await APIs.getTaxAndShippingFeeSetting()
+                const response = await APIs.getTaxAndShippingFeeSetting(session?.user?.accessToken)
                 form.reset({
                     tax: response.data.tax,
                     flatShippingFee: response.data.flatShippingFee
@@ -63,7 +65,7 @@ export default () => {
         console.log('testing',data);
         fullScreenLoader.showLoader();
         try {
-            await APIs.updateTaxAndShippingFeeSetting(data)
+            await APIs.updateTaxAndShippingFeeSetting(data, session?.user?.accessToken)
             toast.success('Tax and shipping fee setting has been updated')
         } catch (error) {
             toast.error('Failed to update tax and shipping fee setting')

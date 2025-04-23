@@ -27,7 +27,7 @@ const {
 
 const router = express.Router();
 
-router.use(`/api/${API_VERSION}/backend-auth`,  authRoutes);
+router.use(`/api/${API_VERSION}/auth`,  authRoutes);
 
 router.use(`/api/${API_VERSION}/products`,  productRoutes);
 

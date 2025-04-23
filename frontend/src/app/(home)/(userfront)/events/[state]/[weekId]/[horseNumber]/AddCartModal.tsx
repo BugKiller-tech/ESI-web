@@ -42,7 +42,7 @@ export const AddCartModal: React.FC<AddCartModalProps> = ({
 
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-    const [ quantity, setQuantity ] = useState<number>(1);
+    const [quantity, setQuantity] = useState<number>(1);
 
     const {
         products,
@@ -106,7 +106,7 @@ export const AddCartModal: React.FC<AddCartModalProps> = ({
     const updateQuantity = (e: any) => {
         try {
             let newVal = parseInt(e.target.value || 1);
-            if ( newVal > 0) {
+            if (newVal > 0) {
                 setQuantity(newVal);
             }
 
@@ -139,26 +139,24 @@ export const AddCartModal: React.FC<AddCartModalProps> = ({
             description='Please select the product you want to purchase for the selected image'
             isOpen={isOpen}
             onClose={onClose}
+            className='max-w-full w-[600px]'
         >
             <div className='flex flex-col md:flex-row gap-2'>
                 <div>
                     {horse && <img src={horse.thumbnailS3Link} width='200px' />}
                 </div>
                 <div className='flex-1 flex flex-col gap-3'>
-                    <Select
-                        onValueChange={(value) => { setSelectedCategory(value) }}
-                        defaultValue={categories[0] || ''}
-                    >
-                        <SelectTrigger>
-                            <SelectValue placeholder='Select categories' />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {categories.map((c) => (
-                                <SelectItem value={`${c}`} key={c}>{c}</SelectItem>
+                    <div className='flex flex-wrap gap-2'>
+                        {
+                            categories.map((c) => (
+                                <div key={c}
+                                    className={'border border-gray-500 rounded-md px-5 py-2 cursor-pointer ' + (selectedCategory == c ? 'bg-main-color text-white' : '')}
+                                    onClick={() => {
+                                        setSelectedCategory(c);
+                                    }}>{c}</div>
                             ))
-                            }
-                        </SelectContent>
-                    </Select>
+                        }
+                    </div>
                     <Select
                         onValueChange={(value) => { processForSelectProdcut(value) }}
                         defaultValue={selectedProduct?._id || ''}
@@ -169,12 +167,14 @@ export const AddCartModal: React.FC<AddCartModalProps> = ({
                         </SelectTrigger>
                         <SelectContent>
                             {productsForCategory.map((p) => (
-                                <SelectItem value={`${p._id}`} key={p._id}>{p.name}</SelectItem>
+                                <SelectItem value={`${p._id}`} key={p._id}>
+                                    <span>{p.name}</span> - <span>${p.price}</span>
+                                </SelectItem>
                             ))
                             }
                         </SelectContent>
                     </Select>
-                    <Input type="number" value={quantity} onChange={(e) => updateQuantity(e) } />
+                    <Input type="number" value={quantity} onChange={(e) => updateQuantity(e)} />
 
                     <div className='flex w-full items-center justify-end space-x-2 pt-6'>
                         <Button disabled={!readyToAddCart} variant='destructive' onClick={addToCartWithSelectedProduct}

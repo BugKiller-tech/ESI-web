@@ -1,5 +1,6 @@
 'use client'
 
+import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { WeekInfo } from 'types';
 import { useRouter } from 'next/navigation';
@@ -12,6 +13,7 @@ interface CellActionProps {
 
 export default function ({ data }: CellActionProps) {
 
+    const { data: session } = useSession();
     const router = useRouter();
 
     const toggleVisibility = () => {
@@ -19,7 +21,7 @@ export default function ({ data }: CellActionProps) {
             _id: data._id,
             isDeleted: data.isDeleted == 1 ? 0 : 1,
         }
-        APIs.updateHorseWeekVisibility(newData)
+        APIs.updateHorseWeekVisibility(newData, session?.user?.accessToken)
         .then(response => {
             console.log('this is the response', response);
             toast.success('Visibility updated successfully');

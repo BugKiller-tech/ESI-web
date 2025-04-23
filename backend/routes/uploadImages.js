@@ -2,7 +2,6 @@ const express = require('express');
 const Joi = require('joi');
 
 const router = express.Router();
-const adminCheckMiddleware = require('../middleware/adminMiddleware');
 const uploadHorseImagesMiddleware = require('../middleware/uploadHorseImagesMiddleware');
 const uploadTimestampJsonMiddleware = require('../middleware/uploadTimestampJsonMiddleware');
 
@@ -11,17 +10,15 @@ const {
     uploadTimeStampJsonWithFtpFolder,
     getHorsesFtpFolders,
 } = require('../controllers/uploadImagesController');
-const bodyValidatorMiddleware = require('../middleware/adminMiddleware');
+const bodyValidatorMiddleware = require('../middleware/bodyValidatorMiddleware');
+const adminCheckMiddleware = require('../middleware/adminMiddleware');
 
 
-// router.use(adminCheckMiddleware);
-
-
+router.use(adminCheckMiddleware);
 router.get('/list-horses-ftp-folders', 
     // adminCheckMiddleware,
     getHorsesFtpFolders,
 )
-
 
 // router.post('/horses', 
 //     uploadHorseImagesMiddleware,

@@ -176,9 +176,11 @@ const downloadImagesZip = async (req, res) => {
             }
 
             const item = order.cartItems[index]
+            const { horse, product } = item;
 
             const extension = fileKey.split('.').pop();
-            const fileName = `Horse#${item.horse?.horseNumber}_Product#${item.product?.category}_${item.product?.name}_Quantity#${item.quantity}.${extension}`;
+            const fileName =
+                `Horse#${horse?.horseNumber}_Product#${product?.category}_${product?.name}_Photoname#${horse?.originImageName}_Quantity#${item.quantity}.${extension}`;
             archive.append(data.Body, { name: fileName });
             index++;
         }

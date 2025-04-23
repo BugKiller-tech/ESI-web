@@ -1,4 +1,6 @@
 'use client';
+
+import { useSession } from 'next-auth/react';
 import { AlertModal } from '@/components/modal/alert-modal';
 import { Button } from '@/components/ui/button';
 import {
@@ -20,6 +22,8 @@ interface CellActionProps {
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
+  const { data: session } = useSession();
+
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -28,8 +32,8 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     // console.log('deleteeeee', data);
     try {
       const response = await APIs.deleteProduct({
-        _id: data._id
-      })
+        _id: data._id,
+      }, session?.user?.accessToken)
       toast.success('Successfully deleted the product');
       router.refresh();
     } catch ( error ) {

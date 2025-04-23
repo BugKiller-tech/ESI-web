@@ -3,6 +3,7 @@
 import { HorseInfo } from 'types';
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { useFullScreenLoader } from '@/context/FullScreenLoaderContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,6 +15,7 @@ export default ({ }: {
 
 }) => {
     const router = useRouter();
+    const { data: session } = useSession();
     const fullScreenLoader = useFullScreenLoader();
 
     const params = useParams();
@@ -59,7 +61,7 @@ export default ({ }: {
             fullScreenLoader.showLoader();
             const response = await APIs.getHorsesByWeek({
                 weekId: weekId,
-            })
+            }, session?.user?.accessToken)
             if (response.data.horses) {
                 setHorses(response.data.horses);
                 setForceApplyFilter(!forceApplyFilter);

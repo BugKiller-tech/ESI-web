@@ -1,5 +1,6 @@
 'use client'; // Required for Next.js App Router
 
+import { useSession } from 'next-auth/react';
 import {
     createContext, ReactNode, useContext,
     useEffect, useState,
@@ -26,6 +27,9 @@ const CartContext = createContext({
 });
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
+    const { data: session } = useSession();
+
+
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [products, setProducts] = useState<Product[]>([]);
     const [taxAndShippingFee, setTaxAndShippingFee] = useState<{
@@ -47,14 +51,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         fetchTaxAndFee();
     }, []);
     const fetchProducts = async () => {
-        const response = await APIs.getAllProducts();
+        const response = await APIs.getAllProducts(session?.user?.accessToken);
         if (response.data) {
             console.log('fetching products inside context', response.data.products);
             setProducts(response.data.products);
         }
     }
     const fetchTaxAndFee = async () => {
-        const response = await APIs.getTaxAndShippingFeeSetting();
+        const response = await APIs.getTaxAndShippingFeeSetting(session?.user?.accessToken);
         if (response.data) {
             console.log('tax and fee fetching is like', response.data);
             setTaxAndShippingFee(response.data);

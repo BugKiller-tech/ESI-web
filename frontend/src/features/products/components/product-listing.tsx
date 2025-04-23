@@ -1,3 +1,4 @@
+import { auth } from '@/lib/auth';
 import { Product } from 'types';
 import { searchParamsCache } from '@/lib/searchparams';
 import { DataTable as ProductTable } from '@/components/ui/table/data-table';
@@ -7,6 +8,9 @@ import * as APIs from '@/apis';
 type ProductListingPageProps = {};
 
 export default async function ProductListingPage({}: ProductListingPageProps) {
+
+  const session = await auth();
+
   // Showcasing the use of search params cache in nested RSCs
   const page = searchParamsCache.get('page');
   const search = searchParamsCache.get('q');
@@ -20,19 +24,8 @@ export default async function ProductListingPage({}: ProductListingPageProps) {
     ...(categories && { categories: categories })
   };
 
-  const response = await APIs.getProducts(filters);
-
-  // useEffect(() => {
-  //   const fetchData = async() => {
-  //     const data = await APIs.getProducts(filters);
-  //     console.log('this is for testing purpose', data);
-  //     // const totalProducts = data.total_products;
-  //     // const products: Product[] = data.products;
-  //   }
-  //   fetchData();
-  // }, [])
-
-  
+  const response = await APIs.getProducts(filters, session?.user?.accessToken);
+ 
   
   // const totalProducts = 0;
   // const products: Product[] = [];

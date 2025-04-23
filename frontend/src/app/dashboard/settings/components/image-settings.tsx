@@ -1,5 +1,6 @@
 'use client'
 
+import { useSession } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { useEffect, useTransition } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -33,6 +34,8 @@ const formSchema = z.object({
 type ImageSettingFormValue = z.infer<typeof formSchema>;
 
 export default () => {
+    const { data: session } = useSession();
+
     const [ loadingForSave, startTransitionForSave ] = useTransition();
     const form = useForm<ImageSettingFormValue>({
         resolver: zodResolver(formSchema),
@@ -45,7 +48,7 @@ export default () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await APIs.getImageProcessSetting()
+                const response = await APIs.getImageProcessSetting(session?.user?.accessToken)
                 if (response.data.imageSetting) {
                     form.reset(response.data.imageSetting)
                 }
@@ -64,7 +67,7 @@ export default () => {
                     imageSetting: {
                         ...data
                     }
-                })
+                }, session?.user?.accessToken)
                 console.log(response);
                 toast.success('Successfully updated')
             } catch (e) {

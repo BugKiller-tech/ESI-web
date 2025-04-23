@@ -1,4 +1,5 @@
 'use client';
+import { useSession } from 'next-auth/react';
 
 import PageContainer from '@/components/layout/page-container';
 import { Heading } from '@/components/ui/heading';
@@ -30,6 +31,8 @@ export default () => {
     const { orderId } = params;
 
     const fullScreenLoader = useFullScreenLoader();
+    const { data: session } = useSession();
+
     const [order, setOrder] = useState<Order | null>(null);
 
     const [newOrderStatus, setNewOrderStatus] = useState('');
@@ -38,7 +41,7 @@ export default () => {
     const fetchOrder = async () => {
         fullScreenLoader.showLoader();
         try {
-            const response = await APIs.getOneOrder(orderId as string);
+            const response = await APIs.getOneOrder(orderId as string, session?.user?.accessToken);
             let od: Order = response.data?.order;
             if (od) {
                 setOrder(od);
@@ -61,7 +64,7 @@ export default () => {
             const response = await APIs.updateOrderStatus({
                 orderId: orderId,
                 orderStatus: newOrderStatus,
-            })
+            }, session?.user?.accessToken)
             let od: Order = response.data?.order;
             if (od) {
                 setOrder(od);
@@ -77,7 +80,7 @@ export default () => {
     const refundOrderAction = async () => {
         try {
             fullScreenLoader.showLoader();
-            const response = await APIs.refundForOrderByAdmin(orderId as string);
+            const response = await APIs.refundForOrderByAdmin(orderId as string, session?.user?.accessToken);
             if (response.data) {
                 let od: Order = response.data?.order;
                 setOrder(od);
@@ -96,7 +99,7 @@ export default () => {
         try {
             toast.info('Preparing the download..');
             fullScreenLoader.showLoader();
-            const response = await APIs.downloadImagesZipForOrder(order._id);
+            const response = await APIs.downloadImagesZipForOrder(order._id, session?.user?.accessToken);
 
             toast.info('Download is started...');
             const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -119,7 +122,7 @@ export default () => {
     const downloadInvoicePDF = async () => {
         try {
             fullScreenLoader.showLoader();
-            const response = await APIs.downloadInvoiceForOrder(order._id);
+            const response = await APIs.downloadInvoiceForOrder(order._id, session?.user?.accessToken);
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
@@ -185,7 +188,7 @@ export default () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Shipping address</td>
-                                                    <td>{order.shippingAddress}</td>
+                                                    <td>{order.shippingAddress} [ { order.zipCode } ]</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Payment status</td>

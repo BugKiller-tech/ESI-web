@@ -45,8 +45,9 @@ const authConfig = {
           })
 
           if (response.data.user) {
+            console.log('authed hehehe', response.data);
             user = response.data.user;
-            token = response.data.token;
+            token = response.data.accessToken;
           }
 
         } catch (error) {
@@ -63,11 +64,13 @@ const authConfig = {
 
         if (user) {
           // Any object returned will be saved in `user` property of the JWT
+          user.accessToken = token;
+          console.log('TTTTTTTTTTTTTTT', user);
           return user;
         } else {
           // If you return null then an error will be displayed advising the user to check their details.
           // return null;
-          throw new Error('asdf');
+          throw new Error('');
           // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
         }
         return null;
@@ -84,6 +87,7 @@ const authConfig = {
         token._id = user._id;
         token.image = user.image;
         token.isAdmin = user.isAdmin;
+        token.accessToken = user.accessToken;
       }
       return token;
     },
@@ -92,6 +96,7 @@ const authConfig = {
         session.user._id = token._id as string;
         session.user.image = (token.image || '') as string;
         session.user.isAdmin = (token.isAdmin || 0) as number;
+        session.user.accessToken = (token.accessToken) as string;
         console.log('in auth call back token', token);
       }
       return session;

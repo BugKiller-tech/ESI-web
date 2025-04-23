@@ -1,3 +1,4 @@
+import { auth } from '@/lib/auth';
 import PageContainer from '@/components/layout/page-container';
 import { Heading } from '@/components/ui/heading';
 import { Separator } from '@/components/ui/separator';
@@ -21,11 +22,12 @@ export default async function ({
         weekId,
         horseNumber,
     } = await params;
+    const session = await auth();
 
 
     let horseImages: any[] = [];
     try {
-        const response = await APIs.getHorseImagesByHorseNumberForAdmin(weekId, horseNumber);
+        const response = await APIs.getHorseImagesByHorseNumberForAdmin(weekId, horseNumber, session?.user?.accessToken);
         if (response.data) {
             horseImages = response.data.horseImages;
         }

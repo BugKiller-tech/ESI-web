@@ -1,5 +1,6 @@
 'use client';
 import { useMemo, useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
 import { useCart } from "@/context/CartContext";
 import OrderSummary from '@/components/esi/OrderSummary';
 import {
@@ -25,6 +26,7 @@ import * as APIs from '@/apis';
 export default () => {
 
     const [ loading, setLoading ] = useState(false);
+    const { data: session } = useSession();
 
     const {
         cartItems,
@@ -42,8 +44,9 @@ export default () => {
             lastName: z.string().min(1, 'Please provide your first name'),
             email: z.string().email('Please provide the valid email'),
             phoneNumber: z.string().min(1, 'Plesae input the phone number'),
-            shippingAddress: flatShippingFee > 0 ? z.string().min(1, 'Please input the shipping address')
-                            : z.string().optional(),
+            street: flatShippingFee > 0 ? z.string().min(1, 'Please input the street') : z.string().optional(),
+            city: flatShippingFee > 0 ? z.string().min(1, 'Please input the city') : z.string().optional(),
+            state: flatShippingFee > 0 ? z.string().min(1, 'Please input the state') : z.string().optional(),
             zipCode: flatShippingFee > 0 ? z.string().min(1, 'Please input your zip code')
                             : z.string().optional()
         });
@@ -57,7 +60,9 @@ export default () => {
         lastName: '',
         email: '',
         phoneNumber: '',
-        shippingAddress: '',
+        street: '',
+        city: '',
+        state: '',
         zipCode: '',
     }
     const form = useForm<UserFormValue>({
@@ -75,7 +80,9 @@ export default () => {
                     lastName: savedCheckoutUserInfo?.lastName || '',
                     email: savedCheckoutUserInfo?.email || '',
                     phoneNumber: savedCheckoutUserInfo?.phoneNumber || '',
-                    shippingAddress: savedCheckoutUserInfo?.shippingAddress || '',
+                    street: savedCheckoutUserInfo?.street || '',
+                    city: savedCheckoutUserInfo?.city || '',
+                    state: savedCheckoutUserInfo?.state || '',
                     zipCode: savedCheckoutUserInfo?.zipCode || '',
                 })
             }
@@ -90,7 +97,9 @@ export default () => {
                 ...data
             } 
             if (flatShippingFee == 0) {
-                dataToPass['shippingAddress'] = '';
+                dataToPass['street'] = '';
+                dataToPass['city'] = '';
+                dataToPass['state'] = '';
                 dataToPass['zipCode'] = '';
             }
 
@@ -99,7 +108,7 @@ export default () => {
             const response = await APIs.createStripeCheckoutSession({
                 ...dataToPass,
                 cartItems: cartItems,
-            })
+            }, session?.user?.accessToken)
             if (response?.data?.url) {
                 window.location.href = response?.data?.url; // redirect to Stripe                
             }
@@ -118,6 +127,7 @@ export default () => {
             <div className="mt-5 flex flex-wrap gap-5">
                 <div className='flex-1'>
                     <OrderSummary
+                        fullHeight={false}
                         cartItems={cartItems}
                         subTotal={subTotal}
                         taxTotal={taxTotal}
@@ -181,13 +191,40 @@ export default () => {
                                     )}
                                 />
                                 {flatShippingFee > 0 && (
-                                    <>
-                                    <FormField control={form.control} name='shippingAddress'
+                                    <div className='p-3 border rounded-md border-gray-500'>
+                                    <div className='font-bold'>Shipping information</div>
+                                    <FormField control={form.control} name='street'
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Shipping address</FormLabel>
+                                                <FormLabel>Street</FormLabel>
                                                 <FormControl>
-                                                    <Input type='text' placeholder='Enter shipping address'
+                                                    <Input type='text' placeholder='Enter Street'
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField control={form.control} name='city'
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>City</FormLabel>
+                                                <FormControl>
+                                                    <Input type='text' placeholder='Enter City'
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField control={form.control} name='state'
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>State</FormLabel>
+                                                <FormControl>
+                                                    <Input type='text' placeholder='Enter State'
                                                         {...field}
                                                     />
                                                 </FormControl>
@@ -208,7 +245,7 @@ export default () => {
                                             </FormItem>
                                         )}
                                     />
-                                    </>
+                                    </div>
 
                                 )}
                                 <div className='text-right'>

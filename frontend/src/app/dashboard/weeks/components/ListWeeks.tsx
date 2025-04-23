@@ -2,6 +2,7 @@
 // import { useState, useTransition,
 //     useEffect
 //  } from 'react';
+import { auth } from '@/lib/auth';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/table/data-table';
@@ -15,6 +16,7 @@ import { columns } from './columns';
 export default async function () {
 
     // const [ loadingData, startTransitionForLoadingData ] = useTransition();
+    const session = await auth();
     
     const page = searchParamsCache.get('page');
     const search = searchParamsCache.get('q');
@@ -35,9 +37,8 @@ export default async function () {
                 limit: pageLimit || 10,
                 search: search || '',
             }
-            const response = await APIs.getHorseWeeks(filters)
+            const response = await APIs.getHorseWeeks(filters, session?.user?.accessToken)
             console.log('this is working or not', response.data);
-            // const response = await APIs.getImageProcessSetting()
             if (response.data.weeks) {
                 // setCategories(response.data.categories);
                 // setTotalCount(response.data.totalCount)

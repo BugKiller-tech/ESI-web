@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useTransition } from 'react';
+import { useSession } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -118,6 +119,7 @@ const ImagesUploadWithPreview = ({ onImagesSelect }: ImageUploadProps) => {
 
 
 export default () => {
+    const { data: session } = useSession();
     const [ loadingForSave, startTransitionForSave ] = useTransition();
 
     const [ selectedState, setSelectedState ] = useState<string>('FL');
@@ -156,7 +158,7 @@ export default () => {
             for (const file of imageFiles) {
                 formData.append('horseImages', file);
             }
-            const response = await APIs.uploadHorseImages(formData)
+            const response = await APIs.uploadHorseImages(formData, session?.user?.accessToken)
             console.log(response.data);
             
         } catch (error) {

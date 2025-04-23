@@ -22,8 +22,6 @@ import {
     CartItem
 } from 'types';
 
-import * as APIs from '@/apis';
-
 export default () => {
     const {
         cartItems,

@@ -1,5 +1,6 @@
 'use client';
 
+import { useSession } from 'next-auth/react';
 import { useEffect, useState, useTransition } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -53,12 +54,14 @@ export default function ProductForm({
     pageTitle: string;
     isForUpdate: boolean;
 }) {
+    const { data: session } = useSession();
+
     const [ categories, setCategories ] = useState([]);
     const [ isPending, startTransition ] = useTransition();
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await APIs.getProductCategories();
+            const response = await APIs.getProductCategories(session?.user?.accessToken);
             if (response) {
                 setCategories(response.data.categories);
             }
@@ -86,8 +89,7 @@ export default function ProductForm({
         startTransition(async () => {
             try {
                 if (initialData) {
-                    // await APIs.updateProduct(initialData.id, values);
-                    await APIs.updateProduct(initialData._id as string, values);
+                    await APIs.updateProduct(initialData._id as string, values, session?.user?.accessToken);
                     toast.success('Successfully updated');
                 } else {
                     await APIs.createProduct(values);

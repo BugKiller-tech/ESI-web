@@ -1,9 +1,11 @@
 const express = require('express');
 const controller = require('../controllers/orderController');
+const adminCheckMiddleware = require('../middleware/adminMiddleware');
 
 
 const router = express.Router();
 
+router.use(adminCheckMiddleware);
 
 router.get('/:orderId/get', controller.getOneOrder);
 router.post('/get-paginated', controller.getOrdersWithPagination);

@@ -2,6 +2,7 @@
 // import { useState, useTransition,
 //     useEffect
 //  } from 'react';
+import { auth } from '@/lib/auth';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/table/data-table';
@@ -19,6 +20,7 @@ export default async function () {
     const page = searchParamsCache.get('page');
     const search = searchParamsCache.get('q');
     const pageLimit = searchParamsCache.get('limit');
+    const session = await auth();
     // const [ searchTerm, setSearchTerm ] = useState('');
 
     // const [categories, setCategories] = useState([]);
@@ -35,9 +37,8 @@ export default async function () {
                 limit: pageLimit || 10,
                 search: search || '',
             }
-            const response = await APIs.getOrdersWithPaginated(filters)
+            const response = await APIs.getOrdersWithPaginated(filters, session?.user?.accessToken)
             console.log('fetching orders', response.data);
-            // const response = await APIs.getImageProcessSetting()
             if (response.data.orders) {
                 // setCategories(response.data.categories);
                 // setTotalCount(response.data.totalCount)

@@ -1,4 +1,5 @@
 
+import { auth } from '@/lib/auth';
 import PageContainer from '@/components/layout/page-container';
 import { Heading } from '@/components/ui/heading';
 import { Separator } from '@/components/ui/separator';
@@ -18,12 +19,13 @@ type pageProps = {
 export default async function ({ params }: pageProps) {
 
     const { weekId } = await params;
+    const session = await auth();
 
     let week: WeekInfo | null = null;
     let horses: string[] = [];
 
     try {
-        const response = await APIs.getHorsesByWeekIdAdmin(weekId as string);
+        const response = await APIs.getHorsesByWeekIdAdmin(weekId as string, session?.user?.accessToken);
         console.log('this is very very', response.data);
         week = response.data.week;
         horses = response.data.horses;

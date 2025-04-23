@@ -1,131 +1,163 @@
-import axios from '@/apis/axios';
+import {
+    createAxiosInstance
+} from './createAxiosInstance';
 
-
-export const signIn =(data: any) => {
+export const signIn = async (data: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.post('/api/v1/auth/signin', data);
 }
 
-export const getImageProcessSetting = () => {
+export const getImageProcessSetting = async (token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.get('/api/v1/admin/setting/image-process-setting');
 }
 
-export const saveImageProcessSetting =  (data: any) => {
+export const saveImageProcessSetting = async (data: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.post('/api/v1/admin/setting/image-process-setting', data);
 }
 
-export const getWatermarkImage = () => {
+export const getWatermarkImage = async (token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.get('/api/v1/admin/setting/watermark-image');
 }
 
-export const uploadWatermarkImage = (formData: any) => {
+export const uploadWatermarkImage = async (formData: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.post('/api/v1/admin/setting/upload-watermark-image', formData, {
         headers: {
+            Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data',
         },
     });
 }
 
-export const uploadHorseImages = (formData: any) => {
+export const uploadHorseImages = async (formData: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.post('/api/v1/admin/upload/horses', formData, {
         headers: {
+            Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data'
         }
     })
 }
 
-export const uploadFtpFolderAndTimestamp = (FormData: any) => {
-    return axios.post('/api/v1/admin/upload/timestamp-and-ftp-folder', FormData,{
+export const uploadFtpFolderAndTimestamp = async (formData: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
+    return axios.post('/api/v1/admin/upload/timestamp-and-ftp-folder', formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
     })
 }
 
-export const getHorsesFtpFolders = () => {
+export const getHorsesFtpFolders = async (token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.get('/api/v1/admin/upload/list-horses-ftp-folders')
 }
 
-export const getTaxAndShippingFeeSetting = () => {
+export const getTaxAndShippingFeeSetting = async (token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.get('/api/v1/admin/setting/tax-and-shipping-fee');
 }
 
-export const updateTaxAndShippingFeeSetting = (formData: any) => {
+export const updateTaxAndShippingFeeSetting = async (formData: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.post('/api/v1/admin/setting/tax-and-shipping-fee', formData);
 }
 
-export const getProductCategories = () => {
+export const getProductCategories = async (token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.get('/api/v1/products/categories');
 }
 
-export const getProducts = (filters: any) => {
+export const getProducts = async (filters: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.post('/api/v1/products/get', filters);
 }
-export const getAllProducts = () => {
+export const getAllProducts = async (token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.get('/api/v1/products/get-all');
 }
 
-export const createProduct = (data: any)=> {
+export const createProduct = async (data: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.post('/api/v1/products/create', data);
 }
 
-export const deleteProduct = (data: any) => {
+export const deleteProduct = async (data: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.post('/api/v1/products/delete', data);
 }
 
-export const getProduct = (productId: string) => {
-    return axios.get(`/api/v1/products/get/${productId}`); 
+export const getProduct = async (productId: string, token: string = '') => {
+    const axios = await createAxiosInstance(token);
+    return axios.get(`/api/v1/products/get/${productId}`);
 }
 
-export const updateProduct = (productId: string, data: any) => {
+export const updateProduct = async (productId: string, data: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.post(`/api/v1/products/update/${productId}`, data);
 }
 
-export const getHorseWeeks = (filters: any) => {
+export const getHorseWeeks = async (filters: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.post('/api/v1/admin/weeks/get-paginated', filters);
 }
 
-export const updateHorseWeekVisibility = (data: any) => {
+export const updateHorseWeekVisibility = async (data: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.post('/api/v1/admin/weeks/update-visibility', data);
 }
 
-export const getHorsesByWeekIdAdmin = (weekId: string) => {
+export const getHorsesByWeekIdAdmin = async (weekId: string, token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.get(`/api/v1/admin/horses/${weekId}/horse-names`);
 }
 
-export const getHorseImagesByHorseNumberForAdmin = (weekId: string, horseNumber: string) => {
+export const getHorseImagesByHorseNumberForAdmin = async (weekId: string, horseNumber: string, token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.get(`/api/v1/admin/horses/${weekId}/horses/${horseNumber}`);
 }
 
-export const getWeeksByState = (postData: any) => {
+export const getWeeksByState = async (postData: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.post('/api/v1/front/weeks/get-weeks-for-state', postData);
 }
 
-export const getHorsesByWeek = (postData: any) => {
+export const getHorsesByWeek = async (postData: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.post('/api/v1/front/horses/get-horses-for-week', postData);
 }
 
-export const getHorseImagesByWeekAndHorseNumber = (postData: any) => {
+export const getHorseImagesByWeekAndHorseNumber = async (postData: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.post('/api/v1/front/horses/get-horse-images-by-week-and-horsenumber', postData);
 }
 
-export const createStripeCheckoutSession = (postData: any) => {
+export const createStripeCheckoutSession = async (postData: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.post('/api/v1/checkout/stripe/create-checkout-session', postData);
 }
 
 
-export const getOrdersWithPaginated = (filters: any) => {
+export const getOrdersWithPaginated = async (filters: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.post('/api/v1/admin/orders/get-paginated', filters);
 }
 
-export const getOneOrder = (orderId: string) => {
+export const getOneOrder = async (orderId: string, token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.get(`/api/v1/admin/orders/${orderId}/get`);
 }
 
-export const updateOrderStatus = (postData: any) => {
+export const updateOrderStatus = async (postData: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.post(`/api/v1/admin/orders/update-order-status`, postData);
 }
 
-export const downloadImagesZipForOrder = (orderId: string) => {
+export const downloadImagesZipForOrder = async (orderId: string, token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.get(`/api/v1/admin/orders/${orderId}/download-images-zip`, {
         responseType: 'blob',
         headers: {
@@ -134,12 +166,14 @@ export const downloadImagesZipForOrder = (orderId: string) => {
     });
 }
 
-export const refundForOrderByAdmin = (orderId: string) => {
+export const refundForOrderByAdmin = async (orderId: string, token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.get(`/api/v1/admin/orders/${orderId}/refund`);
 }
 
 
-export const downloadInvoiceForOrder = (orderId: string) => {
+export const downloadInvoiceForOrder = async (orderId: string, token: string = '') => {
+    const axios = await createAxiosInstance(token);
     return axios.get(`/api/v1/admin/orders/${orderId}/download-invoice`, {
         responseType: 'blob',
     })

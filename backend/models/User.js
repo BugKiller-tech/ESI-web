@@ -62,10 +62,7 @@ schema.methods.createEmailConfirmationToken = async function () {
 
 schema.methods.toAuthJson = function () {
     const excludeFields = ['password'];
-    return {
-        email: this.email,
-        emailConfirmed: this.emailConfirmed,
-    };
+    return this;
 }
 
 module.exports = mongoose.model('User', schema);

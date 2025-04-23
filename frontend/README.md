@@ -13,7 +13,7 @@
 
 ## Overview
 
-This is a starter template using the following stack:
+This is ESI web frontend with followting tech stacks
 
 - Framework - [Next.js 15](https://nextjs.org/13)
 - Language - [TypeScript](https://www.typescriptlang.org)
@@ -107,3 +107,5 @@ You should now be able to access the application at http://localhost:3000.
 > After cloning or forking the repository, be cautious when pulling or syncing with the latest changes, as this may result in breaking conflicts.
 
 Cheers! 🥂
+
+

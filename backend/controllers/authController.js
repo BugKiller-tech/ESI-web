@@ -83,8 +83,8 @@ const signin = async (req, res) => {
 
         return res.json({
             message: 'Login successful',
-            user: user.toAuthJson(),
-            token
+            user: test,
+            accessToken: token,
         });
     } catch (e) {
         console.log(e);

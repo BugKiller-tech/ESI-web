@@ -103,6 +103,16 @@ const uploadTimeStampJsonWithFtpFolder = async (req, res) => {
             message: 'Please provide valid json file which has weekNumber & entries'
         })
     }
+
+    const found = await FtpImageProcessModel.findOne({
+        ftpFolderName: req.body.ftpFolder,
+    })
+
+    if (found) {
+        return res.status(400).json({
+            message: 'Same folder name is processed before',
+        })
+    }
     
     const entry = new FtpImageProcessModel({
         state: req.body.state,

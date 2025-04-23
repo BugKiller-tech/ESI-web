@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 import { RowsPhotoAlbum } from "react-photo-album";
 import "react-photo-album/rows.css";
@@ -30,6 +31,8 @@ export default () => {
 
     const params = useParams();
     const { state, weekId, horseNumber } = params;
+    const { data: session } = useSession();
+    
     const [isOpenCartModal, setIsOpenCartModal] = useState(false);
     const [selectedHorse, setSelectedHorse] = useState<HorseInfo | null>(null);
 
@@ -43,7 +46,7 @@ export default () => {
             const response = await APIs.getHorseImagesByWeekAndHorseNumber({
                 weekId,
                 horseNumber,
-            })
+            }, session?.user?.accessToken)
             setHorseImages(response.data.horseImages);
         } catch (e) {
             console.log('error on', e);
