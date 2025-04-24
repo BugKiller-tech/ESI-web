@@ -24,7 +24,7 @@ export default () => {
     }
 
     return (
-        <div className="mt-3 flex items-center gap-2">
+        <div className={`flex items-center gap-2 ${state ? 'mt-3' : ''}`}>
             { state && <div className="cursor-pointer font-bold text-main-color underline"
                             onClick={() => {
                                 setIsOpenedStateModal(!isOpenedStateModal)

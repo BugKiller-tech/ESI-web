@@ -1,9 +1,49 @@
 const mongoose = require('mongoose');
-const { getHorsesByWeekId } = require('../services/horseService');
 
+const WeekModel = require('../models/WeekModel');
 const HorsesImageModel = require('../models/HorsesImageModel');
 
 const ObjectId = mongoose.Types.ObjectId;
+
+
+const searchHorse = async ( req, res ) => {
+    try {
+        const { weekId, horseNumber } = req.body;
+
+        if (!weekId) {
+            return res.status(400).json({
+                message: 'Week ID is required',
+            });
+        }
+
+        const horses = await HorsesImageModel.find({
+            week: new ObjectId(String(weekId)),
+            horseNumber: { "$regex": horseNumber, "$options": "i" }
+        }).populate('week').sort({
+            createdAt: -1,
+        })
+
+        if (horses.length > 0) {
+            const week = await WeekModel.findById(weekId);
+            return res.status(200).json({
+                message: 'Horses fetched successfully',
+                horse: horses[0],
+                week: week,
+            });
+        } else {
+            return res.status(400).json({
+                message: 'Can not find the horse with the number you entered.',
+            })
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(400).json({
+            message: 'Internal Server Error',
+            error: error.message,
+        });
+    }
+}
+
 
 const getHorsesForWeek = async ( req, res ) => {
     try {
@@ -68,6 +108,7 @@ const getHorseImagesByWeekAndHorseNumber = async (req, res) => {
 
 
 module.exports = {
+    searchHorse,
     getHorsesForWeek,
     getHorseImagesByWeekAndHorseNumber,
 }

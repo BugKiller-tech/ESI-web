@@ -53,7 +53,7 @@ export default ({
                                         </TableCell>
                                         <TableCell>
                                             {
-                                                item.product.price * item.quantity
+                                                (item.product.price * item.quantity).toFixed(2)
                                             }
                                         </TableCell>
                                     </TableRow>
@@ -67,7 +67,7 @@ export default ({
                                 Subtotal
                             </div>
                             <div>
-                                ${subTotal}
+                                ${subTotal.toFixed(2)}
                             </div>
                             {
                                 taxTotal > 0 && (
@@ -76,21 +76,21 @@ export default ({
                                             Tax
                                         </div>
                                         <div>
-                                            ${taxTotal}
+                                            ${taxTotal.toFixed(2)}
                                         </div>
                                     </>
                                 )}
                             {flatShippingFee > 0 && (
                                 <>
                                     <div>Shipping</div>
-                                    <div>${flatShippingFee}</div>
+                                    <div>${flatShippingFee.toFixed(2)}</div>
                                 </>
                             )}
                             <div className='font-bold'>
                                 Order total
                             </div>
                             <div className='font-bold'>
-                                ${subTotal + taxTotal + flatShippingFee}
+                                ${(subTotal + taxTotal + flatShippingFee).toFixed(2)}
                             </div>
                         </div>
                     </div>

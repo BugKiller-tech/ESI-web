@@ -10,13 +10,9 @@ export default ({
     return (
         <div className='h-screen flex flex-col bg-gray-200'>
             <NavigationBar />
-            <div className='px-3 flex-1 overflow-auto'>
-                <div className='md:container mx-auto mt-5'>
-                    <BreadcrumbNav />
-                    <div className='mt-2 md:mt-3'>
-                        { children }
-                    </div>
-                </div>
+            <div className='pt-5 flex-1 overflow-auto md:container mx-auto flex flex-col'>
+                {/* <BreadcrumbNav /> */}
+                {children}
             </div>
         </div>
     )

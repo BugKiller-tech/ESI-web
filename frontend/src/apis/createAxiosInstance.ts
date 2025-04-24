@@ -21,7 +21,7 @@ export const createAxiosInstance = (accessToken?: string) => {
     }, function (error) {
       console.log('error on axios response', error);
       const status = error?.response?.status;
-      if (status >= 400) {
+      if (status == 403) {
         if (typeof window !== 'undefined') {
           console.log('must be redirected')
           window.location.href = '/auth/signin';

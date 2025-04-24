@@ -45,26 +45,26 @@ export default () => {
     const goToFullfillmentPolicy = () => {
         router.push('/fullfillment-policy');
     }
-    
+
 
     return (
         <div className='bg-white shadow-gray-500/50'>
-            <div className='px-3 md:container mx-auto py-3 md:py-5 flex gap-3'>
+            <div className='px-3 md:container mx-auto py-3 md:py-5 flex gap-3 text-main-color'>
                 <div className="flex items-center gap-2
                     font-bold text-2xl cursor-pointer text-black"
                     onClick={goHome}>
                     <img src="/logo.png" className='w-24 h-auto' />
                 </div>
                 <div className="flex-1"></div>
-                <div className='items-center gap-5 text-main-color font-bold
-                    hidden md:flex'>
+                <div className='font-bold
+                    hidden md:flex items-center gap-5'>
                     <div className='flex items-center gap-1 cursor-pointer hover:text-blue-500'
                         onClick={goToCartPage}>
                         <ShoppingCart />
                         <div className='relative flex items-center gap-1'>
-                            Cart 
+                            Cart
                             <span className="text-xs font-semibold text-white bg-main-color rounded-full px-2 py-0.5">
-                                { cart.totalCount }
+                                {cart.totalCount}
                             </span>
                         </div>
                     </div>
@@ -74,23 +74,27 @@ export default () => {
                         Contact us
                     </div>
                     <div className='flex items-center gap-1 cursor-pointer hover:text-blue-500'
-                    onClick={goToFullfillmentPolicy}>
+                        onClick={goToFullfillmentPolicy}>
                         <Handshake />
                         Fulfillment policy
                     </div>
                 </div>
-                <div className='flex items-center md:hidden'>
+                <div className='flex items-center gap-5 md:hidden'>
+                    <div className='flex items-center gap-1 cursor-pointer hover:text-blue-500'
+                        onClick={goToCartPage}>
+                        <ShoppingCart />
+                        <div className='relative flex items-center gap-1'>
+                            Cart
+                            <span className="text-xs font-semibold text-white bg-main-color rounded-full px-2 py-0.5">
+                                {cart.totalCount}
+                            </span>
+                        </div>
+                    </div>
                     <DropdownMenu>
                         <DropdownMenuTrigger>
                             <Menu className='text-main-color' />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
-                            <DropdownMenuItem onClick={goToCartPage}>
-                                <div className='flex items-center text-main-color gap-2'>
-                                    <ShoppingCart />
-                                    <span>Cart</span>
-                                </div>
-                            </DropdownMenuItem>
                             <DropdownMenuItem onClick={goToContactUs}>
                                 <div className='flex items-center text-main-color gap-2'>
                                     <Contact />

@@ -3,6 +3,10 @@ import { useEffect, useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/ui/modal';
 import { Input } from '@/components/ui/input';
+import {
+    PlusIcon,
+    MinusIcon,
+} from 'lucide-react';
 
 import {
     HorseInfo,
@@ -105,8 +109,8 @@ export const AddCartModal: React.FC<AddCartModalProps> = ({
 
     const updateQuantity = (e: any) => {
         try {
-            let newVal = parseInt(e.target.value || 1);
-            if (newVal > 0) {
+            let newVal = parseInt(e.target.value || 0);
+            if (newVal >= 0) {
                 setQuantity(newVal);
             }
 
@@ -174,7 +178,15 @@ export const AddCartModal: React.FC<AddCartModalProps> = ({
                             }
                         </SelectContent>
                     </Select>
-                    <Input type="number" value={quantity} onChange={(e) => updateQuantity(e)} />
+                    <div className='flex items-center space-x-2'>
+                        <button onClick={() => setQuantity(quantity > 0 ? quantity - 1 : 0) } className="p-2 bg-gray-200 rounded">
+                            <MinusIcon size={16} />                        
+                        </button>
+                        <Input type="number" value={quantity} onChange={(e) => updateQuantity(e)} />
+                        <button onClick={() => setQuantity(quantity + 1)} className="p-2 bg-gray-200 rounded">
+                            <PlusIcon size={16} />
+                        </button>
+                    </div>
 
                     <div className='flex w-full items-center justify-end space-x-2 pt-6'>
                         <Button disabled={!readyToAddCart} variant='destructive' onClick={addToCartWithSelectedProduct}

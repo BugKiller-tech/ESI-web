@@ -42,6 +42,7 @@ router.use(`/api/${API_VERSION}/admin/orders`,  require('./ordersAdminRoutes'));
 router.use(`/api/${API_VERSION}/front/weeks`,  require('./weekUserRoutes'));
 router.use(`/api/${API_VERSION}/front/horses`,  require('./horsesUserRoutes'));
 router.use(`/api/${API_VERSION}/checkout/stripe`, require('./stripeCheckoutRouter'));
+router.use(`/api/${API_VERSION}/support`, require('./customerSupport'));
 
 
 router.get(`/api/${API_VERSION}/test`,  async (req, res) => {

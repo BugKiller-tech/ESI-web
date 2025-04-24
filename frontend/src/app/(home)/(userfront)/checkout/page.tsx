@@ -2,6 +2,7 @@
 import { useMemo, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useCart } from "@/context/CartContext";
+import { useRouter } from 'next/navigation';
 import OrderSummary from '@/components/esi/OrderSummary';
 import {
     Form,
@@ -26,6 +27,7 @@ import * as APIs from '@/apis';
 export default () => {
 
     const [ loading, setLoading ] = useState(false);
+    const router = useRouter();
     const { data: session } = useSession();
 
     const {
@@ -120,7 +122,7 @@ export default () => {
     }
 
     return (
-        <div>
+        <div className='pb-3'>
             <div className="text-5xl text-main-color">
                 Checkout
             </div>
@@ -134,7 +136,7 @@ export default () => {
                         flatShippingFee={flatShippingFee}
                     />
                 </div>
-                <div className="flex-1 min-w-[350px]">
+                <div className="flex-1 min-w-[330px]">
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)}
                             className='w-full space-y-2'>
@@ -248,14 +250,19 @@ export default () => {
                                     </div>
 
                                 )}
-                                <div className='text-right'>
+                                <div className='flex justify-end gap-3 mt-5'>
+                                    <Button className='' size='lg' onClick={() => {
+                                        router.back();
+                                    }}>
+                                        Back
+                                    </Button>
                                     <Button type='submit' className='bg-main-color font-bold' size='lg'
                                         disabled={loading}>
                                         { loading && (
                                             <LoaderIcon size={18}
                                                 className="animate-[spin_2s_linear_infinite] mr-2" />
                                         ) }
-                                        Pay for ${ totalToPay }
+                                        Place order
                                     </Button>
                                 </div>
                         </form>

@@ -130,6 +130,11 @@ export const getHorsesByWeek = async (postData: any, token: string = '') => {
     return axios.post('/api/v1/front/horses/get-horses-for-week', postData);
 }
 
+export const searchHorse = async (postData: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
+    return axios.post('/api/v1/front/horses/search-horse', postData);
+}
+
 export const getHorseImagesByWeekAndHorseNumber = async (postData: any, token: string = '') => {
     const axios = await createAxiosInstance(token);
     return axios.post('/api/v1/front/horses/get-horse-images-by-week-and-horsenumber', postData);
@@ -177,4 +182,9 @@ export const downloadInvoiceForOrder = async (orderId: string, token: string = '
     return axios.get(`/api/v1/admin/orders/${orderId}/download-invoice`, {
         responseType: 'blob',
     })
+}
+
+export const sendContactUsInfo = async(data: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
+    return axios.post(`/api/v1/support/contact-us`, data);
 }

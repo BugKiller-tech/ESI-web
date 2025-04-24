@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const adminCheckMiddleware = (req, res, next) => {
-    console.log('ADMMMMMMMMMMMMMMMMMMIIIIIIIIIIIIIIIIIIIINNNNNNNNNNNNNNNNNNNNNNNNN', req);
     const authHeader = req.headers && req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {

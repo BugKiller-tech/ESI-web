@@ -39,7 +39,7 @@ export default async function () {
             }
             const response = await APIs.getOrdersWithPaginated(filters, session?.user?.accessToken)
             console.log('fetching orders', response.data);
-            if (response.data.orders) {
+            if (response.data?.orders) {
                 // setCategories(response.data.categories);
                 // setTotalCount(response.data.totalCount)
                 orders = response.data.orders;

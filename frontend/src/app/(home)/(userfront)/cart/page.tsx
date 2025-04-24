@@ -52,7 +52,7 @@ export default () => {
 
     const renderCartItems = () => {
         return (
-            <div>
+            <div className='pb-3'>
                 <Table>
                     <TableHeader>
                         <TableRow>
@@ -74,7 +74,7 @@ export default () => {
                                     { item.product.category } - { item.product.name }
                                 </TableCell>
                                 <TableCell>
-                                    { item.product.price }
+                                    { item.product.price.toFixed(2) }
                                 </TableCell>
                                 <TableCell className=''>
                                     <div className='flex gap-3'>
@@ -102,7 +102,7 @@ export default () => {
                                 Subtotal
                             </div>
                             <div>
-                                ${subTotal}
+                                ${subTotal.toFixed(2)}
                             </div>
                             {
                             taxTotal > 0 && (
@@ -111,26 +111,31 @@ export default () => {
                                     Tax
                                 </div>
                                 <div>
-                                    ${taxTotal}
+                                    ${taxTotal.toFixed(2)}
                                 </div>
                             </>
                             )}
                             { flatShippingFee > 0 && (
                             <>
                                 <div>Shipping</div>
-                                <div>${ flatShippingFee }</div>
+                                <div>${ flatShippingFee.toFixed(2) }</div>
                             </>
                             ) }
                             <div className='font-bold text-2xl'>
                                 Order total
                             </div>
                             <div className='font-bold'>
-                                ${ totalToPay }
+                                ${ totalToPay.toFixed(2) }
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className='text-right mt-5'>
+                <div className='mt-5 flex justify-end gap-3'>
+                    <Button className='' size='lg' onClick={() => {
+                        router.back();
+                    }}>
+                        Back
+                    </Button>
                     <Button className='bg-main-color' size='lg' onClick={gotoCheckoutPage}>
                         Continue to checkout <ArrowRightIcon size={18} />
                     </Button>

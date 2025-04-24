@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 // import { Input } from '@/components/ui/input';
 import { useFullScreenLoader } from "@/context/FullScreenLoaderContext";
 import { toast } from 'sonner';
+import * as APIs from '@/apis';
 
 
 export default () => {
@@ -11,25 +12,24 @@ export default () => {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
     const onSubmit = async (data: any) => {
-        console.log(data);
-        // Handle form submission logic here
-        fullScreenLoader.showLoader();
-
-        function dummyCode () {
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    resolve(true);
-                }, 2000); // Simulate a 2-second delay
-            });
+        try {
+            console.log(data);
+            // Handle form submission logic here
+            fullScreenLoader.showLoader();
+            const response = await APIs.sendContactUsInfo(data);
+            console.log(data);
+            toast.success('Successfully sent your message.')
+        } catch (error) {
+            console.log('sending email error on contact us', error);
+            toast.error('Failed to send an eamil for contact us form');
+        } finally {
+            fullScreenLoader.hideLoader();
         }
-        await dummyCode();
-
-        fullScreenLoader.hideLoader();
-        toast.success('Successfully sent your message.')
     };
     const onError = (errors: any) => {
         console.log(errors);
         // Handle form validation errors here
+        toast.error('Failed to send your contact us info. Please try again later.')
     };
     
 
@@ -39,7 +39,7 @@ export default () => {
                 GET IN TOUCH
             </h1>
             <div className="text-main-text text-2xl mb-5">
-                Email us at Esihorseshowphotography@gmail.com
+                Please fill out form below to get in touch with us.
             </div>
             <div>
                 <form onSubmit={handleSubmit(onSubmit, onError)} className="flex flex-col gap-4">
