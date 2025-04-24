@@ -10,18 +10,19 @@ const searchHorse = async ( req, res ) => {
     try {
         const { weekId, horseNumber } = req.body;
 
-        if (!weekId) {
+        if (!weekId || !horseNumber) {
             return res.status(400).json({
-                message: 'Week ID is required',
+                message: 'Please provide valid information',
             });
         }
 
         const horses = await HorsesImageModel.find({
             week: new ObjectId(String(weekId)),
-            horseNumber: { "$regex": horseNumber, "$options": "i" }
-        }).populate('week').sort({
+            // horseNumber: { "$regex": horseNumber, "$options": "i" }
+            horseNumber: horseNumber.trim(),
+        }).sort({
             createdAt: -1,
-        })
+        }).limit(2);
 
         if (horses.length > 0) {
             const week = await WeekModel.findById(weekId);
