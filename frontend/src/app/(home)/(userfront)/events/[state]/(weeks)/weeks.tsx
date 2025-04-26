@@ -69,7 +69,7 @@ export default ({ initialWeeks }: {
     }
 
     return (
-        <div>
+        <div className='md:container mx-auto'>
             {/* <div className='flex items-center gap-2'>
                 <Input type='text' value={searchTerm} onChange={(e) => { setSearchTerm(e.target.value) }}
                     placeholder='Search for week' className='bg-white'

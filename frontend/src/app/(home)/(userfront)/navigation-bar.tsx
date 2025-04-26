@@ -48,7 +48,7 @@ export default () => {
 
 
     return (
-        <div className='bg-white shadow-gray-500/50'>
+        <div className='bg-white shadow-lg'>
             <div className='px-3 md:container mx-auto py-3 md:py-5 flex gap-3 text-main-color'>
                 <div className="flex items-center gap-2
                     font-bold text-2xl cursor-pointer text-black"

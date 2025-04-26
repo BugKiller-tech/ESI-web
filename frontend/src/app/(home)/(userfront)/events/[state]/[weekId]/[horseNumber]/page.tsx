@@ -84,7 +84,7 @@ export default () => {
 
 
     return (
-        <div>
+        <div className="md:container mx-auto">
             {/* <RowsPhotoAlbum photos={photos} render={{
                     // photo: ({ onClick }, { photo, width, height }) => (
                     //     <div key={photo.src}>

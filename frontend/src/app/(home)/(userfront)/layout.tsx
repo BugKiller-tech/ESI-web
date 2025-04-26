@@ -8,9 +8,9 @@ export default ({
     children: React.ReactNode
 }) => {
     return (
-        <div className='h-screen flex flex-col bg-gray-200'>
+        <div className='h-screen flex flex-col bg-gray-50'>
             <NavigationBar />
-            <div className='pt-5 flex-1 overflow-auto md:container mx-auto flex flex-col'>
+            <div className='py-5 flex-1 overflow-auto px-2 xl:px-5  flex flex-col'>
                 {/* <BreadcrumbNav /> */}
                 {children}
             </div>

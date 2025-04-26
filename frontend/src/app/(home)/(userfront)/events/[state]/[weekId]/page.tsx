@@ -89,7 +89,7 @@ export default ({ }: {
         router.push(`/events/${state}/${weekId}/${horseNumber}`)
     }
     return (
-        <div>
+        <div className='md:container mx-auto'>
             <div className='flex items-center gap-2 mb-3'>
                 <Input type='text' value={searchTerm} onChange={(e) => { setSearchTerm(e.target.value) }}
                     placeholder='Search for horse' className='bg-white'
