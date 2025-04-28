@@ -20,6 +20,7 @@ export default function () {
                 {/* md:justify-center */}
             <ImageDesktop className='hidden md:grid' />
             <ImageSlider className='block md:hidden' />
+            {/* <ImageSlider /> */}
             <div>
                 <div className='text-4xl md:text-5xl xl:text-6xl text-center text-main-color'>
                     Welcome to Esi photography

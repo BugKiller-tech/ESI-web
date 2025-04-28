@@ -9,7 +9,7 @@ const images = [
 ];
 
 export default function ImageSlider({
-  className,
+  className = '',
 }: {
   className: string,
 }) {
@@ -69,7 +69,7 @@ export default function ImageSlider({
 
 
   return (
-    <div className={`relative w-full h-[50vh] overflow-hidden bg-gray-400 ${className}`}>
+    <div className={`relative w-full h-[50vh] overflow-hidden ${className}`}>
       {/* Arrows */}
       <button
         onClick={prevSlide}
