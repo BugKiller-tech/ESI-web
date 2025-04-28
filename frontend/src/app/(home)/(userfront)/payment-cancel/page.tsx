@@ -15,7 +15,7 @@ export default () => {
 
     return (
         <div>
-            <div className="text-5xl text-main-color">You cancelled the payment</div>
+            <div className="text-3xl md:text-5xl text-main-color">You cancelled the payment</div>
             <div className="text-2xl mt-5">
                 You can purchase anytime.
             </div>

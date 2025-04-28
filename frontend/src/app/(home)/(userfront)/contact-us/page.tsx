@@ -35,7 +35,7 @@ export default () => {
 
     return (
         <div>
-            <h1 className="text-main-color text-4xl font-bold mb-5">
+            <h1 className="text-main-color text-3xl md:text-5xl font-bold mb-5">
                 GET IN TOUCH
             </h1>
             <div className="text-main-text text-2xl mb-5">

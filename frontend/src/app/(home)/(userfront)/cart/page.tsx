@@ -55,7 +55,7 @@ export default () => {
             <div className='pb-3'>
                 <Table>
                     <TableHeader>
-                        <TableRow>
+                        <TableRow className='text-xs md:text-base'>
                             <TableHead className="font-bold">Image</TableHead>
                             <TableHead className="font-bold w-1/2">Product</TableHead>
                             <TableHead className="font-bold">Item price</TableHead>
@@ -66,9 +66,9 @@ export default () => {
                     <TableBody>
                     {
                         cartItems.map((item, idx) => (
-                            <TableRow key={idx} className='border-b border-gray-400'>
+                            <TableRow key={idx} className='border-b border-gray-400 text-xs md:text-base'>
                                 <TableCell>
-                                    <img src={item.horse.thumbnailS3Link} className="h-[70px] w-auto" />
+                                    <img src={item.horse.thumbnailS3Link} className="h-[40px] md:h-[70px] w-auto" />
                                 </TableCell>
                                 <TableCell>
                                     { item.product.category } - { item.product.name }
@@ -96,7 +96,7 @@ export default () => {
                     </TableBody>
                 </Table>
                 <div className='flex justify-end'>
-                    <div className='min-w-[300px] text-xl'>
+                    <div className='min-w-[170px] md:min-w-[300px] text-base md:text-xl'>
                         <div className='grid grid-cols-2 gap-2 [&>div:nth-child(even)]:text-right text-gray-700'>
                             <div>
                                 Subtotal
@@ -146,7 +146,7 @@ export default () => {
 
     return (
         <div className='mx-0 md:mx-5 lg:mx-10'>
-            <div className="text-5xl text-main-color mb-5">
+            <div className="text-3xl md:text-5xl text-main-color mb-5">
                 Cart
             </div>
             {

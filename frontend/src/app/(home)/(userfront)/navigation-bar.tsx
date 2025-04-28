@@ -53,7 +53,7 @@ export default () => {
                 <div className="flex items-center gap-2
                     font-bold text-2xl cursor-pointer text-black"
                     onClick={goHome}>
-                    <img src="/logo.png" className='w-24 h-auto' />
+                    <img src="/white_logo.png" className='w-24 h-auto' />
                 </div>
                 <div className="flex-1"></div>
                 <div className='font-bold

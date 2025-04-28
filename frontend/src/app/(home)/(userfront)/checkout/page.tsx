@@ -123,7 +123,7 @@ export default () => {
 
     return (
         <div className='pb-3'>
-            <div className="text-5xl text-main-color">
+            <div className="text-3xl md:text-5xl text-main-color">
                 Checkout
             </div>
             <div className="mt-5 flex flex-wrap gap-5">

@@ -34,7 +34,7 @@ export default ({
                 <CardContent className="px-0">
                     <Table className="w-full">
                         <TableHeader>
-                            <TableRow>
+                            <TableRow className='text-xs md:text-base'>
                                 <TableHead className="font-bold">Image</TableHead>
                                 <TableHead className="font-bold w-1/2">Product</TableHead>
                                 <TableHead className="font-bold">Item Total</TableHead>
@@ -43,9 +43,9 @@ export default ({
                         <TableBody>
                             {
                                 cartItems.map((item, idx) => (
-                                    <TableRow key={idx} className='border-b border-gray-400'>
+                                    <TableRow key={idx} className='border-b border-gray-400 text-xs md:text-base'>
                                         <TableCell className="relative">
-                                            <img src={item.horse.thumbnailS3Link} className="h-[60px] w-auto rounded-md" />
+                                            <img src={item.horse.thumbnailS3Link} className="h-[40px] md:h-[60px] w-auto rounded-md" />
                                         </TableCell>
                                         <TableCell>
                                             {item.product.category} - {item.product.name}

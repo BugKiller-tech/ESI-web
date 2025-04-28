@@ -69,7 +69,7 @@ export default ({
             <div className='w-[500px] max-w-[90vw] flex flex-col gap-5'>
                 <img src="/Turnout-for-Horses.jpg" className='w-full' />
                 <div>
-                    <div className='text-4xl md:text-5xl xl:text-6xl text-center text-main-color'>
+                    <div className='text-3xl md:text-5xl xl:text-6xl text-center text-main-color'>
                         Hits on the Hudson
                     </div>
                 </div>
