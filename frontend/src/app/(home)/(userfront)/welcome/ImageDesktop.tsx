@@ -33,7 +33,7 @@ export default function ({
                             w-full h-auto"
                     initial={{ scale: 7, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 1, ease: "easeOut" }}
+                    transition={{ duration: 3, ease: "easeOut" }}
                 // whileHover={{
                 //     scale: 1.1,        // Slightly enlarge the element
                 //     rotate: 10,        // Add a small rotation
