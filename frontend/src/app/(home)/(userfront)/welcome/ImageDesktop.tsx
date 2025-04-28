@@ -31,9 +31,9 @@ export default function ({
                 <motion.img key={image.src} src={image.src}
                     className="border border-red-700 shadow-lg shadow-gray-400
                             w-full h-auto"
-                    initial={{ scale: 0.0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ duration: 1.3, ease: "easeOut" }}
+                    initial={{ scale: 7, opacity: 1 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 1, ease: "easeOut" }}
                 // whileHover={{
                 //     scale: 1.1,        // Slightly enlarge the element
                 //     rotate: 10,        // Add a small rotation
