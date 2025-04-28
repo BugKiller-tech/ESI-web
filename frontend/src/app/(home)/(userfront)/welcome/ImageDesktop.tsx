@@ -31,7 +31,7 @@ export default function ({
                 <motion.img key={image.src} src={image.src}
                     className="border border-red-700 shadow-lg shadow-gray-400
                             w-full h-auto"
-                    initial={{ scale: 7, opacity: 1 }}
+                    initial={{ scale: 7, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ duration: 1, ease: "easeOut" }}
                 // whileHover={{
