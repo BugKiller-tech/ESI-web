@@ -22,7 +22,7 @@ export default function () {
             <ImageSlider className='block md:hidden' />
             {/* <ImageSlider /> */}
             <div>
-                <div className='text-4xl md:text-5xl xl:text-6xl text-center text-main-color'>
+                <div className='text-2xl md:text-5xl xl:text-6xl text-center text-main-color'>
                     Welcome to ESI Photography
                 </div>
             </div>
