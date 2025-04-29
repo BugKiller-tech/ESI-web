@@ -28,7 +28,7 @@ export default function ImageSlider({
           setCurrent((prev) => (prev + 1) % images.length);
           setIsAnimating(false); // reset animation state
         }, 1000); // wait 2s for transition to finish
-      }, 3000); // 3s of showing before starting animation
+      }, 1700); // 3s of showing before starting animation
     };
 
     startTimer();
@@ -94,7 +94,7 @@ export default function ImageSlider({
           initial={{ opacity: 0, scale: 1.3 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 1 }}
 
 
           // drag="x"
