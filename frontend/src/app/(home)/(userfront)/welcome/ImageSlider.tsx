@@ -37,10 +37,10 @@ export default function ImageSlider({
   }, [current]); // reset timer whenever slide changes
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      nextSlide();
-    }, 5000); // Change image every 5 seconds
-    return () => clearInterval(interval);
+    // const interval = setInterval(() => {
+    //   nextSlide();
+    // }, 5000); // Change image every 5 seconds
+    // return () => clearInterval(interval);
   }, []);
 
 

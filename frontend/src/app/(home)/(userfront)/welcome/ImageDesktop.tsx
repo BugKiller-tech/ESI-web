@@ -55,7 +55,7 @@ export default function ({
             instance.moveToIdx(0, true) // Fix for showing first set correctly
         },
         defaultAnimation: {
-            duration: 1500,
+            duration: 4000,
             easing(t) {
                 return t
             },
