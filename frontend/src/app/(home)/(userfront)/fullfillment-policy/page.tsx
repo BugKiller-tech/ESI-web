@@ -12,7 +12,7 @@ export default () => {
             <h1 className="text-3xl md:text-5xl font-bold mb-10 text-main-color">
                 Fulfillment policy
             </h1>
-            <div className="text-3xl text-gray-700">
+            <div className="text-xl md:text-3xl text-gray-700">
                 All digital photos will be delivered via email within 72 hours of order <br/>
                 All print orders will be delivered via USPS within 4 weeks.<br/>
                 <br/>

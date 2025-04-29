@@ -23,13 +23,13 @@ export default function () {
             {/* <ImageSlider /> */}
             <div>
                 <div className='text-4xl md:text-5xl xl:text-6xl text-center text-main-color'>
-                    Welcome to Esi photography
+                    Welcome to ESI Photography
                 </div>
             </div>
             <div>
                 <Link href={'/search-photos'}>
-                    <Button size='lg' className='bg-main-color'>
-                        See your photos
+                    <Button size='lg' className='bg-main-color text-2xl font-bold'>
+                        See Your Photos
                     </Button>
                 </Link>
             </div>
