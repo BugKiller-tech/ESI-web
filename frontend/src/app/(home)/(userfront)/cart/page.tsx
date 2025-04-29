@@ -4,6 +4,7 @@ import {
     ArrowRightIcon,
     MinusCircleIcon,
     PlusCircleIcon,
+    Trash2Icon
 } from 'lucide-react';
 import {
     Table,
@@ -32,6 +33,7 @@ export default () => {
 
         addToCart,
         reduceOneFromCart,
+        clearCart,
     } = useCart();
 
     const router = useRouter();
@@ -47,6 +49,10 @@ export default () => {
     }
     const decreaseQuantity = (cartItem: CartItem) => {
         reduceOneFromCart(cartItem);
+    }
+
+    const clearCartAction = () => {
+        clearCart();
     }
 
 
@@ -95,6 +101,12 @@ export default () => {
                     }
                     </TableBody>
                 </Table>
+                <div className='text-center'>
+                    <Button onClick={clearCartAction}>
+                        <Trash2Icon size={16} className='mr-2' />
+                        Clear cart
+                    </Button>
+                </div>
                 <div className='flex justify-end'>
                     <div className='min-w-[170px] md:min-w-[300px] text-base md:text-xl'>
                         <div className='grid grid-cols-2 gap-2 [&>div:nth-child(even)]:text-right text-gray-700'>
