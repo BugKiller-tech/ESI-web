@@ -123,7 +123,7 @@ export default ({
                 </Button>
             </div>
             <div className='w-[530px] max-w-[90vw] flex flex-col gap-5'>
-                <img src="/Turnout-for-Horses.jpg" className='w-full' />
+                <img src="/420DI2_3665_PAGE 2.jpg" className='w-full' />
                 <div>
                     <div className='text-3xl md:text-4xl xl:text-5xl text-center text-main-color'>
                         Ocala, Florida 2025
