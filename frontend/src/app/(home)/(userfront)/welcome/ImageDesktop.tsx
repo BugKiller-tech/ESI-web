@@ -80,16 +80,19 @@ export default function ({
 
     return (
         <div className={`w-full ${className}`}>
+            {/* <div className='mb-5'>
+                <img src="/1.jpg" className='drop-shadow-[0_7px_3px_rgba(0,0,0,0.7)]' />
+            </div> */}
             <div ref={sliderRef} className="keen-slider">
                 {images.map((image, index) => (
-                    <div key={index} className="keen-slider__slide">
+                    <div key={index} className="keen-slider__slide  mb-5">
                         {/* <img
                             src={image.src}
                             alt={`Slide ${index}`}
                             style={{ width: '100%', height: 'auto', objectFit: 'cover', }}
                         /> */}
                         <motion.img key={image.src} src={image.src}
-                            className="border border-red-700 shadow-lg shadow-gray-400
+                            className="drop-shadow-[0_3px_3px_rgba(0,0,0,0.6)]
                             w-full h-auto"
                             initial={{ scale: 2, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
