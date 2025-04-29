@@ -25,7 +25,7 @@ export default function SignupViewPage() {
       <div className='relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex'>
         <div className='absolute inset-0 bg-zinc-900' />
         <div className='relative z-20 flex items-center text-lg font-medium'>
-          <img src="/white_logo.png" className='w-40 h-auto mr-5' />
+          <img src="/white_logo1.png" className='w-40 h-auto mr-5' />
           {/* ESI */}
         </div>
         <div className='relative z-20 mt-auto'>
