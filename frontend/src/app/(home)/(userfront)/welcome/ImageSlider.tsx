@@ -90,7 +90,7 @@ export default function ImageSlider({
           key={images[current]}
           src={images[current]}
           alt="Slider Image"
-          className="absolute w-full h-full object-contain"
+          className="absolute w-full h-full object-contain drop-shadow-[0_3px_3px_rgba(0,0,0,0.6)]"
           initial={{ opacity: 0, scale: 1.3 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
