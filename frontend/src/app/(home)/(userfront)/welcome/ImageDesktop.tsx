@@ -25,15 +25,11 @@ export default function ({
         },
         {
             title: '',
-            src: '/1.jpg',
+            src: '/4.jpg',
         },
         {
             title: '',
-            src: '/2.jpg',
-        },
-        {
-            title: '',
-            src: '/3.jpg',
+            src: '/5.jpg',
         },
     ]
 
@@ -41,7 +37,7 @@ export default function ({
         loop: true,
         slides: {
             perView: 3, // Show 3 slides at once
-            spacing: 3, // Space between slides (optional)
+            spacing: 5, // Space between slides (optional)
         },
         mode: 'free-snap', // Smooth sliding
         renderMode: 'performance', // Faster
