@@ -7,6 +7,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import {
     Select,
     SelectContent,
@@ -42,6 +43,9 @@ export default ({
         }
     }, [weeks]);
 
+    const openWordpressSite = () => {
+        window.open('https://esiphoto1.com/', '_blank');
+    }
 
     const searchForHorse = async () => {
         try {
@@ -65,11 +69,12 @@ export default ({
 
 
     return (
-        <div className='flex-1 flex justify-center'>
-            <div className='w-[500px] max-w-[90vw] flex flex-col gap-5'>
+        <div className='flex-1 flex flex-wrap justify-center
+                                gap-14 md:gap-7 xl:gap-10'>
+            <div className='w-[530px] max-w-[90vw] flex flex-col gap-5'>
                 <img src="/Turnout-for-Horses.jpg" className='w-full' />
                 <div>
-                    <div className='text-3xl md:text-5xl xl:text-6xl text-center text-main-color'>
+                    <div className='text-3xl md:text-4xl xl:text-5xl text-center text-main-color'>
                         Hits on the Hudson
                     </div>
                 </div>
@@ -107,7 +112,7 @@ export default ({
                         }}
                     />
                 </div>
-                <Button size='lg' className='bg-main-color font-bold'
+                <Button size='lg' className='bg-main-color font-bold text-2xl'
                     disabled={!selectedWeekId || !horseNumber || isLoading}
                     onClick={searchForHorse}>
                     {isLoading && (
@@ -115,6 +120,22 @@ export default ({
                             className="animate-[spin_2s_linear_infinite] mr-2" />
                     )}
                     Search
+                </Button>
+            </div>
+            <div className='w-[530px] max-w-[90vw] flex flex-col gap-5'>
+                <img src="/Turnout-for-Horses.jpg" className='w-full' />
+                <div>
+                    <div className='text-3xl md:text-4xl xl:text-5xl text-center text-main-color'>
+                        Ocala, Florida 2025
+                    </div>
+                </div>
+                <Button size='lg' className='bg-main-color font-bold text-2xl mt-3 md:mt-16'
+                    onClick={openWordpressSite}>
+                    {isLoading && (
+                        <LoaderIcon size={18}
+                            className="animate-[spin_2s_linear_infinite] mr-2" />
+                    )}
+                    View
                 </Button>
             </div>
         </div>

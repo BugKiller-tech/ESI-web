@@ -122,9 +122,9 @@ export default () => {
                         }}>
                             <img src={photo.src} alt="Image" />
                         </div>
-                        <div className='bg-main-horse flex items-center justify-center px-3 py-2' key={index}>
+                        <div className='bg-gray-300 flex items-center justify-center px-3 py-2' key={index}>
                             <div onClick={(e) => displayAddToCartPopup(e, index)}
-                                className='text-black rounded-md border-2 border-black
+                                className='text-main-color rounded-md border-2 border-main-color
                                             px-3 py-1 flex gap-2
                                             cursor-pointer'>
                                 <ShoppingCart />

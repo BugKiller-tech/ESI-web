@@ -33,6 +33,11 @@ export default function () {
                     </Button>
                 </Link>
             </div>
+            <div className='flex-1 w-full flex items-end justify-end'>
+                <a target='_blank' href='https://www.instagram.com/esi_photography' className='cursor-pointer'>
+                    <img src="/icons/instagram.svg" width={'30px'} />
+                </a>
+            </div>
         </div>
     )
 }
