@@ -49,11 +49,11 @@ export default () => {
 
     return (
         <div className='bg-white shadow-lg'>
-            <div className='px-3 md:container mx-auto py-3 md:py-5 flex gap-3 text-main-color'>
+            <div className='px-3 md:container mx-auto py-2 md:py-5 flex gap-3 text-main-color'>
                 <div className="flex items-center gap-2
                     font-bold text-2xl cursor-pointer text-black"
                     onClick={goHome}>
-                    <img src="/white_logo1.png" className='w-24 h-auto' />
+                    <img src="/white_logo1.png" className='w-16 md:w-24 h-auto' />
                 </div>
                 <div className="flex-1"></div>
                 <div className='font-bold
