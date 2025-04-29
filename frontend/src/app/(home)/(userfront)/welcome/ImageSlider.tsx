@@ -71,7 +71,7 @@ export default function ImageSlider({
   return (
     <div className={`relative w-full h-[50vh] overflow-hidden ${className}`}>
       {/* Arrows */}
-      <button
+      {/* <button
         onClick={prevSlide}
         className="absolute top-1/2 left-5 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 z-10"
       >
@@ -82,7 +82,7 @@ export default function ImageSlider({
         className="absolute top-1/2 right-5 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 z-10"
       >
         &#8594;
-      </button>
+      </button> */}
 
       {/* Image Transition */}
       <AnimatePresence>
