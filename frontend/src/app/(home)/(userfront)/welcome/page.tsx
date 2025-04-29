@@ -16,7 +16,7 @@ export default function () {
 
    
     return (
-        <div className='flex-1 flex flex-col md:mt-10 items-center gap-5 md:gap-10 xl:gap-12'> 
+        <div className='flex-1 flex flex-col mt-3 md:mt-10 items-center gap-2 md:gap-10 xl:gap-12'> 
                 {/* md:justify-center */}
             <ImageDesktop className='hidden md:grid' />
             <ImageSlider className='block md:hidden' />
@@ -28,7 +28,7 @@ export default function () {
             </div>
             <div>
                 <Link href={'/search-photos'}>
-                    <Button size='lg' className='bg-main-color text-2xl font-bold'>
+                    <Button size='lg' className='bg-main-color text-xl md:text-2xl font-bold'>
                         See Your Photos
                     </Button>
                 </Link>
