@@ -27,8 +27,8 @@ export default function ImageSlider({
         setTimeout(() => {
           setCurrent((prev) => (prev + 1) % images.length);
           setIsAnimating(false); // reset animation state
-        }, 2100); // wait 2s for transition to finish
-      }, 2200); // 3s of showing before starting animation
+        }, 2010); // wait 2s for transition to finish
+      }, 2010); // 3s of showing before starting animation
     };
 
     startTimer();
