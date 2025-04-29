@@ -96,7 +96,7 @@ export default function ({
                             w-full h-auto"
                             initial={{ scale: 2, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
-                            transition={{ duration: 2, ease: "easeOut" }}
+                            transition={{ duration: 4, ease: "easeOut" }}
                         // whileHover={{
                         //     scale: 1.1,        // Slightly enlarge the element
                         //     rotate: 10,        // Add a small rotation
