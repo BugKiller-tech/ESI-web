@@ -20,6 +20,7 @@ const searchHorse = async ( req, res ) => {
             week: new ObjectId(String(weekId)),
             // horseNumber: { "$regex": horseNumber, "$options": "i" }
             horseNumber: horseNumber.trim(),
+            isDeleted: 0,
         }).sort({
             createdAt: -1,
         }).limit(2);
@@ -87,6 +88,7 @@ const getHorseImagesByWeekAndHorseNumber = async (req, res) => {
         const horses = await HorsesImageModel.find({
             week: weekId,
             horseNumber: horseNumber,
+            isDeleted: 0,
         }).sort({
             photoTakenTime: 1,
             createdAt: 1,

@@ -1,12 +1,18 @@
 
 const WeekModel = require('../models/WeekModel');
 
-const getWeeksByState = async (state) => {
+const getWeeksByState = async (state, showInvisibleAsWell=true) => {
 
-    let conditions = {};
+    let conditions = {
+        isDeleted: 0,
+    };
     if (state) {
         conditions['state'] = state;
     }
+    if (!showInvisibleAsWell) {
+        conditions['isHided'] = 0;
+    }
+
     try {
         const weeks = await WeekModel.find(conditions).sort({
             year: -1,

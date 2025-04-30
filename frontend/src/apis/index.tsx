@@ -109,6 +109,10 @@ export const updateHorseWeekVisibility = async (data: any, token: string = '') =
     const axios = await createAxiosInstance(token);
     return axios.post('/api/v1/admin/weeks/update-visibility', data);
 }
+export const updateHorseWeekDeleteState = async (data: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
+    return axios.post('/api/v1/admin/weeks/delete', data);
+}
 
 export const getHorsesByWeekIdAdmin = async (weekId: string, token: string = '') => {
     const axios = await createAxiosInstance(token);
@@ -118,6 +122,16 @@ export const getHorsesByWeekIdAdmin = async (weekId: string, token: string = '')
 export const getHorseImagesByHorseNumberForAdmin = async (weekId: string, horseNumber: string, token: string = '') => {
     const axios = await createAxiosInstance(token);
     return axios.get(`/api/v1/admin/horses/${weekId}/horses/${horseNumber}`);
+}
+
+export const deleteHorseImageByAdmin = async (weekId: string, horseImageId: string, token: string = '') => {
+    const axios = await createAxiosInstance(token);
+    return axios.delete(`/api/v1/admin/horses/${weekId}/horses/${horseImageId}/delete`);
+}
+
+export const deleteHorseByAdmin = async (weekId: string, horseNumber: string, token: string = '') => {
+    const axios = await createAxiosInstance(token);
+    return axios.delete(`/api/v1/admin/horses/${weekId}/horses/${horseNumber}/delete-all-images`);
 }
 
 export const getWeeksByState = async (postData: any, token: string = '') => {

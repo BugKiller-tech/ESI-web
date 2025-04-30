@@ -15,6 +15,10 @@ const schema = new mongoose.Schema({
         type: String,
         default: '',
     },
+    isHided: { // hide in user's side
+        type: Number,
+        default: 0,
+    },
     isDeleted: {
         type: Number,
         default: 0,

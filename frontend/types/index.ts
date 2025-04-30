@@ -49,6 +49,7 @@ export interface WeekInfo {
   year: number;
   yearStr?: string;
   weekNumber: string;
+  isHided: number | null;
   isDeleted: number;
 
   displayName: string;

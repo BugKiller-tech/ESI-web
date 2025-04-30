@@ -11,7 +11,7 @@ const getWeeksForState = async (req, res) => {
         }
 
         // Assuming you have a function to fetch weeks based on state
-        const weeks = await getWeeksByState(state);
+        const weeks = await getWeeksByState(state, false);
 
         return res.status(200).json({
             message: 'Weeks fetched successfully',

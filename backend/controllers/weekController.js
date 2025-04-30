@@ -15,7 +15,7 @@ const getWeeksWithPagination  = async (req, res) => {
                 },
                 {
                     $match: {
-                        // isDeleted: 0,
+                        isDeleted: 0,
                         $or: [
                             { "state": { "$regex": search, "$options": "i" } },
                             { "yearStr": { "$regex": search, "$options": "i" } },
@@ -51,6 +51,30 @@ const getWeeksWithPagination  = async (req, res) => {
 const updateVisibility = async (req, res) => {
     try {
         const _id = req.body._id;
+        const isHided = req.body.isHided;
+
+        if (!_id) {
+            return res.status(400).json({
+                'message': 'week ID is required'
+            })
+        }
+
+        await WeekModel.updateOne({ _id: _id }, { $set: { isHided: isHided } });
+
+        return res.json({
+            'message': 'week visibility updated successfully'
+        })
+    } catch (error) {
+        console.log('Error updating week visibility:', error);
+        return res.status(400).json({
+            'message': 'Failed to update week visibility'
+        })
+    }
+}
+
+const deleteTheWeek = async (req, res) => {
+    try {
+        const _id = req.body._id;
         const isDeleted = req.body.isDeleted;
 
         if (!_id) {
@@ -76,4 +100,5 @@ const updateVisibility = async (req, res) => {
 module.exports = {
     getWeeksWithPagination,
     updateVisibility,
+    deleteTheWeek,
 }
