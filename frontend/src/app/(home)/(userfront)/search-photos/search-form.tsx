@@ -75,7 +75,7 @@ export default ({
                 <img src="/Turnout-for-Horses.jpg" className='w-full' />
                 <div>
                     <div className='text-3xl md:text-4xl xl:text-5xl text-center text-main-color'>
-                        Hits on the Hudson
+                        HITS on the Hudson
                     </div>
                 </div>
                 <div>
@@ -126,7 +126,7 @@ export default ({
                 <img src="/420DI2_3665_PAGE 2.jpg" className='w-full' />
                 <div>
                     <div className='text-3xl md:text-4xl xl:text-5xl text-center text-main-color'>
-                        Ocala, Florida 2025
+                        HITS on the Hudson 2024,2025
                     </div>
                 </div>
                 <Button size='lg' className='bg-main-color font-bold text-2xl mt-3 md:mt-16'

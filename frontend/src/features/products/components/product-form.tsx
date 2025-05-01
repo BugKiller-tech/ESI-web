@@ -92,7 +92,7 @@ export default function ProductForm({
                     await APIs.updateProduct(initialData._id as string, values, session?.user?.accessToken);
                     toast.success('Successfully updated');
                 } else {
-                    await APIs.createProduct(values);
+                    await APIs.createProduct(values, session?.user?.accessToken);
                     toast.success('Successfully created');
                 }
             } catch (error) {
