@@ -44,7 +44,7 @@ export default ({
     }, [weeks]);
 
     const openWordpressSite = () => {
-        window.open('https://old.esiphoto1.com/', '_blank');
+        window.open('https://past.esiphoto1.com/', '_blank');
     }
 
     const searchForHorse = async () => {
