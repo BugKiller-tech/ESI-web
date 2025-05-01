@@ -126,6 +126,7 @@ export default ({
                 <img src="/420DI2_3665_PAGE 2.jpg" className='w-full' />
                 <div>
                     <div className='text-3xl md:text-4xl xl:text-5xl text-center text-main-color'>
+                        Ocala, FL 2025 <br/>
                         HITS on the Hudson 2024,2025
                     </div>
                 </div>
