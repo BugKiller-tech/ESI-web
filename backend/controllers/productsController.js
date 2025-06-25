@@ -67,7 +67,8 @@ const getAllProducts = async (req, res) => {
         const products = await ProductsModel.find({
             category: {
                 $in: AVAILABLE_PRODUCT_CATEGORIES,
-            }
+            },
+            isDeleted: 0,
         }).sort({
             createdAt: 1,
         })
