@@ -73,22 +73,22 @@ export default () => {
     });
 
     useEffect(() => {
-        const savedInfo = localStorage.getItem('checkoutUserInfo');
-        if (savedInfo) {
-            const savedCheckoutUserInfo = JSON.parse(savedInfo);
-            if (savedCheckoutUserInfo) {
-                form.reset({
-                    firstName: savedCheckoutUserInfo?.firstName || '',
-                    lastName: savedCheckoutUserInfo?.lastName || '',
-                    email: savedCheckoutUserInfo?.email || '',
-                    phoneNumber: savedCheckoutUserInfo?.phoneNumber || '',
-                    street: savedCheckoutUserInfo?.street || '',
-                    city: savedCheckoutUserInfo?.city || '',
-                    state: savedCheckoutUserInfo?.state || '',
-                    zipCode: savedCheckoutUserInfo?.zipCode || '',
-                })
-            }
-        }
+        // const savedInfo = localStorage.getItem('checkoutUserInfo');
+        // if (savedInfo) {
+        //     const savedCheckoutUserInfo = JSON.parse(savedInfo);
+        //     if (savedCheckoutUserInfo) {
+        //         form.reset({
+        //             firstName: savedCheckoutUserInfo?.firstName || '',
+        //             lastName: savedCheckoutUserInfo?.lastName || '',
+        //             email: savedCheckoutUserInfo?.email || '',
+        //             phoneNumber: savedCheckoutUserInfo?.phoneNumber || '',
+        //             street: savedCheckoutUserInfo?.street || '',
+        //             city: savedCheckoutUserInfo?.city || '',
+        //             state: savedCheckoutUserInfo?.state || '',
+        //             zipCode: savedCheckoutUserInfo?.zipCode || '',
+        //         })
+        //     }
+        // }
     }, [form.reset]);
 
     const onSubmit = async (data: UserFormValue) => {
@@ -105,7 +105,7 @@ export default () => {
                 dataToPass['zipCode'] = '';
             }
 
-            localStorage.setItem('checkoutUserInfo', JSON.stringify(data));
+            // localStorage.setItem('checkoutUserInfo', JSON.stringify(data));
 
             const response = await APIs.createStripeCheckoutSession({
                 ...dataToPass,
