@@ -134,6 +134,14 @@ export const deleteHorseByAdmin = async (weekId: string, horseNumber: string, to
     return axios.delete(`/api/v1/admin/horses/${weekId}/horses/${horseNumber}/delete-all-images`);
 }
 
+export const changeHorseNumberForImages = async (data: any, token: string = '') => {
+    const {
+        weekId
+    } = data;
+    const axios = await createAxiosInstance(token);
+    return axios.post(`/api/v1/admin/horses/${weekId}/horses/change-horse-number-for-images`, data);
+}
+
 export const getWeeksByState = async (postData: any, token: string = '') => {
     const axios = await createAxiosInstance(token);
     return axios.post('/api/v1/front/weeks/get-weeks-for-state', postData);

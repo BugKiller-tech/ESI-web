@@ -15,12 +15,42 @@ import { Button } from '@/components/ui/button';
 import {
     EventHandler as ReactGridEventHandler
 } from '@/components/react-grid-gallery/types'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { HorseInfo } from 'types';
 import { useFullScreenLoader } from "@/context/FullScreenLoaderContext";
+import ChangeImageNumberForSelectedHorsesModal from "./ChangeImageNumberForSelectedHorsesModal";
+
 import * as APIs from '@/apis';
 
 
+
+import { ThumbnailImageProps } from '@/components/react-grid-gallery';
+import { Checkbox } from '@/components/ui/checkbox';
+
+const ImageComponent = (props: ThumbnailImageProps) => {
+    const { key, ...otherImageProps } = props.imageProps
+    return (
+        <div style={{
+            ...props.imageProps.style,
+            position: 'relative',
+        }}>
+            <img {...otherImageProps} />;
+            <div style={{
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                height: '50px',
+                background: 'red',
+            }}>
+                test
+                {/* {JSON.stringify(props.imageProps)} */}
+                <Button onClick={() => {
+                    console.log('test and test')
+                }}>test</Button>
+            </div>
+        </div>
+    );
+};
 
 type compProps = {
     horseImages: HorseInfo[];
@@ -35,10 +65,17 @@ export default function ListHorseImages({
     const router = useRouter();
 
     const fullScreenLoader = useFullScreenLoader();
-    const [ selectedHorse, setSelectedHorse ] = useState< HorseInfo | null >(null);
+    const [selectedHorse, setSelectedHorse] = useState<HorseInfo | null>(null);
+    const [checkedHorseImageIds, setCheckedHorseImageIds] = useState<string[]>([]);
+    const [showChangeHorseNumberModal, setShowChangeHorseNumberMmodal] = useState<boolean>(false);
 
 
-    const dispHorseImages = [];
+    useEffect(() => {
+        if (checkedHorseImageIds.length == 0) {
+            setShowChangeHorseNumberMmodal(false);
+        }
+    }, [checkedHorseImageIds])
+
 
     if (horseImages.length > 0) {
 
@@ -51,7 +88,6 @@ export default function ListHorseImages({
             height: 250,
         }
     })
-
 
 
     //  const imagesInfoArray = horseImages.map(h => {
@@ -70,10 +106,6 @@ export default function ListHorseImages({
         console.log('selected horse image is just', horse);
     }
 
-    const onImageSelectedInGrid = () => {
-
-    }
-
     const deleteImageAction = async () => {
         try {
             fullScreenLoader.showLoader();
@@ -86,18 +118,35 @@ export default function ListHorseImages({
         fullScreenLoader.hideLoader();
     }
 
+    const toggleSelectionForImage = (horseId: string) => {
+        if (!horseId) {
+            return;
+        }
+        if (checkedHorseImageIds.includes(horseId)) {
+            setCheckedHorseImageIds(checkedHorseImageIds.filter(id => {
+                return id != horseId
+            }))
+        } else {
+            setCheckedHorseImageIds([
+                ...checkedHorseImageIds,
+                horseId
+            ])
+        }
+    }
+
 
     return (
         <div>
-            <Gallery images={dispImages}
+            {/* <Gallery images={dispImages}
+                thumbnailImageComponent={ImageComponent}
                 rowHeight={220}
                 enableImageSelection={false}
-                onClick={onImageSelected}
+                // onClick={onImageSelected}
                 margin={5}
-            />
+            /> */}
 
             <Modal
-                title='Action for image'
+                title='Delete action for image'
                 description='Here is the simple actions for image.'
                 isOpen={selectedHorse ? true : false}
                 onClose={() => {
@@ -111,29 +160,81 @@ export default function ListHorseImages({
                     </Button>
                 </div>
             </Modal>
-            {/* <div className='grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4'>
-            { horseImages.map((horse, index) => {
+
+
+            {checkedHorseImageIds.length > 0 && (
+                <div className='mb-3 bg-yellow-300 px-5 py-2 flex justify-between align-center rounded-md'>
+                    <span className='font-bold'>
+                        {checkedHorseImageIds.length} image{checkedHorseImageIds.length > 1 ? 's' : ''} selected!
+                    </span>
+                    <div className='flex gap-5'>
+                        <Button size='sm'
+                            className='bg-main-color text-white'
+                            onClick={() => {
+                                setShowChangeHorseNumberMmodal(true);
+                            }}>Change horse number</Button>
+                        <Button size='sm'
+                            onClick={() => {
+                                setCheckedHorseImageIds([]);
+                            }}>Clear selection</Button>
+                    </div>
+                </div>
+            )}
+
+            <div className='grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(230px,1fr))] gap-4'>
+                {horseImages.map((horse, index) => {
                     return (
                         <div key={horse.horseNumber + index}
                             className='cursor-pointer
                             rounded-lg overflow-hidden
                             flex flex-col
                             bg-center bg-no-repeat bg-cover'
-                            // style={{ backgroundImage: `url(${horse.thumbnailS3Link})` }}
-                            style={{ backgroundImage: `url(/horse_folder.png)` }}
-                            onClick={() => {
-                                onImageSelected(horse.horseNumber);
-                            }}>
-                            <div className='min-h-[100px] md:min-h-[200px]'></div>
-                            <div className='flex-1 flex items-center bg-main-horse px-3 py-2'>
-                                <div className='font-bold'>
-                                    { horse.horseNumber }
-                                </div>
+
+                        // style={{ backgroundImage: `url(/horse_folder.png)` }}
+                        >
+                            <div
+                                style={{
+                                    aspectRatio: '3/2',
+                                    backgroundImage: `url(${horse.thumbnailS3Link})`,
+                                    backgroundPosition: 'center',
+                                    backgroundRepeat: 'no-repeat',
+                                    backgroundSize: 'cover',
+                                }}></div>
+                            <div className='flex-1 flex items-center justify-between bg-main-horse px-3 py-1 gap-2'>
+                                <Checkbox onClick={() => toggleSelectionForImage(horse._id)} 
+                                    checked={ checkedHorseImageIds.includes(horse._id) } />
+                                {/* <Button
+                                    className='text-white'
+                                    onClick={() => {
+                                    }}>
+                                    View
+                                </Button> */}
+                                <Button
+                                    variant='destructive'
+                                    className='bg-main-color text-white'
+                                    onClick={() => {
+                                        setSelectedHorse(horse);
+                                    }}>Delete</Button>
+                                {/* <div className='font-bold'>
+                                    {horse.horseNumber}
+                                </div> */}
                             </div>
                         </div>
                     )
-                }) }
-            </div> */}
+                })}
+            </div>
+
+            {
+                showChangeHorseNumberModal && <ChangeImageNumberForSelectedHorsesModal
+                    selectedHorseImageIds={checkedHorseImageIds}
+                    hideModalAction={(isDeleted: boolean) => {
+                        setShowChangeHorseNumberMmodal(false);
+                        if (isDeleted) {
+                            setCheckedHorseImageIds([]);
+                        }
+                    }}
+                />
+            }
         </div>
     );
 }

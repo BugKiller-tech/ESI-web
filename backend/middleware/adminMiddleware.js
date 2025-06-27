@@ -17,7 +17,7 @@ const adminCheckMiddleware = (req, res, next) => {
         if (err) return res.status(403).json({
             message: 'Invalid or expired token'
         });
-        console.log('UUUUUUUUUUUUUUUUUUUUUUU', user);
+        console.log('adminCheckMiddleware', user);
         if (!user.isAdmin) {
             return res.status(403).json({
                 message: 'Access denied. Please check your permission',
