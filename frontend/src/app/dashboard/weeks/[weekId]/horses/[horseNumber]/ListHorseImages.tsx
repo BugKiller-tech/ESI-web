@@ -10,7 +10,9 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Gallery } from '@/components/react-grid-gallery';
-import { Modal } from '@/components/ui/modal';
+import {
+    Modal
+} from '@/components/ui/modal';
 import { Button } from '@/components/ui/button';
 import {
     EventHandler as ReactGridEventHandler
@@ -19,6 +21,13 @@ import { useEffect, useState } from 'react';
 import { HorseInfo } from 'types';
 import { useFullScreenLoader } from "@/context/FullScreenLoaderContext";
 import ChangeImageNumberForSelectedHorsesModal from "./ChangeImageNumberForSelectedHorsesModal";
+
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
+
+// import optional lightbox plugins
+import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
 
 import * as APIs from '@/apis';
 
@@ -68,6 +77,8 @@ export default function ListHorseImages({
     const [selectedHorse, setSelectedHorse] = useState<HorseInfo | null>(null);
     const [checkedHorseImageIds, setCheckedHorseImageIds] = useState<string[]>([]);
     const [showChangeHorseNumberModal, setShowChangeHorseNumberMmodal] = useState<boolean>(false);
+
+    const [horseImageUrlToDisplayBig, setHorseImageUrlToDisplayBig] = useState<string>('');
 
 
     useEffect(() => {
@@ -145,6 +156,25 @@ export default function ListHorseImages({
                 margin={5}
             /> */}
 
+            <Lightbox
+                open={!!horseImageUrlToDisplayBig}
+                close={() => setHorseImageUrlToDisplayBig('')}
+                index={0}
+                slides={[
+                    {
+                        src: horseImageUrlToDisplayBig
+                    }
+                ]}
+                plugins={[
+                    Fullscreen,
+                    Zoom
+                ]}
+                render={{
+                    buttonPrev: () => null,
+                    buttonNext: () => null,
+                }}
+            />
+
             <Modal
                 title='Delete action for image'
                 description='Here is the simple actions for image.'
@@ -160,7 +190,6 @@ export default function ListHorseImages({
                     </Button>
                 </div>
             </Modal>
-
 
             {checkedHorseImageIds.length > 0 && (
                 <div className='mb-3 bg-yellow-300 px-5 py-2 flex justify-between align-center rounded-md'>
@@ -201,14 +230,16 @@ export default function ListHorseImages({
                                     backgroundSize: 'cover',
                                 }}></div>
                             <div className='flex-1 flex items-center justify-between bg-main-horse px-3 py-1 gap-2'>
-                                <Checkbox onClick={() => toggleSelectionForImage(horse._id)} 
-                                    checked={ checkedHorseImageIds.includes(horse._id) } />
-                                {/* <Button
+                                <Checkbox onClick={() => toggleSelectionForImage(horse._id)}
+                                    checked={checkedHorseImageIds.includes(horse._id)} />
+                                <span className='flex-1'></span>
+                                <Button
                                     className='text-white'
                                     onClick={() => {
+                                        setHorseImageUrlToDisplayBig(horse.thumbWebS3Link);
                                     }}>
                                     View
-                                </Button> */}
+                                </Button>
                                 <Button
                                     variant='destructive'
                                     className='bg-main-color text-white'
