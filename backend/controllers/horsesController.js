@@ -1,6 +1,7 @@
 
 const WeekModel = require('../models/WeekModel');
 const HorsesImageModel = require('../models/HorsesImageModel');
+const mongoose = require('mongoose');
 
 
 const getAllHorsesForAdmin = async (req, res) => {
@@ -116,11 +117,48 @@ const deleteHorse = async (req, res) => {
     }    
 }
 
+const changeHorseNumberForImages = async (req, res) => {
+    try {
+        const {
+            weekId,
+        } = req.params;
+        const {
+            horseImageIds,
+            newHorseNumber,
+        } = req.body;
+
+        console.log('data received is just like');
+        console.log(horseImageIds);
+        console.log(newHorseNumber);
+
+        const horseImages = await HorsesImageModel.find({
+            _id: {
+                $in: horseImageIds.map(id => new mongoose.Types.ObjectId(String(id)))
+            }
+        })
+        for (const horseImage of horseImages) {
+            horseImage.horseNumber = newHorseNumber;
+            await horseImage.save();
+        }
+
+        return res.json({
+            'message': 'Successfully changed horse number for selected images',
+        })
+        
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({
+            message: 'Failed to perform an action to change horse number',
+        })
+    }
+}
+
 
 module.exports = {
     getAllHorsesForAdmin,
     getHorseImagesForAdmin,
     deleteHorseImage,
     deleteHorse,
+    changeHorseNumberForImages,
 
 }
