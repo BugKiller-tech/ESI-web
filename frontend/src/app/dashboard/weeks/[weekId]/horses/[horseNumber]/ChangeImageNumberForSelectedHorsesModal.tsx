@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 
 import * as APIs from '@/apis';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Input } from "@/components/ui/input";
 import { toast } from 'sonner';
 import { useFullScreenLoader } from "@/context/FullScreenLoaderContext";
 
@@ -35,20 +36,20 @@ export default ({
     const [horseNumbers, setHorseNumbers] = useState<string[]>([]);
 
     useEffect(() => {
-        const fetchHorseNumbers = async () => {
-            try {
-                console.log('weekid is like', weekId);
-                const response = await APIs.getHorsesByWeekIdAdmin(weekId as string, session?.user?.accessToken);
-                const horseNumbers: string[] = response.data.horses || [];
-                console.log('fetched horse numbers from api', horseNumbers);
-                setHorseNumbers(horseNumbers);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        if (horseNumbers.length == 0) {
-            fetchHorseNumbers();
-        }
+        // const fetchHorseNumbers = async () => {
+        //     try {
+        //         console.log('weekid is like', weekId);
+        //         const response = await APIs.getHorsesByWeekIdAdmin(weekId as string, session?.user?.accessToken);
+        //         const horseNumbers: string[] = response.data.horses || [];
+        //         console.log('fetched horse numbers from api', horseNumbers);
+        //         setHorseNumbers(horseNumbers);
+        //     } catch (error) {
+        //         console.log(error);
+        //     }
+        // }
+        // if (horseNumbers.length == 0) {
+        //     fetchHorseNumbers();
+        // }
     }, []);
 
 
@@ -56,7 +57,7 @@ export default ({
     const changeHorseNumberAction = async () => {
         try {
             const postData = {
-                newHorseNumber,
+                newHorseNumber: newHorseNumber.trim(),
                 horseImageIds: selectedHorseImageIds,
             }
             fullScreenLoader.showLoader();
@@ -93,8 +94,12 @@ export default ({
                 </div>
 
                 <div>
-                    <div className='mb-2 font-bold text-main-color'>New horse number:</div>                    
-                    <Select
+                    <div className='mb-2 font-bold text-main-color'>New horse number: { newHorseNumber }</div>
+                    <Input type="text" placeholder='Please enter the correct horse number for the selected images'
+                    value={newHorseNumber} onChange={(e) => {
+                        setNewHorseNumber(e.target.value);
+                    }}/>          
+                    {/* <Select
                         onValueChange={(value) => { setNewHorseNumber(value) }}
                         defaultValue={newHorseNumber || ''}
                         value={newHorseNumber}
@@ -110,7 +115,7 @@ export default ({
                             ))
                             }
                         </SelectContent>
-                    </Select>
+                    </Select> */}
                 </div>
                 <div className='flex items-center justify-end space-x-2 pt-6'>
                     <Button variant='destructive' onClick={changeHorseNumberAction}
