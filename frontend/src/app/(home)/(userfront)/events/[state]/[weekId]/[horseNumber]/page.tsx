@@ -66,6 +66,7 @@ export default () => {
             width: h.aspectRatio * height,
             height: height,
             src: h.thumbnailS3Link,
+            originImageName: h.originImageName
         }
     });
     const images = horseImages.map(h => {
@@ -122,6 +123,7 @@ export default () => {
                         }}>
                             <img src={photo.src} alt="Image" />
                         </div>
+                        <div className='px-3 py-1 font-bold text-center'>{ photo.originImageName }</div>
                         <div className='bg-gray-300 flex items-center justify-center px-3 py-2' key={index}>
                             <div onClick={(e) => displayAddToCartPopup(e, index)}
                                 className='text-main-color rounded-md border-2 border-main-color

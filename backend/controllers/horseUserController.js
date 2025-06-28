@@ -90,8 +90,8 @@ const getHorseImagesByWeekAndHorseNumber = async (req, res) => {
             horseNumber: horseNumber,
             isDeleted: 0,
         }).sort({
-            photoTakenTime: 1,
-            createdAt: 1,
+            photoTakenTime: -1,
+            createdAt: -1,
         });
         console.log('horses', horses);
 
