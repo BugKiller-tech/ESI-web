@@ -38,6 +38,9 @@ const getHorseImagesForAdmin = async (req, res) => {
             week: req.params.weekId,
             horseNumber: req.params.horseNumber,
             isDeleted: 0,
+        }).sort({
+            photoTakenTime: -1,
+            createdAt: -1,
         });
 
         return res.json({

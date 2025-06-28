@@ -229,26 +229,29 @@ export default function ListHorseImages({
                                     backgroundRepeat: 'no-repeat',
                                     backgroundSize: 'cover',
                                 }}></div>
-                            <div className='flex-1 flex items-center justify-between bg-main-horse px-3 py-1 gap-2'>
-                                <Checkbox onClick={() => toggleSelectionForImage(horse._id)}
-                                    checked={checkedHorseImageIds.includes(horse._id)} />
-                                <span className='flex-1'></span>
-                                <Button
-                                    className='text-white'
-                                    onClick={() => {
-                                        setHorseImageUrlToDisplayBig(horse.thumbWebS3Link);
-                                    }}>
-                                    View
-                                </Button>
-                                <Button
-                                    variant='destructive'
-                                    className='bg-main-color text-white'
-                                    onClick={() => {
-                                        setSelectedHorse(horse);
-                                    }}>Delete</Button>
-                                {/* <div className='font-bold'>
+                            <div className='bg-main-horse'>
+                                <div className='px-3 py-1 font-bold text-center border-b border-gray-400'>{ horse.originImageName }</div>
+                                <div className='px-3 flex-1 flex items-center justify-between py-1 gap-2'>
+                                    <Checkbox onClick={() => toggleSelectionForImage(horse._id)}
+                                        checked={checkedHorseImageIds.includes(horse._id)} />
+                                    <span className='flex-1'></span>
+                                    <Button
+                                        className='text-white'
+                                        onClick={() => {
+                                            setHorseImageUrlToDisplayBig(horse.thumbWebS3Link);
+                                        }}>
+                                        View
+                                    </Button>
+                                    <Button
+                                        variant='destructive'
+                                        className='bg-main-color text-white'
+                                        onClick={() => {
+                                            setSelectedHorse(horse);
+                                        }}>Delete</Button>
+                                    {/* <div className='font-bold'>
                                     {horse.horseNumber}
                                 </div> */}
+                                </div>
                             </div>
                         </div>
                     )
