@@ -16,9 +16,19 @@ const getAllHorsesForAdmin = async (req, res) => {
             week: req.params.weekId,
             isDeleted: 0,
         }).distinct('horseNumber');
+
+        const sortedHorseNumbers = horses.map(h => {
+            try {
+                return Number(h)
+            } catch (e) {
+                return 0;
+            }
+        }).filter(h => h != 0)
+        .sort().map(h_num => String(h_num));
+
         return res.json({
             week: week,
-            horses: horses
+            horses: sortedHorseNumbers
         })
     } catch (error) {
         console.log('Error fetching horses:', error);
