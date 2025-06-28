@@ -230,7 +230,9 @@ export default function ListHorseImages({
                                     backgroundSize: 'cover',
                                 }}></div>
                             <div className='bg-main-horse'>
-                                <div className='px-3 py-1 font-bold text-center border-b border-gray-400'>{ horse.originImageName }</div>
+                                <div className='px-3 py-1 font-bold text-center border-b border-gray-400'>
+                                    {horse.originImageName}
+                                </div>
                                 <div className='px-3 flex-1 flex items-center justify-between py-1 gap-2'>
                                     <Checkbox onClick={() => toggleSelectionForImage(horse._id)}
                                         checked={checkedHorseImageIds.includes(horse._id)} />

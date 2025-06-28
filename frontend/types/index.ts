@@ -58,6 +58,7 @@ export interface WeekInfo {
 export interface HorseInfo {
   _id: string;
   horseNumber: string;
+  photoTakenTime: string;
   originImageName: string;
   originImageS3Link: string;
   thumbWebS3Link: string;
