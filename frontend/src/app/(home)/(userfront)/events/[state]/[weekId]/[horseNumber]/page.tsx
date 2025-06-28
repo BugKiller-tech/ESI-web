@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
 import { RowsPhotoAlbum } from "react-photo-album";
@@ -17,7 +17,8 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import { toast } from "sonner";
 import {
-    ShoppingCart
+    ShoppingCart,
+    ArrowBigLeft
 } from 'lucide-react';
 
 
@@ -26,13 +27,16 @@ import { AddCartModal } from './AddCartModal';
 import * as APIs from '@/apis';
 
 import './style.scss';
+import { Button } from '@/components/ui/button';
 
 export default () => {
 
     const params = useParams();
     const { state, weekId, horseNumber } = params;
     const { data: session } = useSession();
-    
+
+    const router = useRouter();
+
     const [isOpenCartModal, setIsOpenCartModal] = useState(false);
     const [selectedHorse, setSelectedHorse] = useState<HorseInfo | null>(null);
 
@@ -114,6 +118,15 @@ export default () => {
                 }}
                 
             /> */}
+            <div className='text-center'>
+                <Button className='bg-main-color text-white mb-3 font-bold'
+                    onClick={() => {
+                        router.push('/search-photos');
+                    }}>
+                    <ArrowBigLeft />
+                    Back to Search
+                </Button>
+            </div>
             <div className="grid-container">
                 {photos.map((photo, index) => (
                     <div className="cell" key={index}>
@@ -123,7 +136,7 @@ export default () => {
                         }}>
                             <img src={photo.src} alt="Image" />
                         </div>
-                        <div className='px-3 py-1 font-bold text-center'>{ photo.originImageName }</div>
+                        <div className='px-3 py-1 font-bold text-center'>{photo.originImageName}</div>
                         <div className='bg-gray-300 flex items-center justify-center px-3 py-2' key={index}>
                             <div onClick={(e) => displayAddToCartPopup(e, index)}
                                 className='text-main-color rounded-md border-2 border-main-color
