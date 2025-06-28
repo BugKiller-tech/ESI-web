@@ -275,11 +275,11 @@ const createInvoicePdfWithPuppeteer = async (order, outputPath) => {
         <body>
           <h1>ESI Photography</h1>
           <div class="section">
-            <div style='display: flex;'>
+            <div style='display: flex; align-items: center;'>
               <h3 style='flex-grow: 1'>Customer Information</h3>
-              <h4>
+              <h5>
                 ${order.orderedAt}
-              </h4>
+              </h5>
             </div>
             <div class="info-grid">
               <div>Full name:</div><div>${order.firstName}&nbsp;${order.lastName
