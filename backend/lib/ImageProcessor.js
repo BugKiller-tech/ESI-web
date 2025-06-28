@@ -143,7 +143,10 @@ const imageProcessingJobForWeek = async (weekNumber) => {
                     const parser = exifParser.create(imageBuffer);
                     const result = parser.parse();
                     console.log('exifparser result', result);
-                    let { width, height } = result.imageSize;
+                    let { width, height } = result.imageSize || {
+                        width: 1000,
+                        height: 1000,
+                    };
                     const dateTimeOriginal = result.tags.DateTimeOriginal;
                     const orientation = result.tags?.Orientation | 0
                     // Orientation referencevalues
@@ -295,7 +298,10 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
                     const parser = exifParser.create(imageBuffer);
                     const result = parser.parse();
                     // console.log('exifparser result', result);
-                    let { width, height } = result.imageSize;
+                    let { width, height } = result.imageSize || {
+                        width: 1000,
+                        height: 1000,
+                    };;
                     const dateTimeOriginal = result.tags?.DateTimeOriginal || 0;
                     const orientation = result.tags?.Orientation | 0
                     // Orientation referencevalues
