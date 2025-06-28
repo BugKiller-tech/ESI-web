@@ -17,18 +17,18 @@ const getAllHorsesForAdmin = async (req, res) => {
             isDeleted: 0,
         }).distinct('horseNumber');
 
-        const sortedHorseNumbers = horses.map(h => {
+        let sortedHorseNumbers = horses.map(h => {
             try {
                 return Number(h)
             } catch (e) {
                 return 0;
             }
         }).filter(h => h != 0)
-        .sort().map(h_num => String(h_num));
+        sortedHorseNumbers.sort((a, b) => a - b);
 
         return res.json({
             week: week,
-            horses: sortedHorseNumbers
+            horses: sortedHorseNumbers.map(h_num => String(h_num))
         })
     } catch (error) {
         console.log('Error fetching horses:', error);
