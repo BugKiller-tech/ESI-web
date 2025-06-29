@@ -21,9 +21,9 @@ const getAllHorsesForAdmin = async (req, res) => {
             try {
                 return Number(h)
             } catch (e) {
-                return 0;
+                return -1;
             }
-        }).filter(h => h != 0)
+        }).filter(h => h != -1)
         sortedHorseNumbers.sort((a, b) => a - b);
 
         return res.json({
