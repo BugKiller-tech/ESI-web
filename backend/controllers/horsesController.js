@@ -28,7 +28,12 @@ const getAllHorsesForAdmin = async (req, res) => {
 
         return res.json({
             week: week,
-            horses: sortedHorseNumbers.map(h_num => String(h_num))
+            horses: sortedHorseNumbers.map(h_num => {
+                if (h_num == 0) {
+                    return '0000'
+                }
+                return String(h_num)
+            })
         })
     } catch (error) {
         console.log('Error fetching horses:', error);
