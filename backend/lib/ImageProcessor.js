@@ -327,11 +327,12 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
                     console.log(
                         `Date image taken (dev debug)==>
                             width: ${width}, height: ${height}, date image taken: ${dateImageTaken}`, inUtcTime.toFormat('yyyy-MM-dd HH:mm:ss'));
-                    const horseNumber = getHorseNumberByPhotoTakenTime(inUtcTime.toFormat('yyyy-MM-dd HH:mm:ss'), horseJsonEntries);
+                    let horseNumber = getHorseNumberByPhotoTakenTime(inUtcTime.toFormat('yyyy-MM-dd HH:mm:ss'), horseJsonEntries);
 
                     if (!horseNumber) {
-                        console.log('Can not find horse number inside json file');
-                        continue;
+                        console.log('Can not find horse number inside json file 0000 will be horse #');
+                        // continue;
+                        horseNumber = '0000';
                     }
 
                     const originImageName = imageInfo.imageFileName.split('.')[0];
