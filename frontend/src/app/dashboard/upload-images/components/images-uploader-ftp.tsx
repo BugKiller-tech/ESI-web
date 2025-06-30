@@ -112,7 +112,7 @@ export default () => {
     const [showImageProcessDoneModal, setShowImageProcessDoneModal] = useState(false);
     const [imageProcessingResulgMsg, setImageProcessingResulgMsg] = useState('');
 
-    const STATUS_UPDATE_INTERVAL = 3000;
+    const STATUS_UPDATE_INTERVAL = 2000;
     const intervalId = useRef<number | null>(null);
 
     const clearProgress = () => {
