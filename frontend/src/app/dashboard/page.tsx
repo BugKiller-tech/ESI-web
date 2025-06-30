@@ -5,9 +5,10 @@ import PageContainer from '@/components/layout/page-container';
 export default async function Dashboard() {
   const session = await auth();
 
-  // if (!session?.user || session?.user?.isAdmin !== 1) {
-  //   return redirect('/auth/signin');
-  // } else {
+  if (!session?.user || session?.user?.isAdmin !== 1) {
+    return redirect('/auth/signin');
+  } 
+  // else {
   //   console.log('no loggedin user really..')
   //   // redirect('/dashboard/overview');
   // }
