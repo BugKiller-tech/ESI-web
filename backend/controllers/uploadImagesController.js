@@ -142,7 +142,8 @@ const uploadTimeStampJsonWithFtpFolder = async (req, res) => {
         console.log('error')
     });
     return res.json({
-        'message': 'Successfully uploaded all images and image process will be executed in background',
+        taskId: record._id,
+        message: 'Successfully uploaded all images and image process will be executed in background',
     })
 }
 
