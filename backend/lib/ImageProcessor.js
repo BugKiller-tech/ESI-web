@@ -429,12 +429,13 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
             }
 
             // Update progress into FtpImagesProcessModel
-            record.progressVal = Math.round((index + 1 ) / totalImagesCount);
+            record.progressVal = Math.round((index + 1 ) * 100 / totalImagesCount);
             await record.save();
         }
         record.unsortedImagesCount = unsortedImagesCount
         record.totalImagesCount = totalImagesCount
         record.status = FTP_IMAGE_PROCESSOR_JOB_STATUS.SUCCESS;
+        record.progressVal = 100;
         await record.save();
         // if (!errorMsg) {
         //     record.isProcessed = 1;
