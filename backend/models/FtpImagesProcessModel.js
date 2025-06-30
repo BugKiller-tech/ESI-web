@@ -27,6 +27,23 @@ const schema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
+    
+    progressVal: {
+        type: Number,
+        default: 0,
+    },
+    unsortedImagesCount: {
+        type: Number,
+        default: 0,
+    },
+    totalImagesCount: {
+        type: Number,
+        default: 0,
+    },
+    status: {
+        type: String,
+        default: '',
+    }
 }, {
     timestamps: true
 })

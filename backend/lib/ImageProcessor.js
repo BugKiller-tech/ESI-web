@@ -15,6 +15,9 @@ const HorsesImageModel = require('../models/HorsesImageModel.js');
 const constants = require('../constants/constants.js');
 const { getAllImagesFromFtpFolder, deleteFtpFolderAndFiles } = require('../lib/ftpAccess');
 const { uploadAllImagesToS3 } = require('./uploadToS3Lib');
+const {
+    FTP_IMAGE_PROCESSOR_JOB_STATUS
+} = require('../constants/constants');
 
 
 async function getImageBuffer(imagePath) {
@@ -268,6 +271,9 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
             return;
         }
 
+        record.status = FTP_IMAGE_PROCESSOR_JOB_STATUS.PROGRESS;
+        await record.save();
+
         const {
             watermarkUrl,
             thumbWebPercentage,
@@ -282,6 +288,7 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
         const images = await getAllImagesFromFtpFolder(record.ftpFolderName);
 
         const totalImagesCount = images.length;
+        let unsortedImagesCount = 0;
         console.log(`We found ${totalImagesCount} images inside the folder.`)
         
         let processedImagesCount = 0;
@@ -333,6 +340,7 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
                         console.log('Can not find horse number inside json file 0000 will be horse #');
                         // continue;
                         horseNumber = '0000';
+                        unsortedImagesCount += 1;
                     }
 
                     const originImageName = imageInfo.imageFileName.split('.')[0];
@@ -419,7 +427,15 @@ const imageProcessingJobUploadedViaFtp = async (_id) => {
                 errorMsg += `\n Image file name is ${record.imageFileName}`
                 console.log(e);
             }
+
+            // Update progress into FtpImagesProcessModel
+            record.progressVal = Math.round((index + 1 ) / totalImagesCount);
+            await record.save();
         }
+        record.unsortedImagesCount = unsortedImagesCount
+        record.totalImagesCount = totalImagesCount
+        record.status = FTP_IMAGE_PROCESSOR_JOB_STATUS.SUCCESS;
+        await record.save();
         // if (!errorMsg) {
         //     record.isProcessed = 1;
         //     await record.save();

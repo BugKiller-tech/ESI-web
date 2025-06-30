@@ -5,6 +5,13 @@ const ORDER_STATUS = {
     Shipped: 'Shipped/Completed',
     Refunded: 'Refunded',
 }
+
+const FTP_IMAGE_PROCESSOR_JOB_STATUS = {
+    SUCCESS: 'SUCCESS',
+    PROGRESS: 'PROGRESS',
+    FAILURE: 'FAILURE',
+}
+
 module.exports = {
     originImagePath: 'uploads/originImages',
     timestampJsonPath: 'uploads/timestampJson',
@@ -21,4 +28,6 @@ module.exports = {
     API_VERSION: 'v1',
     ORDER_STATUS: ORDER_STATUS,
     AVAILABLE_ORDER_STATUS: Object.values(ORDER_STATUS),
+
+    FTP_IMAGE_PROCESSOR_JOB_STATUS,
 }

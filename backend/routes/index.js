@@ -15,6 +15,7 @@ const adminSettingRoutes = require('./adminSetting');
 const productRoutes = require('./productsRouter');
 const weekAdminRoutes = require('./weekAdminRouter');
 const horsesAdminRoutes = require('./horsesAdminRouter');
+const trackerRoutes = require('./trackerRouter');
 const {
     API_VERSION,
 } = require('../constants/constants');
@@ -36,6 +37,7 @@ router.use(`/api/${API_VERSION}/admin/setting`,  adminSettingRoutes);
 router.use(`/api/${API_VERSION}/admin/weeks`,  weekAdminRoutes);
 router.use(`/api/${API_VERSION}/admin/horses`,  horsesAdminRoutes);
 router.use(`/api/${API_VERSION}/admin/orders`,  require('./ordersAdminRoutes'));
+router.use(`/api/${API_VERSION}/tracker`, trackerRoutes)
 
 
 

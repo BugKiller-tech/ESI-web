@@ -51,6 +51,11 @@ export const uploadFtpFolderAndTimestamp = async (formData: any, token: string =
     })
 }
 
+export const getFtpImageProcessTaskStatus = async (taskId: string, token: string = '') => {
+    const axios = await createAxiosInstance(token);
+    return axios.get(`/api/v1/tracker/ftp_image_process_status/${taskId}`);
+}
+
 export const getHorsesFtpFolders = async (token: string = '') => {
     const axios = await createAxiosInstance(token);
     return axios.get('/api/v1/admin/upload/list-horses-ftp-folders')
