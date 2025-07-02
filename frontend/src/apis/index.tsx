@@ -7,6 +7,11 @@ export const signIn = async (data: any, token: string = '') => {
     return axios.post('/api/v1/auth/signin', data);
 }
 
+export const getCurrentUser = async (token: string = '') => {
+    const axios = await createAxiosInstance(token);
+    return axios.get('/api/v1/auth/get-user');
+}
+
 export const getImageProcessSetting = async (token: string = '') => {
     const axios = await createAxiosInstance(token);
     return axios.get('/api/v1/admin/setting/image-process-setting');
@@ -147,9 +152,34 @@ export const changeHorseNumberForImages = async (data: any, token: string = '') 
     return axios.post(`/api/v1/admin/horses/${weekId}/horses/change-horse-number-for-images`, data);
 }
 
+export const searchImagesByImageNumber = async (data: any, token: string = '') => {
+    const {
+        weekId
+    } = data;
+    const axios = await createAxiosInstance(token);
+    return axios.post(`/api/v1/admin/horses/${weekId}/search-images-by-image-numbers`, data);
+}
+export const downloadForSelectedImages = async (data: any, token: string = '') => {
+    const {
+        weekId
+    } = data;
+    const axios = await createAxiosInstance(token);
+    return axios.post(`/api/v1/admin/horses/${weekId}/download-for-selected-images`, data, {
+        responseType: 'blob',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+}
+
+
 export const getWeeksByState = async (postData: any, token: string = '') => {
     const axios = await createAxiosInstance(token);
     return axios.post('/api/v1/front/weeks/get-weeks-for-state', postData);
+}
+export const getAllWeeks = async (token: string = '') => {
+    const axios = await createAxiosInstance(token);
+    return axios.get('/api/v1/front/weeks/get-all-weeks');
 }
 
 export const getHorsesByWeek = async (postData: any, token: string = '') => {
@@ -211,7 +241,7 @@ export const downloadInvoiceForOrder = async (orderId: string, token: string = '
     })
 }
 
-export const sendContactUsInfo = async(data: any, token: string = '') => {
+export const sendContactUsInfo = async (data: any, token: string = '') => {
     const axios = await createAxiosInstance(token);
     return axios.post(`/api/v1/support/contact-us`, data);
 }

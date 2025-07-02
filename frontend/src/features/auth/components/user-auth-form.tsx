@@ -65,7 +65,7 @@ export default function UserAuthForm() {
       toast.error('Failed to sign in, please check your credentials');
     }
     if (result?.ok) {
-      router.push('/dashboard');
+      router.push(callbackUrl ?? '/dashboard');
     }
   };
 

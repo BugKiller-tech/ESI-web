@@ -25,6 +25,9 @@ const {
     createInvoicePDFWithPdfKit,
     createInvoicePdfWithPuppeteer
 } = require('../lib/invoicePdf');
+const {
+    createImagesZipForResponsePipe
+} = require("../lib/imageZipLib");
 
 
 const getOrdersWithPagination = async (req, res) => {
@@ -144,47 +147,31 @@ const downloadImagesZip = async (req, res) => {
             })
         }
 
-        const s3Links = order.cartItems.map(item => {
-            return item.horse?.originImageS3Link
-        })
-
-        const s3FileKeys = s3Links.map(link => getFileKeyFromS3Link(link));
-        // return res.json({
-        //     links: s3Keys
-        // })
+        
 
         res.setHeader('Content-Type', 'application/zip');
         res.setHeader('Content-Disposition', `attachment; filename=images.zip`);
 
         const archive = archiver('zip', { zlib: { level: 9 } });
-
         archive.on('error', err => res.status(500).send({ error: err.message }));
-
         archive.pipe(res);
 
-        let index = 0;
-        for (const fileKey of s3FileKeys) {
-            const command = new GetObjectCommand({
-                Bucket: BUCKET_NAME,
-                Key: fileKey,
-            });
-
-            const data = await s3.send(command);
-
-            if (!data.Body || typeof data.Body.pipe !== 'function') {
-                throw new Error(`Failed to stream S3 object: ${key}`);
-            }
-
-            const item = order.cartItems[index]
+        const s3Links = order.cartItems.map(item => {
+            return item.horse?.originImageS3Link
+        })
+        let imagesData = s3Links.map((link, index) => {
+            const item = order.cartItems[index];
             const { horse, product } = item;
+            const extension = link.split(".").pop();
 
-            const extension = fileKey.split('.').pop();
-            const fileName =
-                `Horse#${horse?.horseNumber}_Product#${product?.category}_${product?.name}_Photoname#${horse?.originImageName}_Quantity#${item.quantity}.${extension}`;
-            archive.append(data.Body, { name: fileName });
-            index++;
-        }
-        await archive.finalize();
+            return {
+                s3Link: link,
+                fileName: `Horse#${horse?.horseNumber}_Product#${product?.category}_${product?.name}_Photoname#${horse?.originImageName}_Quantity#${item.quantity}.${extension}`,
+            }
+        });
+        await createImagesZipForResponsePipe(archive, imagesData);
+
+        
     } catch (error) {
         console.log(error);
         return res.status(400).json({
