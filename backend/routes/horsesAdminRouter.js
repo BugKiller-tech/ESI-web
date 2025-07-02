@@ -12,6 +12,8 @@ router.get('/:weekId/horses/:horseNumber', controller.getHorseImagesForAdmin);
 router.delete('/:weekId/horses/:horseImageId/delete', controller.deleteHorseImage);
 router.delete('/:weekId/horses/:horseNumber/delete-all-images', controller.deleteHorse);
 router.post('/:weekId/horses/change-horse-number-for-images', controller.changeHorseNumberForImages);
+router.post('/:weekId/search-images-by-image-numbers', controller.searchImagesByImageNumber);
+router.post('/:weekId/download-for-selected-images',  controller.downloadForSelectedImages);
 
 
 module.exports = router;

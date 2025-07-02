@@ -22,6 +22,12 @@ export const navItems: NavItem[] = [
     isActive: false,
   },
   {
+    title: 'Search by Image number',
+    url: '/dashboard/search-image-by-number',
+    icon: 'searchHorse',
+    isActive: false,
+  },
+  {
     title: 'Products',
     url: '/dashboard/product',
     icon: 'product',

@@ -33,7 +33,8 @@ import {
   X,
   SettingsIcon,
   MagnetIcon,
-  ShoppingBasketIcon
+  ShoppingBasketIcon,
+  FolderSearch,
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -89,4 +90,5 @@ export const Icons = {
   check: Check,
   week: MagnetIcon,
   basket: ShoppingBasketIcon,
+  searchHorse: FolderSearch,
 };

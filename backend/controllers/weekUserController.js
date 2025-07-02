@@ -1,4 +1,4 @@
-const { getWeeksByState } = require('../services/weekService');
+const { getWeeksByState, getAllWeeksFunc } = require('../services/weekService');
 
 const getWeeksForState = async (req, res) => {
     try {
@@ -10,8 +10,25 @@ const getWeeksForState = async (req, res) => {
             });
         }
 
-        // Assuming you have a function to fetch weeks based on state
         const weeks = await getWeeksByState(state, false);
+
+        return res.status(200).json({
+            message: 'Weeks fetched successfully',
+            weeks: weeks,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(400).json({
+            message: 'Internal Server Error',
+            error: error.message,
+        });
+    }
+}
+
+
+const getAllWeeks = async (req, res) => {
+    try {
+        const weeks = await getAllWeeksFunc(false);
 
         return res.status(200).json({
             message: 'Weeks fetched successfully',
@@ -28,4 +45,5 @@ const getWeeksForState = async (req, res) => {
 
 module.exports = {
     getWeeksForState,
+    getAllWeeks,
 }
