@@ -67,6 +67,9 @@ export default ({
             const response = await APIs.searchImagesByImageNumber(postData, session?.user?.accessToken);
             if (response.data?.horseImages) {
                 setSearchedImages(response.data?.horseImages);
+                if (response.data?.horseImages.length == 0) {
+                    toast.info('No image detected with the image # you provided.')
+                }
             }
         } catch (error) {
             console.log(error);
