@@ -45,7 +45,7 @@ export default ({
     ] = useState('');
     const imageNumbers = imageNumbersText.split(/[\n,]+/).reduce((acc, currentVal, index) => {
         if (currentVal.trim() != '') {
-            acc.push(currentVal)
+            acc.push(currentVal.trim())
         }
         return acc;
     }, [])
