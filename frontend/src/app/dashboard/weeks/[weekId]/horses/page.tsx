@@ -30,6 +30,7 @@ export default async function ({ params }: pageProps) {
         week = response.data.week;
         horses = response.data.horses;
     } catch (error) {
+        console.log("failed to find horses~")
         console.log(error);
     }
 
