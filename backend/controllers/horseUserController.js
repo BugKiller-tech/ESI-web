@@ -58,7 +58,6 @@ const searchHorsesByName = async (req, res) => {
         }
 
         const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
         // const weekHorses = await WeekHorseInfoModel.find({
         //     week: new ObjectId(String(weekId)),
         //     horseName: {
@@ -77,14 +76,17 @@ const searchHorsesByName = async (req, res) => {
             },
             {
                 $match: {
+                    horseName: {
+                        $regex: new RegExp(escapeRegex(horseNameToSearch), 'i')
+                    },
                     images: { $ne: [] } // only those that are referenced
                 }
             },
-            // {
-            //     $project: {
-            //         images: 0 // remove the joined images if you don't need them
-            //     }
-            // }
+            {
+                $project: {
+                    images: 0 // remove the joined images if you don't need them
+                }
+            }
         ])
 
 
