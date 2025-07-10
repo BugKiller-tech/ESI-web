@@ -4,7 +4,7 @@ import PageContainer from '@/components/layout/page-container';
 import { Heading } from '@/components/ui/heading';
 import { Separator } from '@/components/ui/separator';
 import { Suspense } from 'react';
-import { WeekInfo } from 'types';
+import { HorseImageInfo, WeekInfo } from 'types';
 import ListHorses from './ListHorses';
 
 import * as APIs from "@/apis";
@@ -22,7 +22,7 @@ export default async function ({ params }: pageProps) {
     const session = await auth();
 
     let week: WeekInfo | null = null;
-    let horses: string[] = [];
+    let horses: HorseImageInfo[] = [];
 
     try {
         const response = await APIs.getHorsesByWeekIdAdmin(weekId as string, session?.user?.accessToken);

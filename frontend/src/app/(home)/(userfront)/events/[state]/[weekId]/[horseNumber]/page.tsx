@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 
 
-import { HorseInfo } from 'types';
+import { HorseImageInfo } from 'types';
 import { AddCartModal } from './AddCartModal';
 import * as APIs from '@/apis';
 
@@ -38,10 +38,10 @@ export default () => {
     const router = useRouter();
 
     const [isOpenCartModal, setIsOpenCartModal] = useState(false);
-    const [selectedHorse, setSelectedHorse] = useState<HorseInfo | null>(null);
+    const [selectedHorse, setSelectedHorse] = useState<HorseImageInfo | null>(null);
 
 
-    const [horseImages, setHorseImages] = useState<HorseInfo[]>([]);
+    const [horseImages, setHorseImages] = useState<HorseImageInfo[]>([]);
     const [openImageModal, setOpenImageModal] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 

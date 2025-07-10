@@ -36,20 +36,7 @@ export default ({
     const [horseNumbers, setHorseNumbers] = useState<string[]>([]);
 
     useEffect(() => {
-        // const fetchHorseNumbers = async () => {
-        //     try {
-        //         console.log('weekid is like', weekId);
-        //         const response = await APIs.getHorsesByWeekIdAdmin(weekId as string, session?.user?.accessToken);
-        //         const horseNumbers: string[] = response.data.horses || [];
-        //         console.log('fetched horse numbers from api', horseNumbers);
-        //         setHorseNumbers(horseNumbers);
-        //     } catch (error) {
-        //         console.log(error);
-        //     }
-        // }
-        // if (horseNumbers.length == 0) {
-        //     fetchHorseNumbers();
-        // }
+      // fetch available horse numbers if it's needed later and udpate horseNumbers state
     }, []);
 
 

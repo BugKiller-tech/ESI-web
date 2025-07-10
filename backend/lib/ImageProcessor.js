@@ -16,6 +16,7 @@ const constants = require('../constants/constants.js');
 const { getAllImagesFromFtpFolder, deleteFtpFolderAndFiles } = require('../lib/ftpAccess');
 const { uploadAllImagesToS3 } = require('./uploadToS3Lib');
 const {
+    watermarkPath,
     FTP_IMAGE_PROCESSOR_JOB_STATUS
 } = require('../constants/constants');
 
@@ -52,7 +53,7 @@ function generateUniqueImageFileName(extension = 'JPG') {
 async function getSettings() {
     const setting = await ProjectSettingModel.findOne({});
 
-    let watermarkUrl = 'public/watermark/default.png';
+    let watermarkUrl = `${watermarkPath}/default.png`;
     let thumbnailPercentage = 5;
     let thumbWebPercentage = 25;
 

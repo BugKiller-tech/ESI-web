@@ -8,6 +8,7 @@ import * as APIs from '@/apis';
 import { toast } from 'sonner';
 import { Modal } from '@/components/ui/modal';
 import { useState } from 'react';
+import UploadHorseNamesExcel from './UploadHorseNamesExcel';
 
 interface CellActionProps {
     data: WeekInfo;
@@ -19,6 +20,7 @@ export default function ({ data }: CellActionProps) {
     const router = useRouter();
 
     const [isOpenDeleteConfirmModal, setIsOpenDeleteConfirmModal] = useState(false);
+    const [isOpenHorseNamesExcelModal, setIsOpenHorseNamesExcelModal] = useState(false);
 
     const toggleVisibility = () => {
         const newData = {
@@ -71,6 +73,11 @@ export default function ({ data }: CellActionProps) {
             }}>Delete</Button>}
             <Button size='sm' onClick={toggleVisibility}>{data.isHided ? 'Make visible' : 'Make hidden'}</Button>
             <Button size='sm' onClick={viewHorses}>View horses</Button>
+            <Button size='sm' className='bg-main-color font-bold'
+                onClick={() => {
+                    setIsOpenHorseNamesExcelModal(true);
+                }}>Upload horse names XLSX
+            </Button>
 
             <Modal
                 title='Delete confirm'
@@ -87,6 +94,15 @@ export default function ({ data }: CellActionProps) {
                     </Button>
                 </div>
             </Modal>
+
+            <UploadHorseNamesExcel
+                week={data}
+                isOpened={isOpenHorseNamesExcelModal}
+                closeModalAction={() => {
+                    setIsOpenHorseNamesExcelModal(false);
+                }} />
+
+
         </div>
     )
 }

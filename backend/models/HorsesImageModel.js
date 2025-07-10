@@ -2,12 +2,16 @@ const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 
 const schema = new mongoose.Schema({
-    week: { // Reference to User
+    week: { // Reference to Week
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Weeks" 
+        ref: "Weeks"
     },
     horseNumber: {
         type: String,
+    },
+    horseInfo: { // reference the normalized name
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'WeekHorseInfo'
     },
     originImageName: {
         type: String,

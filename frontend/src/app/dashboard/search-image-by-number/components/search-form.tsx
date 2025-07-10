@@ -21,7 +21,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
-import { HorseInfo, WeekInfo } from "types";
+import { HorseImageInfo, WeekInfo } from "types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import * as APIs from '@/apis';
 import { useSession } from "next-auth/react";
@@ -51,7 +51,7 @@ export default ({
     }, [])
 
 
-    const [searchedImages, setSearchedImages] = useState<HorseInfo[]>([]);
+    const [searchedImages, setSearchedImages] = useState<HorseImageInfo[]>([]);
 
 
     const allInfoInputed = imageNumbers.length > 0 && selectedWeekId;

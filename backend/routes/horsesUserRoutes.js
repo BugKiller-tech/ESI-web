@@ -6,7 +6,8 @@ const router = express.Router();
 
 
 
-router.post('/search-horse', controller.searchHorse);
+router.post('/search-horse-by-number', controller.searchHorseByNumber);
+router.post('/search-horses-by-name', controller.searchHorsesByName);
 router.post('/get-horses-for-week', controller.getHorsesForWeek);
 router.post('/get-horse-images-by-week-and-horsenumber', controller.getHorseImagesByWeekAndHorseNumber);
 

@@ -56,14 +56,24 @@ export const uploadFtpFolderAndTimestamp = async (formData: any, token: string =
     })
 }
 
-export const getFtpImageProcessTaskStatus = async (taskId: string, token: string = '') => {
-    const axios = await createAxiosInstance(token);
-    return axios.get(`/api/v1/tracker/ftp_image_process_status/${taskId}`);
-}
-
 export const getHorsesFtpFolders = async (token: string = '') => {
     const axios = await createAxiosInstance(token);
     return axios.get('/api/v1/admin/upload/list-horses-ftp-folders')
+}
+
+export const uploadHorseNamesExcel = async (formData: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
+    return axios.post('/api/v1/admin/upload/upload-horse-names', formData, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+}
+
+export const getFtpImageProcessTaskStatus = async (taskId: string, token: string = '') => {
+    const axios = await createAxiosInstance(token);
+    return axios.get(`/api/v1/tracker/ftp_image_process_status/${taskId}`);
 }
 
 export const getTaxAndShippingFeeSetting = async (token: string = '') => {
@@ -187,9 +197,14 @@ export const getHorsesByWeek = async (postData: any, token: string = '') => {
     return axios.post('/api/v1/front/horses/get-horses-for-week', postData);
 }
 
-export const searchHorse = async (postData: any, token: string = '') => {
+export const searchHorseByNumber = async (postData: any, token: string = '') => {
     const axios = await createAxiosInstance(token);
-    return axios.post('/api/v1/front/horses/search-horse', postData);
+    return axios.post('/api/v1/front/horses/search-horse-by-number', postData);
+}
+
+export const searchHorsesByName = async (postData: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
+    return axios.post('/api/v1/front/horses/search-horses-by-name', postData);
 }
 
 export const getHorseImagesByWeekAndHorseNumber = async (postData: any, token: string = '') => {

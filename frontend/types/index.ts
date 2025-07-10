@@ -55,9 +55,17 @@ export interface WeekInfo {
   displayName: string;
 }
 
-export interface HorseInfo {
+export interface WeekHorseInfo {
   _id: string;
   horseNumber: string;
+  horseName: string;
+  riderName: string;
+}
+
+export interface HorseImageInfo {
+  _id: string;
+  horseNumber: string;
+  horseInfo?: WeekHorseInfo;
   photoTakenTime: string;
   originImageName: string;
   originImageS3Link: string;
@@ -69,7 +77,7 @@ export interface HorseInfo {
 }
 
 export interface CartItem {
-  horse: HorseInfo,
+  horse: HorseImageInfo,
   product: Product,
   quantity: number;
 }

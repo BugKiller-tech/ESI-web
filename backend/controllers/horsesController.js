@@ -15,31 +15,67 @@ const getAllHorsesForAdmin = async (req, res) => {
                 message: "Week not found",
             });
         }
-        const horses = await HorsesImageModel.find({
-            week: req.params.weekId,
-            isDeleted: 0,
-        }).distinct("horseNumber");
 
-        let sortedHorseNumbers = horses
-            .map((h) => {
-                try {
-                    return Number(h);
-                } catch (e) {
-                    return -1;
+
+        const result = await HorsesImageModel.aggregate([
+            {
+                $addFields: {
+                    horseNumberNum: { $toInt: "$horseNumber" }
                 }
-            })
-            .filter((h) => h != -1);
-        sortedHorseNumbers.sort((a, b) => a - b);
+
+            },
+            {
+                // Group by horseNumber to get one doc per number
+                $group: {
+                    _id: "$horseNumber",        // group key (original string horseNumber)
+                    doc: { $first: "$$ROOT" }   // get the first matching document
+                }
+            },
+            {
+                // Unpack the document back from 'doc'
+                $replaceRoot: { newRoot: "$doc" }
+            },
+            {
+                // Sort by numeric version of horseNumber
+                $sort: { horseNumberNum: 1 }
+            }
+        ]);
+        // Now use Mongoose's `populate` manually via `Model.populate`
+        const horses = await HorsesImageModel.populate(result, { path: "horseInfo" });
+        console.log('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT', horses);
 
         return res.json({
             week: week,
-            horses: sortedHorseNumbers.map((h_num) => {
-                if (h_num == 0) {
-                    return "0000";
-                }
-                return String(h_num);
-            }),
-        });
+            horses: horses,
+        })
+
+
+
+        // const horses = await HorsesImageModel.find({
+        //     week: req.params.weekId,
+        //     isDeleted: 0,
+        // }).distinct("horseNumber");
+
+        // let sortedHorseNumbers = horses
+        //     .map((h) => {
+        //         try {
+        //             return Number(h);
+        //         } catch (e) {
+        //             return -1;
+        //         }
+        //     })
+        //     .filter((h) => h != -1);
+        // sortedHorseNumbers.sort((a, b) => a - b);
+
+        // return res.json({
+        //     week: week,
+        //     horses: sortedHorseNumbers.map((h_num) => {
+        //         if (h_num == 0) {
+        //             return "0000";
+        //         }
+        //         return String(h_num);
+        //     }),
+        // });
     } catch (error) {
         console.log("Error fetching horses:", error);
         return res.status(400).json({
@@ -198,13 +234,13 @@ const downloadForSelectedImages = async (req, res) => {
     try {
         const {
             imageIds
-         } = req.body;
+        } = req.body;
 
-         if (!imageIds || imageIds.length == 0) {
+        if (!imageIds || imageIds.length == 0) {
             return res.status(400).json({
                 message: 'Please provide the valid information to download'
             })
-         }
+        }
         const horseImages = await HorsesImageModel.find({
             _id: {
                 $in: imageIds,

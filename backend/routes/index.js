@@ -20,7 +20,6 @@ const {
     API_VERSION,
 } = require('../constants/constants');
 
-const OrderModel = require('../models/OrderModel');
 const {
     createInvoicePDFWithPdfKit,
     createInvoicePdfWithPuppeteer

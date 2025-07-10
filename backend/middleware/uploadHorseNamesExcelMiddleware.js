@@ -1,40 +1,39 @@
 const multer = require('multer');
 const path = require('path');
-
 const {
-    watermarkPath
+    horseNamesExcelPath,
 } = require('../constants/constants');
 
 // Set storage engine
 const storage = multer.diskStorage({
-    destination: watermarkPath,
+    destination: horseNamesExcelPath,
     filename: function (req, file, cb) {
-        cb(null, 'watermark_' + Date.now() + path.extname(file.originalname));
+        cb(null, 'horsenames_' + Date.now() + path.extname(file.originalname));
     },
 });
 
 // Initialize upload
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 2 * 1024 * 1024 }, // Limit file size to 2MB
+    limits: { fileSize: 10 * 1024 * 1024 }, // Limit file size to 10MB
     fileFilter: function (req, file, cb) {
         checkFileType(file, cb);
     }
-}).single('watermarkImage');
+}).single('horseNamesExcel');
 
 // Check file type
 function checkFileType(file, cb) {
     // Allowed ext
-    const filetypes = /jpeg|jpg|png|gif/;
+    const filetypes = /xlsx|xls/;
     // Check ext
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    // Check mime
-    const mimetype = filetypes.test(file.mimetype);
+    // // Check mime
+    // const mimetype = filetypes.test(file.mimetype);
 
-    if (mimetype && extname) {
+    if (extname) {
         return cb(null, true);
     } else {
-        cb('Error: Images Only!');
+        cb('Error: Excel file only!');
     }
 }
 

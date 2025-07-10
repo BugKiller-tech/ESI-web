@@ -18,7 +18,7 @@ import {
     EventHandler as ReactGridEventHandler
 } from '@/components/react-grid-gallery/types'
 import { useEffect, useState } from 'react';
-import { HorseInfo } from 'types';
+import { HorseImageInfo } from 'types';
 import { useFullScreenLoader } from "@/context/FullScreenLoaderContext";
 import ChangeImageNumberForSelectedHorsesModal from "./ChangeImageNumberForSelectedHorsesModal";
 
@@ -62,7 +62,7 @@ const ImageComponent = (props: ThumbnailImageProps) => {
 };
 
 type compProps = {
-    horseImages: HorseInfo[];
+    horseImages: HorseImageInfo[];
 }
 
 export default function ListHorseImages({
@@ -74,7 +74,7 @@ export default function ListHorseImages({
     const router = useRouter();
 
     const fullScreenLoader = useFullScreenLoader();
-    const [selectedHorse, setSelectedHorse] = useState<HorseInfo | null>(null);
+    const [selectedHorse, setSelectedHorse] = useState<HorseImageInfo | null>(null);
     const [checkedHorseImageIds, setCheckedHorseImageIds] = useState<string[]>([]);
     const [showChangeHorseNumberModal, setShowChangeHorseNumberMmodal] = useState<boolean>(false);
 
