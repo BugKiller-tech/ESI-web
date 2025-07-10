@@ -66,7 +66,7 @@ export default function ({
                                     Horse number:&nbsp;
                                     <span className='text-main-color'>
                                         {horse.horseNumber}
-                                        {horse.horseNumber == '0' && '0000 ( unsorted photos )'}
+                                        {horse.horseNumber == '0000' && '( unsorted photos )'}
                                     </span>
                                 </div>
                                 <div>
