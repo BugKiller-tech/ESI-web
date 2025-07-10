@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 
 import {
-    HorseInfo,
+    HorseImageInfo,
     Product,
 } from 'types';
 import {
@@ -32,7 +32,7 @@ interface AddCartModalProps {
     onClose: () => void;
     onConfirm: (product: Product) => void;
 
-    horse: HorseInfo | null;
+    horse: HorseImageInfo | null;
 }
 
 export const AddCartModal: React.FC<AddCartModalProps> = ({

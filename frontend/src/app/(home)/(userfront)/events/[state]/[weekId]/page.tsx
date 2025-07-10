@@ -1,6 +1,6 @@
 'use client';
 
-import { HorseInfo } from 'types';
+import { HorseImageInfo } from 'types';
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
@@ -22,8 +22,8 @@ export default ({ }: {
     const { state, weekId } = params;
     // console.log('testingforforfor', params);
 
-    const [horses, setHorses] = useState<HorseInfo[]>([]);
-    const [filteredHorses, setFilteredHorses] = useState<HorseInfo[]>([]);
+    const [horses, setHorses] = useState<HorseImageInfo[]>([]);
+    const [filteredHorses, setFilteredHorses] = useState<HorseImageInfo[]>([]);
 
     const [ searchTerm, setSearchTerm ] = useState('');
     const [forceApplyFilter, setForceApplyFilter] = useState(false);

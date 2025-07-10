@@ -2,11 +2,12 @@ const mongoose = require('mongoose');
 
 const WeekModel = require('../models/WeekModel');
 const HorsesImageModel = require('../models/HorsesImageModel');
+const WeekHorseInfoModel = require('../models/WeekHorseInfoModel');
 
 const ObjectId = mongoose.Types.ObjectId;
 
 
-const searchHorse = async ( req, res ) => {
+const searchHorseByNumber = async (req, res) => {
     try {
         const { weekId, horseNumber } = req.body;
 
@@ -46,8 +47,65 @@ const searchHorse = async ( req, res ) => {
     }
 }
 
+const searchHorsesByName = async (req, res) => {
+    try {
+        const { weekId, horseNameToSearch } = req.body;
 
-const getHorsesForWeek = async ( req, res ) => {
+        if (!weekId || !horseNameToSearch) {
+            return res.status(400).json({
+                message: 'Please provide valid information',
+            });
+        }
+
+        const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+        // const weekHorses = await WeekHorseInfoModel.find({
+        //     week: new ObjectId(String(weekId)),
+        //     horseName: {
+        //         $regex: new RegExp(escapeRegex(horseNameToSearch), 'i')
+        //     }
+        // })
+
+        const weekHorses = await WeekHorseInfoModel.aggregate([
+            {
+                $lookup: {
+                    from: 'horsesimagemodels', // this is real db collection name not model name
+                    localField: '_id',
+                    foreignField: 'horseInfo',
+                    as: 'images'
+                }
+            },
+            {
+                $match: {
+                    images: { $ne: [] } // only those that are referenced
+                }
+            },
+            // {
+            //     $project: {
+            //         images: 0 // remove the joined images if you don't need them
+            //     }
+            // }
+        ])
+
+
+        const week = await WeekModel.findById(weekId);
+
+        return res.json({
+            week: week,
+            horses: weekHorses,
+        })
+    } catch (error) {
+        console.error(error);
+        return res.status(400).json({
+            message: 'Internal Server Error',
+            error: error.message,
+        });
+    }
+}
+
+
+
+const getHorsesForWeek = async (req, res) => {
     try {
         console.log('req body tttttttttttttttttt', req.body);
         const { weekId } = req.body;
@@ -111,7 +169,8 @@ const getHorseImagesByWeekAndHorseNumber = async (req, res) => {
 
 
 module.exports = {
-    searchHorse,
+    searchHorseByNumber,
+    searchHorsesByName,
     getHorsesForWeek,
     getHorseImagesByWeekAndHorseNumber,
 }

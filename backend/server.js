@@ -37,6 +37,7 @@ const pathsToBeCreated = [
     Constants.thumbnailPath,
     Constants.watermarkPath,
     Constants.INVOICES_PATH,
+    Constants.horseNamesExcelPath,
 ]
 for (const folderPath of pathsToBeCreated) {
     const pathToCreate = path.join(__dirname, folderPath);

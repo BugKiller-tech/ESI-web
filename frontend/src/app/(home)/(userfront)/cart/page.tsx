@@ -157,7 +157,7 @@ export default () => {
     }
 
     return (
-        <div className='mx-0 md:mx-5 lg:mx-10'>
+        <div className='mx-0 md:container'>
             <div className="text-3xl md:text-5xl text-main-color mb-5">
                 Cart
             </div>

@@ -22,6 +22,10 @@ const schema = new mongoose.Schema({
     isDeleted: {
         type: Number,
         default: 0,
+    },
+    horseNamesData: {
+        type: String,
+        default: '',
     }
 })
 

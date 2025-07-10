@@ -4,18 +4,20 @@ const Joi = require('joi');
 const router = express.Router();
 const uploadHorseImagesMiddleware = require('../middleware/uploadHorseImagesMiddleware');
 const uploadTimestampJsonMiddleware = require('../middleware/uploadTimestampJsonMiddleware');
+const uploadHorseNamesExcelMiddleware = require('../middleware/uploadHorseNamesExcelMiddleware');
 
 const {
     uploadImages,
     uploadTimeStampJsonWithFtpFolder,
     getHorsesFtpFolders,
+    uploadHorseNamesExcelAction,
 } = require('../controllers/uploadImagesController');
 const bodyValidatorMiddleware = require('../middleware/bodyValidatorMiddleware');
 const adminCheckMiddleware = require('../middleware/adminMiddleware');
 
 
 router.use(adminCheckMiddleware);
-router.get('/list-horses-ftp-folders', 
+router.get('/list-horses-ftp-folders',
     // adminCheckMiddleware,
     getHorsesFtpFolders,
 )
@@ -32,10 +34,19 @@ router.post('/timestamp-and-ftp-folder',
         state: Joi.string().required('state is required'),
         weekNumber: Joi.string().optional(),
         ftpFolder: Joi.string().required('ftp folder name is required'),
-        
+
     })),
     uploadTimeStampJsonWithFtpFolder
 );
+
+
+router.post('/upload-horse-names',
+    uploadHorseNamesExcelMiddleware,
+    bodyValidatorMiddleware(Joi.object({
+        weekId: Joi.string().required('Please provide the week id'),
+    })),
+    uploadHorseNamesExcelAction
+)
 
 
 module.exports = router;
