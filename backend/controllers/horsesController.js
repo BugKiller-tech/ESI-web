@@ -20,7 +20,15 @@ const getAllHorsesForAdmin = async (req, res) => {
         const result = await HorsesImageModel.aggregate([
             {
                 $addFields: {
-                    horseNumberNum: { $toInt: "$horseNumber" }
+                    horseNumberNum: {
+                        // $toInt: "$horseNumber" 
+                        $convert: {
+                            input: "$horseNumber",
+                            to: "int",
+                            onError: 0,
+                            onNull: 0
+                        }
+                    }
                 }
 
             },

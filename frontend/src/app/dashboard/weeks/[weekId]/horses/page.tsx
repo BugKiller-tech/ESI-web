@@ -27,8 +27,8 @@ export default async function ({ params }: pageProps) {
     try {
         const response = await APIs.getHorsesByWeekIdAdmin(weekId as string, session?.user?.accessToken);
         console.log('this is very very', response.data);
-        week = response.data.week;
-        horses = response.data.horses;
+        week = response.data.week as WeekInfo;
+        horses = response.data.horses as HorseImageInfo[];
     } catch (error) {
         console.log("failed to find horses~")
         console.log(error);
