@@ -14,9 +14,11 @@ export default ({
     weeks: WeekInfo[]
 }) => {
 
-    const [activeTab, setActiveTab] = useState("tab1");
+    const [activeTab, setActiveTab] = useState("searchByHorseNumber");
 
     useEffect(() => {
+
+        // On page load: check if it was a refresh
         const lastActiveTab = localStorage.getItem('lastActiveTab');
         if (lastActiveTab) {
             setActiveTab(lastActiveTab);
@@ -84,6 +86,7 @@ export default ({
                     View
                 </Button>
             </div>
+            
         </div>
     )
 }

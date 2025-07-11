@@ -34,6 +34,7 @@ export default ({
     const [searchedHorses, setSearchedHorses] = useState<WeekHorseInfo[]>([]);
 
     useEffect(() => {
+        console.log('reading horse name saved localstorage');
         setHorseName(localStorage.getItem('searchHorseName') || '');
     }, [])
     useEffect(() => {
