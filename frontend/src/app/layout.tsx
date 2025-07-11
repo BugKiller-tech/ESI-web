@@ -7,7 +7,10 @@ import { Lato } from 'next/font/google';
 import NextTopLoader from 'nextjs-toploader';
 import { FullScreenLoaderProvider } from '@/context/FullScreenLoaderContext';
 import { CartProvider } from '@/context/CartContext';
+
+import ClientUnloadHandler from '@/app/ClientUnloadHandler';
 import './globals.css';
+
 
 export const metadata: Metadata = {
   title: 'ESI',
@@ -29,6 +32,7 @@ export default async function RootLayout({
   return (
     <html lang='en' className={`${lato.className}`} suppressHydrationWarning>
       <body className={'overflow-hidden'}>
+        <ClientUnloadHandler />
         <NextTopLoader showSpinner={false} />
         <NuqsAdapter>
           <Providers session={session}>
