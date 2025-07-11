@@ -61,7 +61,7 @@ export default function ({ data }: CellActionProps) {
     }
 
     const viewHorses = () => {
-        router.push(`/dashboard/weeks/${data._id}/horses`); // Assuming this is the correct route to view horses
+        router.push(`/dashboard/weeks/${data._id}/horses`);
     }
 
 

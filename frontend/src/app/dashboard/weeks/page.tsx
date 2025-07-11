@@ -8,6 +8,8 @@ import ListWeeks from './components/ListWeeks';
 
 import { SearchParams } from 'nuqs/server';
 import { searchParamsCache, serialize } from '@/lib/searchparams';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 
 
@@ -28,10 +30,15 @@ export default async function (props: pageProps) {
         <PageContainer scrollable={false}>
             <div className='flex flex-1 flex-col space-y-4'>
                 <div className='flex items-start justify-between'>
-                <Heading
-                    title='All Weeks'
-                    description='Manage weeks here'
-                />
+                    <Heading
+                        title='All Weeks'
+                        description='Manage weeks here'
+                    />
+                    <Link href='/dashboard/upload-horsenames-upcoming-week'>
+                    <Button>
+                        Upload horse names Excel
+                    </Button>
+                    </Link>
                 </div>
                 <Separator />
                 <Suspense

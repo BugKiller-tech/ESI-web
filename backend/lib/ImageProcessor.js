@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const FtpImagesProcessModel = require('../models/FtpImagesProcessModel');
 const ProjectSettingModel = require('../models/ProjectSettingModel');
 const WeekModel = require('../models/WeekModel.js');
+const WeekHorseInfo = require('../models/WeekHorseInfoModel.js')
 const HorsesImageModel = require('../models/HorsesImageModel.js');
 
 
@@ -113,6 +114,15 @@ const saveHorseInfoToDb =  async (
         aspectRatio,
         photoTakenTime: photoTakenTime,
     })
+
+    let horseInfo = await WeekHorseInfo.findOne({
+        week: week._id,
+        horseNumber: horseNumber,
+    })
+
+    if (horseInfo) {
+        imageRecord.horseInfo = horseInfo;
+    }
     await imageRecord.save();
 }
 

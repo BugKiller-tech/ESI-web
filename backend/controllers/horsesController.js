@@ -33,6 +33,11 @@ const getAllHorsesForAdmin = async (req, res) => {
 
             },
             {
+                $match: {
+                    week: week._id,
+                }
+            },
+            {
                 // Group by horseNumber to get one doc per number
                 $group: {
                     _id: "$horseNumber",        // group key (original string horseNumber)

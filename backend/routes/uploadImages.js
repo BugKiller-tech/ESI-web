@@ -11,6 +11,7 @@ const {
     uploadTimeStampJsonWithFtpFolder,
     getHorsesFtpFolders,
     uploadHorseNamesExcelAction,
+    uploadHorseNamesExcelForUpcomingWeekAction,
 } = require('../controllers/uploadImagesController');
 const bodyValidatorMiddleware = require('../middleware/bodyValidatorMiddleware');
 const adminCheckMiddleware = require('../middleware/adminMiddleware');
@@ -46,6 +47,16 @@ router.post('/upload-horse-names',
         weekId: Joi.string().required('Please provide the week id'),
     })),
     uploadHorseNamesExcelAction
+)
+
+router.post('/upload-horse-names-for-upcoming-week',
+    uploadHorseNamesExcelMiddleware,
+    bodyValidatorMiddleware(Joi.object({
+        year: Joi.number().required('year is required'),
+        state: Joi.string().required('state is required'),
+        weekNumber: Joi.string().required('week number is required'),
+    })),
+    uploadHorseNamesExcelForUpcomingWeekAction
 )
 
 
