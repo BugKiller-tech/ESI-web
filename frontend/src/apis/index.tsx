@@ -71,6 +71,18 @@ export const uploadHorseNamesExcel = async (formData: any, token: string = '') =
     });
 }
 
+export const uploadHorseNamesExcelForUpcomingWeek = async (formData: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
+    return axios.post('/api/v1/admin/upload/upload-horse-names-for-upcoming-week', formData, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+}
+
+
+
 export const getFtpImageProcessTaskStatus = async (taskId: string, token: string = '') => {
     const axios = await createAxiosInstance(token);
     return axios.get(`/api/v1/tracker/ftp_image_process_status/${taskId}`);

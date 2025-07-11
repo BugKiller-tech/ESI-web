@@ -254,6 +254,31 @@ const updateHorseInfos = async (week) => {
     }
 }
 
+const readHorseNamesFromExcelAndUpdateWeek = async (filePath, week) => {
+    try {
+        const workbook = XLSX.readFile(filePath);
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        const newHorseNamesData = XLSX.utils.sheet_to_json(sheet, {
+            header: ['horseNumber', 'horseName', 'riderName'],
+            range: 1,
+        });
+        console.log('horse names are like', newHorseNamesData);
+        fs.unlinkSync(filePath);
+
+        let existingHorseNamesData = [];
+        if (week.horseNamesData) {
+            existingHorseNamesData = JSON.parse(week.horseNamesData);
+        }
+        const horseNamesData = mergeHorseData(existingHorseNamesData, newHorseNamesData);
+        week.horseNamesData = JSON.stringify(horseNamesData);
+        await week.save();
+
+        updateHorseInfos(week);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 const uploadHorseNamesExcelAction = async (req, res) => {
     try {
         if (!req.file) {
@@ -265,35 +290,17 @@ const uploadHorseNamesExcelAction = async (req, res) => {
         const {
             weekId
         } = req.body;
-        console.log("found excel file on ", filePath);
-        console.log('weekId is', weekId);
-
-        const workbook = XLSX.readFile(filePath);
-        const sheet = workbook.Sheets[workbook.SheetNames[0]];
-        const newHorseNamesData = XLSX.utils.sheet_to_json(sheet, {
-            header: ['horseNumber', 'horseName', 'riderName'],
-            range: 1,
-        });
-        console.log('horse names are like', newHorseNamesData);
-
-
-        fs.unlinkSync(filePath);
 
         const week = await WeekModel.findOne({
             _id: weekId,
         })
-        if (week) {
-            let existingHorseNamesData = [];
-            if (week.horseNamesData) {
-                existingHorseNamesData = JSON.parse(week.horseNamesData);
-            }
-            const horseNamesData = mergeHorseData(existingHorseNamesData, newHorseNamesData);
-            week.horseNamesData = JSON.stringify(horseNamesData);
-            await week.save();
+        if (!week) {
+            return res.status(400).json({
+                message: 'Failed to find proper week',
+            })
         }
 
-        updateHorseInfos(week);
-
+        await readHorseNamesFromExcelAndUpdateWeek(filePath, week);
         return res.json({
             message: 'Successful'
         })
@@ -303,7 +310,46 @@ const uploadHorseNamesExcelAction = async (req, res) => {
             message: 'Failed to upload or parsing for horse names excel',
         })
     }
+}
 
+const uploadHorseNamesExcelForUpcomingWeekAction = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({
+                message: 'Failed to find excel file you uploaded',
+            })
+        }
+        const filePath = req.file.path;
+        const {
+            year,
+            state,
+            weekNumber,
+        } = req.body;
+
+        let week = await WeekModel.findOne({
+            year: year,
+            state: state,
+            weekNumber: weekNumber,
+        })
+        if (!week) {
+            week = new WeekModel({
+                year: year,
+                state: state,
+                weekNumber: weekNumber,
+            })
+            await week.save();
+        }
+
+        await readHorseNamesFromExcelAndUpdateWeek(filePath, week);
+        return res.json({
+            message: 'Successful'
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({
+            message: 'Failed to upload or parsing for horse names excel',
+        })
+    }
 }
 
 module.exports = {
@@ -311,4 +357,5 @@ module.exports = {
     uploadTimeStampJsonWithFtpFolder,
     getHorsesFtpFolders,
     uploadHorseNamesExcelAction,
+    uploadHorseNamesExcelForUpcomingWeekAction,
 }

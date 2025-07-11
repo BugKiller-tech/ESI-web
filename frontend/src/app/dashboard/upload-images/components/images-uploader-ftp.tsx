@@ -35,6 +35,10 @@ import { Progress } from '@/components/ui/progress';
 
 import * as APIs from '@/apis';
 import { Modal } from '@/components/ui/modal';
+import {
+    StateType,
+    availableWeekNumbers
+} from '@/constants/esi-constants'
 
 
 interface JsonUploadProps {
@@ -78,25 +82,12 @@ const JsonUploadComp = ({ onJsonFileSelected }: JsonUploadProps) => {
 };
 
 
-type StateType = 'FL' | 'NY'
 export default () => {
     const { data: session } = useSession();
     const [loading, startTransition] = useTransition();
 
     const currentYear = new Date().getFullYear();
     const yearOptions = Array.from({ length: 3 }, (_, i) => currentYear - i);
-    const availableWeekNumbers = {
-        'FL': [
-            'Wk1-12',
-        ],
-        'NY': [
-            'Festival of The Horse',
-            'Wk1-3',
-            'Wk4-6',
-            'Wk7-9',
-            'Wk10-12',
-        ]
-    }
 
     const [year, setYear] = useState<Number>(currentYear);
     const [selectedState, setSelectedState] = useState<StateType>('FL');
