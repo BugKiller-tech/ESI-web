@@ -5,6 +5,7 @@ import { WeekInfo, HorseImageInfo } from 'types';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import SearchByHorseNumber from './components/SearchByHorseNumber';
 import SearchByHorseName from './components/SearchByHorseName';
+import { useEffect, useState } from 'react';
 
 
 export default ({
@@ -13,6 +14,19 @@ export default ({
     weeks: WeekInfo[]
 }) => {
 
+    const [activeTab, setActiveTab] = useState("tab1");
+
+    useEffect(() => {
+        const lastActiveTab = localStorage.getItem('lastActiveTab');
+        if (lastActiveTab) {
+            setActiveTab(lastActiveTab);
+        }
+    }, [])
+
+    const onTabChange = (value: string) => {
+        setActiveTab(value);
+        localStorage.setItem('lastActiveTab', value);
+    }
 
 
     const openWordpressSite = () => {
@@ -32,7 +46,11 @@ export default ({
                         HITS on the Hudson
                     </div>
                 </div>
-                <Tabs defaultValue='searchByHorseNumber' className='rounded-lg space-y-4'>
+                <Tabs defaultValue='searchByHorseNumber' className='rounded-lg space-y-4'
+                    value={activeTab}
+                    onValueChange={(newval) => {
+                        onTabChange(newval)
+                    }}>
                     <TabsList className='flex'>
                         <TabsTrigger className='flex-1'
                             value='searchByHorseNumber'>
@@ -49,7 +67,7 @@ export default ({
                     <TabsContent value='searchByHorseName'>
                         <SearchByHorseName weeks={weeks} />
                     </TabsContent>
-                    
+
                 </Tabs>
             </div>
             <div className='w-[530px] max-w-[90vw] flex flex-col gap-5'>

@@ -74,7 +74,8 @@ export default () => {
                 console.log(response.data);
                 if (response.data) {
                     toast.success('Successfully uploaded. horse names are store for your upcoming image uploads');
-                    router.back();
+                    router.replace('/dashboard/weeks');
+                    router.refresh();
                 }
 
             } catch (error: any) {
