@@ -75,7 +75,7 @@ const searchHorsesByName = async (req, res) => {
         }
         const weekHorses = await WeekHorseInfoModel.find(matchQueries).sort({
             horseName: 1,
-        });
+        }).collation({ locale: "en", strength: 1 }); // this collation is for case-insensitve sort, us 
         
         // let matchQueries = {
         //     week: new ObjectId(String(weekId)),

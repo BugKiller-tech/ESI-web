@@ -12,6 +12,10 @@ const schema = new mongoose.Schema({
   }
 });
 schema.index({ week: 1, horseNumber: 1 }, { unique: true });
+schema.index({ horseName: 1 }, { collation: {
+    locale: 'en',
+    strength: 1,
+} })
 
 // Instance method
 schema.methods.updateHasImageInfo = async function () {
