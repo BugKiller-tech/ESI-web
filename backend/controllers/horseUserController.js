@@ -68,6 +68,15 @@ const searchHorsesByName = async (req, res) => {
         //         $regex: new RegExp(escapeRegex(horseNameToSearch), 'i')
         //     }
         // })
+        let matchQueries = {
+
+            images: { $ne: [] } // only those that are referenced
+        }
+        if (horseNameToSearch) {
+            matchQueries.horseName = {
+                $regex: new RegExp(escapeRegex(horseNameToSearch), 'i')
+            }
+        }
 
         const weekHorses = await WeekHorseInfoModel.aggregate([
             {
@@ -79,12 +88,7 @@ const searchHorsesByName = async (req, res) => {
                 }
             },
             {
-                $match: {
-                    horseName: {
-                        $regex: new RegExp(escapeRegex(horseNameToSearch), 'i')
-                    },
-                    images: { $ne: [] } // only those that are referenced
-                }
+                $match: matchQueries
             },
             {
                 $project: {
