@@ -95,7 +95,7 @@ export default function SearchableDropdown({
                 {filtered.map((item, idx) => (
                   <div
                     key={idx + item}
-                    className={`cursor-pointer px-2 py-1 rounded ${idx === highlightedIndex
+                    className={`cursor-pointer px-2 py-1 rounded hover:bg-blue-900 ${idx === highlightedIndex
                         ? 'bg-blue-500 text-white'
                         : 'hover:bg-gray-100'
                       }`}

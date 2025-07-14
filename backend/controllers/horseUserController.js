@@ -69,7 +69,7 @@ const searchHorsesByName = async (req, res) => {
         //     }
         // })
         let matchQueries = {
-
+            week: new ObjectId(String(weekId)),
             images: { $ne: [] } // only those that are referenced
         }
         if (horseNameToSearch) {

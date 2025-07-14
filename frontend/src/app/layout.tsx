@@ -6,6 +6,8 @@ import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { Lato } from 'next/font/google';
 import NextTopLoader from 'nextjs-toploader';
 import { FullScreenLoaderProvider } from '@/context/FullScreenLoaderContext';
+
+import { AvailableHorsesProvider } from '@/context/AvailableHorsesContext';
 import { CartProvider } from '@/context/CartContext';
 
 import ClientUnloadHandler from '@/app/ClientUnloadHandler';
@@ -36,12 +38,14 @@ export default async function RootLayout({
         <NextTopLoader showSpinner={false} />
         <NuqsAdapter>
           <Providers session={session}>
-            <CartProvider>
-              <FullScreenLoaderProvider>
-                <Toaster />
-                {children}
-              </FullScreenLoaderProvider>
-            </CartProvider>
+            <AvailableHorsesProvider>
+              <CartProvider>
+                <FullScreenLoaderProvider>
+                  <Toaster />
+                  {children}
+                </FullScreenLoaderProvider>
+              </CartProvider>
+            </AvailableHorsesProvider>
           </Providers>
         </NuqsAdapter>
       </body>
