@@ -95,7 +95,9 @@ const searchHorsesByName = async (req, res) => {
                     images: 0 // remove the joined images if you don't need them
                 }
             }
-        ])
+        ]).sort({
+            horseName: 1,
+        })
 
 
         const week = await WeekModel.findById(weekId);
