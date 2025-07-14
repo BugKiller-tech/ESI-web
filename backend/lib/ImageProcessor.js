@@ -121,6 +121,8 @@ const saveHorseInfoToDb =  async (
     })
 
     if (horseInfo) {
+        horseInfo.hasImages = true;
+        await horseInfo.save();
         imageRecord.horseInfo = horseInfo;
     }
     await imageRecord.save();

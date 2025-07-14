@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const archiver = require('archiver');
 
 const WeekModel = require("../models/WeekModel");
+const WeekHorseInfoModel = require('../models/WeekHorseInfoModel');
 const HorsesImageModel = require("../models/HorsesImageModel");
 const {
     createImagesZipForResponsePipe
@@ -139,6 +140,14 @@ const deleteHorseImage = async (req, res) => {
         if (horse) {
             horse.isDeleted = 1;
             await horse.save();
+            if (horse.horseInfo) {
+                const weekHorseInfo = await WeekHorseInfoModel.findOne({
+                    _id: horse.horseInfo,
+                })
+                if (weekHorseInfo) {
+                    await weekHorseInfo.updateHasImageInfo();
+                }
+            }
         } else {
             return res.status(400).json({
                 message: "Failed to find image",
@@ -171,6 +180,14 @@ const deleteHorse = async (req, res) => {
         for (const horse of horses) {
             horse.isDeleted = 1;
             await horse.save();
+            if (horse.horseInfo) {
+                const weekHorseInfo = await WeekHorseInfoModel.findOne({
+                    _id: horse.horseInfo,
+                })
+                if (weekHorseInfo) {
+                    await weekHorseInfo.updateHasImageInfo();
+                }
+            }
         }
         return res.json({
             message: "success",
