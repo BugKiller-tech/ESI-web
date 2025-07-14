@@ -61,43 +61,46 @@ const searchHorsesByName = async (req, res) => {
             horseNameToSearch = '';
         }
 
-        const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        // const weekHorses = await WeekHorseInfoModel.find({
-        //     week: new ObjectId(String(weekId)),
-        //     horseName: {
-        //         $regex: new RegExp(escapeRegex(horseNameToSearch), 'i')
-        //     }
-        // })
+        
         let matchQueries = {
             week: new ObjectId(String(weekId)),
-            images: { $ne: [] } // only those that are referenced
+            hasImages: true,
         }
+
         if (horseNameToSearch) {
+            const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             matchQueries.horseName = {
                 $regex: new RegExp(escapeRegex(horseNameToSearch), 'i')
             }
         }
-
-        const weekHorses = await WeekHorseInfoModel.aggregate([
-            {
-                $lookup: {
-                    from: 'horsesimagemodels', // this is real db collection name not model name
-                    localField: '_id',
-                    foreignField: 'horseInfo',
-                    as: 'images'
-                }
-            },
-            {
-                $match: matchQueries
-            },
-            {
-                $project: {
-                    images: 0 // remove the joined images if you don't need them
-                }
-            }
-        ]).sort({
+        const weekHorses = await WeekHorseInfoModel.find(matchQueries).sort({
             horseName: 1,
-        })
+        });
+        
+        // let matchQueries = {
+        //     week: new ObjectId(String(weekId)),
+        //     images: { $ne: [] } // only those that are referenced
+        // }
+        // const weekHorses = await WeekHorseInfoModel.aggregate([
+        //     {
+        //         $lookup: {
+        //             from: 'horsesimagemodels', // this is real db collection name not model name
+        //             localField: '_id',
+        //             foreignField: 'horseInfo',
+        //             as: 'images'
+        //         }
+        //     },
+        //     {
+        //         $match: matchQueries
+        //     },
+        //     {
+        //         $project: {
+        //             images: 0 // remove the joined images if you don't need them
+        //         }
+        //     }
+        // ]).sort({
+        //     horseName: 1,
+        // })
 
 
         const week = await WeekModel.findById(weekId);

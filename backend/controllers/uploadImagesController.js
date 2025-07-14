@@ -239,6 +239,7 @@ const updateHorseInfos = async (week) => {
                 {
                     week: week._id,
                     horseNumber: record.horseNumber,
+                    isDeleted: 0,
                 },
                 {
                     $set: {
@@ -247,6 +248,10 @@ const updateHorseInfos = async (week) => {
                 },
                 // { upsert: true }
             );
+            if (result.matchedCount > 0) { // modifiedCount
+                record.hasImages = true;
+                await record.save();
+            }
 
         }
     } catch (error) {
