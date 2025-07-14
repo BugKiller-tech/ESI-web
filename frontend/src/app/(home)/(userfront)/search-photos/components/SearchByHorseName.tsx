@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { LoaderIcon } from 'lucide-react';
 import { Modal } from '@/components/ui/modal';
+import SearchableDropdown from './SearchableDropdown';
 
 
 export default ({
@@ -29,6 +30,8 @@ export default ({
     const [isLoading, setIsLoading] = useState(false);
     const [selectedWeekId, setSelectedWeekId] = useState('');
     const [horseName, setHorseName] = useState('');
+    const [loadingAllHorseNames, setLoadingAllHorseNames] = useState(false);
+    const [availableHorseNames, setAvailableHorseNames] = useState([]);
 
     const [searchedWeek, setSearchedWeek] = useState<WeekInfo | null>(null);
     const [searchedHorses, setSearchedHorses] = useState<WeekHorseInfo[]>([]);
@@ -44,24 +47,58 @@ export default ({
         }
     }, [weeks]);
 
-    const searchForHorseByHorseName = async () => {
+    useEffect(() => {
+        (async () => { // Fetch all horse names
+            if (!selectedWeekId) {
+                return;
+            }
+            setLoadingAllHorseNames(true);
+            const {
+                week,
+                horses,
+            } = await searchForHorseByHorseName('');
+            setAvailableHorseNames(horses.map((h: WeekHorseInfo) => {
+                return h.horseName
+            }))
+            setLoadingAllHorseNames(false);
+
+        })();
+    }, [selectedWeekId])
+
+    const searchForHorseByHorseName = async (horseNameToSearch: string) => {
         try {
-            setIsLoading(true);
             const response = await APIs.searchHorsesByName({
                 weekId: selectedWeekId,
-                horseNameToSearch: horseName,
+                horseNameToSearch: horseNameToSearch,
             })
             const week = response.data?.week as WeekInfo;
             const horses = response.data?.horses as WeekHorseInfo[];
-            console.log('hores...... ', horses);
+            return {
+                week,
+                horses,
+            }
+        } catch (error: any) {
+        }
+
+    }
+    const searchForMatchingHorsesAction = async () => {
+        try {
+            setIsLoading(true);
+            const {
+                week,
+                horses,
+            } = await searchForHorseByHorseName(horseName);
             setSearchedWeek(week);
             setSearchedHorses(horses);
+            if (horses.length == 0) {
+                toast.success('No horse found');
+            }
             // if (horse && week) {
             //     router.push(`/events/${week.state}/${week._id}/${horse.horseNumber}`);
             // }
 
         } catch (error: any) {
-            toast.error(error?.response?.data?.message || 'Failed to search');
+            toast.error(error?.message || 'Failed to search');
         } finally {
             setIsLoading(false);
         }
@@ -96,7 +133,15 @@ export default ({
             </div>
             <div>
                 <div className='font-bold mb-2'>Horse name</div>
-                <Input
+                <div>
+                    <SearchableDropdown
+                        loading={loadingAllHorseNames}
+                        placeholder='Please select the horse name'
+                        items={availableHorseNames}
+                        value={horseName}
+                        onSelect={setHorseName} />
+                </div>
+                {/* <Input
                     type='text'
                     placeholder='Please enter horse name'
                     value={horseName}
@@ -106,11 +151,11 @@ export default ({
                             setHorseName(e.target.value);
                         }
                     }}
-                />
+                /> */}
             </div>
             <Button size='lg' className='bg-main-color font-bold text-2xl'
                 disabled={!selectedWeekId || !horseName || isLoading}
-                onClick={searchForHorseByHorseName}>
+                onClick={searchForMatchingHorsesAction}>
                 {isLoading && (
                     <LoaderIcon size={18}
                         className="animate-[spin_2s_linear_infinite] mr-2" />

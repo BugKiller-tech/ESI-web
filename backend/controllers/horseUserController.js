@@ -49,12 +49,16 @@ const searchHorseByNumber = async (req, res) => {
 
 const searchHorsesByName = async (req, res) => {
     try {
-        const { weekId, horseNameToSearch } = req.body;
+        const { weekId } = req.body;
+        let horseNameToSearch = req.body.horseNameToSearch;
 
-        if (!weekId || !horseNameToSearch) {
+        if (!weekId) {
             return res.status(400).json({
                 message: 'Please provide valid information',
             });
+        }
+        if (!horseNameToSearch) {
+            horseNameToSearch = '';
         }
 
         const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
