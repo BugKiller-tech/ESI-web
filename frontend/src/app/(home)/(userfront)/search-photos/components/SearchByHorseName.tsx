@@ -17,6 +17,9 @@ import { Button } from '@/components/ui/button';
 import { LoaderIcon } from 'lucide-react';
 import { Modal } from '@/components/ui/modal';
 import SearchableDropdown from './SearchableDropdown';
+import {
+    useAvailableHorsesByWeek,
+} from '@/context/AvailableHorsesContext';
 
 
 export default ({
@@ -26,15 +29,17 @@ export default ({
 }) => {
 
     const router = useRouter();
+    const allAvailableHorseNamesInfo = useAvailableHorsesByWeek();
+
 
     const [isLoading, setIsLoading] = useState(false);
     const [selectedWeekId, setSelectedWeekId] = useState('');
     const [horseName, setHorseName] = useState('');
     const [loadingAllHorseNames, setLoadingAllHorseNames] = useState(false);
-    const [availableHorseNames, setAvailableHorseNames] = useState([]);
 
     const [searchedWeek, setSearchedWeek] = useState<WeekInfo | null>(null);
     const [searchedHorses, setSearchedHorses] = useState<WeekHorseInfo[]>([]);
+    const [availableHorseNamesForCurrentWeek, setAvailableHorseNamesForCurrentWeek] = useState<string[]>([]);
 
     useEffect(() => {
         console.log('reading horse name saved localstorage');
@@ -47,19 +52,34 @@ export default ({
         }
     }, [weeks]);
 
+
+
+
+
     useEffect(() => {
         (async () => { // Fetch all horse names
             if (!selectedWeekId) {
                 return;
             }
+            let horseNames = allAvailableHorseNamesInfo.getHorsenamesForWeek(selectedWeekId);
+            console.log('horse names are like like', horseNames);
+            if (horseNames.length > 0) {
+                setAvailableHorseNamesForCurrentWeek(horseNames);
+                return;
+            }
+
             setLoadingAllHorseNames(true);
             const {
                 week,
                 horses,
             } = await searchForHorseByHorseName('');
-            setAvailableHorseNames(horses.map((h: WeekHorseInfo) => {
+            horseNames = horses.map((h: WeekHorseInfo) => {
                 return h.horseName
-            }))
+            })
+            allAvailableHorseNamesInfo.setHorsenamesForWeek(week._id, horseNames);
+            setAvailableHorseNamesForCurrentWeek(horseNames);
+            updateHorseNameSelection('');
+
             setLoadingAllHorseNames(false);
 
         })();
@@ -104,10 +124,19 @@ export default ({
         }
     }
 
+    const updateHorseNameSelection = (name: string) => {
+        localStorage.setItem('searchHorseName', name);
+        setHorseName(name);
+
+    }
+
 
     const viewImages = async (h: WeekHorseInfo) => {
         router.push(`/events/${searchedWeek.state}/${searchedWeek._id}/${h.horseNumber}`);
     }
+
+
+
 
     return (
         <div className='flex flex-col gap-3'>
@@ -137,9 +166,9 @@ export default ({
                     <SearchableDropdown
                         loading={loadingAllHorseNames}
                         placeholder='Please select the horse name'
-                        items={availableHorseNames}
+                        items={availableHorseNamesForCurrentWeek}
                         value={horseName}
-                        onSelect={setHorseName} />
+                        onSelect={updateHorseNameSelection} />
                 </div>
                 {/* <Input
                     type='text'
