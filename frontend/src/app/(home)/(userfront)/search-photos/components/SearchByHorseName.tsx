@@ -51,6 +51,9 @@ export default ({
             setSelectedWeekId(weeks[0]._id);
         }
     }, [weeks]);
+    useEffect(() => {
+        setHorseName('');
+    }, [selectedWeekId])
 
 
 
