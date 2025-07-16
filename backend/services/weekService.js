@@ -16,7 +16,7 @@ const getWeeksByState = async (state, showInvisibleAsWell=true) => {
     try {
         const weeks = await WeekModel.find(conditions).sort({
             year: -1,
-            weekNumber: 1,
+            // weekNumber: 1,
             createdAt: -1,
         });
         return weeks;
