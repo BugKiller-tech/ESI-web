@@ -16,6 +16,12 @@ export const navItems: NavItem[] = [
     isActive: false,
   },
   {
+    title: 'Timestamp JSON Merger',
+    url: '/dashboard/timestamp-merger',
+    icon: 'week',
+    isActive: false,
+  },
+  {
     title: 'Manage weeks',
     url: '/dashboard/weeks',
     icon: 'week',
@@ -38,7 +44,7 @@ export const navItems: NavItem[] = [
     url: '/dashboard/orders',
     icon: 'basket',
     isActive: false,
-  }
+  },
   // {
   //   title: 'Dashboard',
   //   url: '/dashboard/overview',
