@@ -41,11 +41,12 @@ const getOrdersWithPagination = async (req, res) => {
 
         const response = await OrderModel.aggregatePaginate(
             OrderModel.aggregate([
-                // {
-                //     $addFields: {
-                //       yearStr: { $toString: "$year" }
-                //     }
-                // },
+                {
+                    $addFields: {
+                    //   yearStr: { $toString: "$year" },
+                        fullName: { $concat: ['$firstName', ' ', '$lastName'] }
+                    }
+                },
                 {
                     $match: {
                         // isDeleted: 0,
@@ -54,7 +55,7 @@ const getOrdersWithPagination = async (req, res) => {
                         },
                         $or: [
                             { "fullName": { "$regex": search, "$options": "i" } },
-                            { "email": { "$regex": search, "$options": "i" } },
+                            // { "email": { "$regex": search, "$options": "i" } },
                             // { "weekNumber": { "$regex": search, "$options": "i" } },
                         ]
                     },
