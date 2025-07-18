@@ -30,6 +30,18 @@ export const columns: ColumnDef<Order>[] = [
         accessorKey: 'email',
         header: "Email",
     },
+    // {
+    //     accessorKey: 'firstName',
+    //     header: 'First name'
+    // },
+    // {
+    //     accessorKey: 'lastName',
+    //     header: 'Last name'
+    // },
+    {
+        accessorKey: 'fullName',
+        header: 'Full name'
+    },
     {
         accessorKey: 'paymentStatus',
         header: 'Payment status'

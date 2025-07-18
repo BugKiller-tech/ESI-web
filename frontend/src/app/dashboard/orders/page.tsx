@@ -8,6 +8,7 @@ import ListOrders from './components/ListOrders';
 
 import { SearchParams } from 'nuqs/server';
 import { searchParamsCache, serialize } from '@/lib/searchparams';
+import OrderTableAction from './components/components/OrderTableAction'; 
 
 
 
@@ -34,6 +35,7 @@ export default async function (props: pageProps) {
                 />
                 </div>
                 <Separator />
+                <OrderTableAction />
                 <Suspense
                     key={key}
                     fallback={<DataTableSkeleton columnCount={5} rowCount={10} />}
