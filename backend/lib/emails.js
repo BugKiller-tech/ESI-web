@@ -41,8 +41,10 @@ const sendOrderInvoice = async (order) => {
 
         const response = await sgMail.send(msg);
         console.log('Email sent');
+        return true;
     } catch (error) {
         console.log(error);
+        return false;
     }
 }
 
