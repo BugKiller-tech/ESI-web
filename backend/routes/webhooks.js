@@ -67,7 +67,7 @@ router.post('/stripe-hook', express.raw({ type: 'application/json' }), async (re
             // Then define and call a function to handle the event checkout.session.completed
             console.log('checkout session complete hook data', checkoutSessionCompleted);
             const order = await OrderModel.findOne({
-                _id: new mongoose.Types.ObjectId(checkoutSessionCompleted.metadata?.orderId)
+                _id: new mongoose.Types.ObjectId(String(checkoutSessionCompleted.metadata?.orderId || ''))
             })
             if (order) {
                 order.paymentIntentId = checkoutSessionCompleted.payment_intent;
@@ -84,7 +84,14 @@ router.post('/stripe-hook', express.raw({ type: 'application/json' }), async (re
                 }
                 await order.save();
 
-                await sendOrderInvoice(order);
+                const emailSent = await sendOrderInvoice(order);
+                if (emailSent) {
+                    order.isInvoiceEmailSent = 1;
+                    await order.save();
+                }
+                if (!emailSent) {
+                    return res.status(400).send();
+                }
 
             }
             break;

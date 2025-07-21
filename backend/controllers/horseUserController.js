@@ -166,7 +166,7 @@ const getHorseImagesByWeekAndHorseNumber = async (req, res) => {
             photoTakenTime: -1,
             createdAt: -1,
         });
-        console.log('horses', horses);
+        // console.log('horses', horses);
 
         return res.json({
             horseImages: horses,

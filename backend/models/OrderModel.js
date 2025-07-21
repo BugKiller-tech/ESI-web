@@ -75,6 +75,10 @@ const schema = new mongoose.Schema({
         type: String,
         default: '',
     },
+    isInvoiceEmailSent: { // 1 sent, 0 not sent, 2 old
+        type: Number,
+        default: 0,
+    },
     refundInfo: {
         type: Object,
     }
