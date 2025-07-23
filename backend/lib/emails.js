@@ -91,17 +91,23 @@ const sendContactUsEmail = async (data) => {
             ...data,
         })
 
-        const msg = {
+        // const msg = {
+        //     to: process.env.CONTACT_US_RECEIVER.split(','),
+        //     from: {
+        //         email: process.env.SENDGRID_FROM_EMAIL,
+        //         name: 'ESI Get in touch email',
+        //     },
+        //     subject: 'ESI Contact us info',
+        //     html: html,
+        // }
+        // const response = await sgMail.send(msg);
+
+        const response = await mg.messages.create(process.env.MAILGUN_DOMAIN, {
+            from: process.env.MAILGUN_FROM_EMAIL,
             to: process.env.CONTACT_US_RECEIVER.split(','),
-            from: {
-                email: process.env.SENDGRID_FROM_EMAIL,
-                name: 'ESI Get in touch email',
-            },
             subject: 'ESI Contact us info',
             html: html,
-        }
-
-        const response = await sgMail.send(msg);
+        });
         console.log('Email was sent');
     } catch (error) {
         console.log(error);
