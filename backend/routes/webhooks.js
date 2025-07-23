@@ -16,7 +16,8 @@ const {
     createInvoicePdfWithPuppeteer
 } = require('../lib/invoicePdf');
 const {
-    sendOrderInvoice,
+    sendOrderInvoiceSendGrid,
+    sendOrderInvoiceMailGun,
 } = require('../lib/emails');
 
 
@@ -84,7 +85,8 @@ router.post('/stripe-hook', express.raw({ type: 'application/json' }), async (re
                 }
                 await order.save();
 
-                const emailSent = await sendOrderInvoice(order);
+                // const emailSent = await sendOrderInvoiceSendGrid(order);
+                const emailSent = await sendOrderInvoiceMailGun(order);
                 if (emailSent) {
                     order.isInvoiceEmailSent = 1;
                     await order.save();

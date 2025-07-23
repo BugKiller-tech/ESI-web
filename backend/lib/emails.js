@@ -2,6 +2,9 @@ const sgMail = require('@sendgrid/mail');
 const handlebars = require('handlebars');
 const path = require('path');
 const fs = require('fs');
+const Mailgun = require('mailgun.js');
+const formData = require('form-data');
+
 
 handlebars.registerHelper('breaklines', function (text) {
     text = handlebars.Utils.escapeExpression(text);
@@ -12,7 +15,10 @@ handlebars.registerHelper('breaklines', function (text) {
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
-const sendOrderInvoice = async (order) => {
+const mailgun = new Mailgun(FormData);
+const mg = mailgun.client({ username: 'api', key: process.env.MAILGUN_API_KEY });
+
+const sendOrderInvoiceSendGrid = async (order) => {
 
     try {
         const source = fs.readFileSync(path.resolve(process.cwd(), 'email_templates/order-confirmation.html'), 'utf8');
@@ -48,6 +54,34 @@ const sendOrderInvoice = async (order) => {
     }
 }
 
+const sendOrderInvoiceMailGun = async (order) => {
+
+    try {
+        const source = fs.readFileSync(path.resolve(process.cwd(), 'email_templates/order-confirmation.html'), 'utf8');
+        const template = handlebars.compile(source);
+        const html = template({
+            fullName: order.firstName + ' ' + order.lastName,
+        })
+
+        // Send email with attachment
+        const response = await mg.messages.create(process.env.MAILGUN_DOMAIN, {
+            from: process.env.MAILGUN_FROM_EMAIL,
+            to: [order.email],
+            // to: ['huacaimobile93@gmail.com', 'blazedog1400@gmail.com'],  // test purpose only
+            subject: 'Thank you for your order',
+            html: html,
+            attachment: {
+                filename: 'invoice.pdf',
+                data: fs.createReadStream(order.invoicePdf),
+            },
+        });
+        return true;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
 const sendContactUsEmail = async (data) => {
 
     try {
@@ -76,6 +110,7 @@ const sendContactUsEmail = async (data) => {
 
 
 module.exports = {
-    sendOrderInvoice,
+    sendOrderInvoiceSendGrid,
+    sendOrderInvoiceMailGun,
     sendContactUsEmail,
 }
