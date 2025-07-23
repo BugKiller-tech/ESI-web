@@ -51,8 +51,8 @@ router.use(`/api/${API_VERSION}/support`, require('./customerSupport'));
 router.get(`/api/${API_VERSION}/test`,  async (req, res) => {
     // imageProcessingJobUploadedViaFtp('67db965aa99bbac91e70ce25');
 
-    const order = await OrderModel.findById('6876bafba7c143a2c4ff3809');
-    sendOrderInvoiceMailGun(order);
+    // const order = await OrderModel.findById('6876bafba7c143a2c4ff3809');
+    // sendOrderInvoiceMailGun(order);
     
     return res.json({
         'message': 'testing',
