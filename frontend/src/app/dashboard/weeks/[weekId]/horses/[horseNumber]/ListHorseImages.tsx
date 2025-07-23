@@ -192,21 +192,20 @@ export default function ListHorseImages({
             </Modal>
 
             {checkedHorseImageIds.length > 0 && (
-                <div className='mb-3 bg-yellow-300 px-5 py-2 flex justify-between align-center rounded-md'>
+                <div className='absolute bottom-5 right-2 bg-yellow-300 px-5 py-2
+                                flex flex-wrap justify-between items-center gap-5 rounded-md'>
                     <span className='font-bold'>
                         {checkedHorseImageIds.length} image{checkedHorseImageIds.length > 1 ? 's' : ''} selected!
                     </span>
-                    <div className='flex gap-5'>
-                        <Button size='sm'
-                            className='bg-main-color text-white'
-                            onClick={() => {
-                                setShowChangeHorseNumberMmodal(true);
-                            }}>Change horse number</Button>
-                        <Button size='sm'
-                            onClick={() => {
-                                setCheckedHorseImageIds([]);
-                            }}>Clear selection</Button>
-                    </div>
+                    <Button size='sm'
+                        className='bg-main-color text-white'
+                        onClick={() => {
+                            setShowChangeHorseNumberMmodal(true);
+                        }}>Change horse number</Button>
+                    <Button size='sm'
+                        onClick={() => {
+                            setCheckedHorseImageIds([]);
+                        }}>Clear selection</Button>
                 </div>
             )}
 
