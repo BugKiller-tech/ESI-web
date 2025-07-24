@@ -292,7 +292,7 @@ const createInvoicePdfWithPuppeteer = async (order, outputPath) => {
   }</div>
               <div>Email:</div><div>${order.email}</div>
               <div>Phone number:</div><div>${order.phoneNumber}</div>
-              <div>Shipping address:</div><div>${order.shippingAddress}</div>
+              <div>Shipping address:</div><div>${order.shippingAddress} ${order.zipCode ? ', ' + order.zipCode : ''}</div>
             </div>
           </div>
     
