@@ -51,7 +51,10 @@ const getAllHorsesForAdmin = async (req, res) => {
             },
             {
                 // Sort by numeric version of horseNumber
-                $sort: { horseNumberNum: 1 }
+                $sort: {
+                    horseNumberNum: 1,
+                    horseNumber: 1,
+                }
             }
         ]);
         // Now use Mongoose's `populate` manually via `Model.populate`
@@ -217,6 +220,21 @@ const changeHorseNumberForImages = async (req, res) => {
             },
         });
         for (const horseImage of horseImages) {
+            
+            // let weekHorseInfo = await WeekHorseInfoModel.findOne({
+            //     _id: horseImage.horseInfo
+            // })
+            // if (!weekHorseInfo) {
+            //     weekHorseInfo = new WeekHorseInfoModel({
+            //         week: horseImage.week,
+            //         horseNumber: horseImage.horseNumber,
+            //         horseName: '',
+            //         hasImages: true,
+            //     })
+            //     await weekHorseInfo.save();
+            // }
+            // horseImage.horseInfo = weekHorseInfo._id;
+
             horseImage.horseNumber = newHorseNumber;
             await horseImage.save();
         }

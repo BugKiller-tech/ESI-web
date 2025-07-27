@@ -18,7 +18,7 @@ import {
     EventHandler as ReactGridEventHandler
 } from '@/components/react-grid-gallery/types'
 import { useEffect, useState } from 'react';
-import { HorseImageInfo } from 'types';
+import { HorseImageInfo, WeekInfo } from 'types';
 import { useFullScreenLoader } from "@/context/FullScreenLoaderContext";
 import ChangeImageNumberForSelectedHorsesModal from "./ChangeImageNumberForSelectedHorsesModal";
 
@@ -35,6 +35,7 @@ import * as APIs from '@/apis';
 
 import { ThumbnailImageProps } from '@/components/react-grid-gallery';
 import { Checkbox } from '@/components/ui/checkbox';
+import { CheckIcon } from '@radix-ui/react-icons';
 
 const ImageComponent = (props: ThumbnailImageProps) => {
     const { key, ...otherImageProps } = props.imageProps
@@ -62,10 +63,12 @@ const ImageComponent = (props: ThumbnailImageProps) => {
 };
 
 type compProps = {
+    week: WeekInfo,
     horseImages: HorseImageInfo[];
 }
 
 export default function ListHorseImages({
+    week,
     horseImages
 }: compProps) {
 
@@ -235,7 +238,8 @@ export default function ListHorseImages({
                                 </div>
                                 <div className='px-3 flex-1 flex items-center justify-between py-1 gap-2'>
                                     <Checkbox onClick={() => toggleSelectionForImage(horse._id)}
-                                        checked={checkedHorseImageIds.includes(horse._id)} />
+                                        checked={checkedHorseImageIds.includes(horse._id)}>
+                                    </Checkbox>
                                     <span className='flex-1'></span>
                                     <Button
                                         className='text-white'
@@ -262,6 +266,7 @@ export default function ListHorseImages({
 
             {
                 showChangeHorseNumberModal && <ChangeImageNumberForSelectedHorsesModal
+                    week={week}
                     selectedHorseImageIds={checkedHorseImageIds}
                     hideModalAction={(isDeleted: boolean) => {
                         setShowChangeHorseNumberMmodal(false);

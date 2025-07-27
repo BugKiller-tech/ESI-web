@@ -199,6 +199,12 @@ export const getWeeksByState = async (postData: any, token: string = '') => {
     const axios = await createAxiosInstance(token);
     return axios.post('/api/v1/front/weeks/get-weeks-for-state', postData);
 }
+
+export const getWeekInfoById = async (weekId: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
+    return axios.get(`/api/v1/front/weeks/${weekId}/get-week-info`);
+}
+
 export const getAllWeeks = async (token: string = '') => {
     const axios = await createAxiosInstance(token);
     return axios.get('/api/v1/front/weeks/get-all-weeks');
@@ -217,6 +223,11 @@ export const searchHorseByNumber = async (postData: any, token: string = '') => 
 export const searchHorsesByName = async (postData: any, token: string = '') => {
     const axios = await createAxiosInstance(token);
     return axios.post('/api/v1/front/horses/search-horses-by-name', postData);
+}
+
+export const searchCandidAndAwardHorses = async (postData: any, token: string = '') => {
+    const axios = await createAxiosInstance(token);
+    return axios.post('/api/v1/front/horses/search-candid-award-names', postData);
 }
 
 export const getHorseImagesByWeekAndHorseNumber = async (postData: any, token: string = '') => {

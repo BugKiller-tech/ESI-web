@@ -6,6 +6,7 @@ import * as APIs from "@/apis";
 import { toast } from 'sonner';
 
 import ListHorseImages from './ListHorseImages';
+import { WeekInfo } from 'types';
 
 type pageProps = {
     params: Promise<{
@@ -35,18 +36,32 @@ export default async function ({
         console.log(error);
     }
 
+    let week: WeekInfo = null;
+    try {
+        const response = await APIs.getWeekInfoById(weekId, session?.user?.accessToken);
+        if (response.data) {
+            week = response.data.week;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+
+
+
 
     return (
         <PageContainer scrollable={true}>
             <div className='flex flex-1 flex-col space-y-4'>
                 <div className='flex items-start justify-between'>
-                <Heading
-                    title={`Horse images for horse number "${ horseNumber }"`}
-                    description='Horse images for the above horse number'
-                />
+                    <Heading
+                        title={`Horse images for horse number "${horseNumber}"`}
+                        description='Horse images for the above horse number'
+                    />
                 </div>
                 <Separator />
-                <ListHorseImages horseImages={horseImages} />
+                <ListHorseImages
+                    week={week}
+                    horseImages={horseImages} />
             </div>
         </PageContainer>
     )

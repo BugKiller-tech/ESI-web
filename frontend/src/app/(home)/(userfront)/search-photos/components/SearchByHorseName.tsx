@@ -20,6 +20,9 @@ import SearchableDropdown from './SearchableDropdown';
 import {
     useAvailableHorsesByWeek,
 } from '@/context/AvailableHorsesContext';
+import WeekSelector from './WeekSelector';
+import { useAtomValue } from 'jotai';
+import { selectedWeekIdAtom } from '../jotai/atoms';
 
 
 export default ({
@@ -31,9 +34,10 @@ export default ({
     const router = useRouter();
     const allAvailableHorseNamesInfo = useAvailableHorsesByWeek();
 
+    const selectedWeekId = useAtomValue(selectedWeekIdAtom)
+
 
     const [isLoading, setIsLoading] = useState(false);
-    const [selectedWeekId, setSelectedWeekId] = useState('');
     const [horseName, setHorseName] = useState('');
     const [loadingAllHorseNames, setLoadingAllHorseNames] = useState(false);
 
@@ -45,12 +49,7 @@ export default ({
         console.log('reading horse name saved localstorage');
         setHorseName(localStorage.getItem('searchHorseName') || '');
     }, [])
-    useEffect(() => {
-        if (weeks.length > 0) {
-            console.log('default select change', weeks[0]._id);
-            setSelectedWeekId(weeks[0]._id);
-        }
-    }, [weeks]);
+    
     useEffect(() => {
         setHorseName('');
     }, [selectedWeekId])
@@ -143,26 +142,8 @@ export default ({
 
     return (
         <div className='flex flex-col gap-3'>
-            <div>
-                <div className='font-bold mb-2'>Week number</div>
-                <Select
-                    onValueChange={(value) => { setSelectedWeekId(value) }}
-                    defaultValue={selectedWeekId || ''}
-                    value={selectedWeekId}
-                >
-                    <SelectTrigger>
-                        <SelectValue placeholder='Select the week' />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {weeks.map((w) => (
-                            <SelectItem value={w._id} key={w._id}>
-                                <span>{w.year}</span>&nbsp;&nbsp;-&nbsp;&nbsp;<span>{w.weekNumber}</span>
-                            </SelectItem>
-                        ))
-                        }
-                    </SelectContent>
-                </Select>
-            </div>
+            <WeekSelector weeks={weeks} />
+
             <div>
                 <div className='font-bold mb-2'>Horse name</div>
                 <div>

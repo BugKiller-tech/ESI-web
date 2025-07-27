@@ -61,7 +61,7 @@ const searchHorsesByName = async (req, res) => {
             horseNameToSearch = '';
         }
 
-        
+
         let matchQueries = {
             week: new ObjectId(String(weekId)),
             hasImages: true,
@@ -76,7 +76,7 @@ const searchHorsesByName = async (req, res) => {
         const weekHorses = await WeekHorseInfoModel.find(matchQueries).sort({
             horseName: 1,
         }).collation({ locale: "en", strength: 1 }); // this collation is for case-insensitve sort, us 
-        
+
         // let matchQueries = {
         //     week: new ObjectId(String(weekId)),
         //     images: { $ne: [] } // only those that are referenced
@@ -118,6 +118,44 @@ const searchHorsesByName = async (req, res) => {
     }
 }
 
+
+const searchCandidAndAwardHorses = async (req, res) => {
+    try {
+        const { weekId } = req.body;
+
+        if (!weekId) {
+            return res.status(400).json({
+                message: 'Please provide valid information',
+            });
+        }
+
+
+        let matchQueries = {
+            week: new ObjectId(String(weekId)),
+            $or: [
+                { horseNumber: { $regex: /^Candid\s/, $options: 'i' } },
+                { horseNumber: { $regex: /^Award\s/, $options: 'i' } }
+            ]
+        }
+        
+        const horseNames = await HorsesImageModel.find(matchQueries).distinct('horseNumber').sort({
+            horseName: 1,
+        }).collation({ locale: "en", strength: 1 }); // this collation is for case-insensitve sort, us 
+
+        const week = await WeekModel.findById(weekId);
+
+        return res.json({
+            week: week,
+            horseNames: horseNames,
+        })
+    } catch (error) {
+        console.error(error);
+        return res.status(400).json({
+            message: 'Internal Server Error',
+            error: error.message,
+        });
+    }
+}
 
 
 const getHorsesForWeek = async (req, res) => {
@@ -186,6 +224,7 @@ const getHorseImagesByWeekAndHorseNumber = async (req, res) => {
 module.exports = {
     searchHorseByNumber,
     searchHorsesByName,
+    searchCandidAndAwardHorses,
     getHorsesForWeek,
     getHorseImagesByWeekAndHorseNumber,
 }

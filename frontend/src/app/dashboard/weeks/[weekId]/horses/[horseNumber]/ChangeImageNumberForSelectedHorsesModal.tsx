@@ -7,20 +7,31 @@ import {
     useRouter,
     useParams
 } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import * as APIs from '@/apis';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from "@/components/ui/input";
 import { toast } from 'sonner';
 import { useFullScreenLoader } from "@/context/FullScreenLoaderContext";
+import clsx from 'clsx';
+import {
+    HORSE_NUMBER_INPUT,
+    CANDID_PREFIX,
+    AWARD_PREFIX,
+
+    SPECIAL_SHOT_FOLDERS,
+} from '@/constants/esi-constants';
+import { WeekInfo } from 'types';
 
 type compProps = {
+    week: WeekInfo,
     hideModalAction: (isDeleted: boolean) => void,
     selectedHorseImageIds: string[],
 }
 
 export default ({
+    week,
     hideModalAction,
     selectedHorseImageIds
 }: compProps) => {
@@ -31,20 +42,62 @@ export default ({
     const router = useRouter();
     const fullScreenLoader = useFullScreenLoader();
 
+    const [horseNumberType, setHorseNumberType] = useState(HORSE_NUMBER_INPUT); // HORSE_NUMBER_INPUT, CANDID_PREFIX, AWARD_PREFIX
     const [newHorseNumber, setNewHorseNumber] = useState<string>('');
+    const [selectedSubWeek, setSelectedSubWeek] = useState('');
 
-    const [horseNumbers, setHorseNumbers] = useState<string[]>([]);
+    const specialHorseType = [CANDID_PREFIX, AWARD_PREFIX];
 
     useEffect(() => {
-      // fetch available horse numbers if it's needed later and udpate horseNumbers state
+        // fetch available horse numbers if it's needed later and udpate horseNumbers state
     }, []);
+
+    useEffect(() => {
+        if (specialHorseType.includes(horseNumberType)) {
+            setNewHorseNumber(horseNumberType);
+        } else {
+            setNewHorseNumber('');
+        }
+    }, [horseNumberType]);
+
+    const availableFolders = useMemo(() => {
+        let options = [];
+
+        const startEnd = SPECIAL_SHOT_FOLDERS[week?.weekNumber];
+        if (startEnd) {
+            const {
+                start, end
+            } = startEnd;
+            for (let i = start; i <= end; i++) {
+                options.push(`Wk${i}`);
+            }
+        }
+        return options;
+    }, [week]);
+
+
+    const computedHorseNumber = useMemo(() => {
+        if (horseNumberType == HORSE_NUMBER_INPUT) {
+            return newHorseNumber
+        }
+        return `${horseNumberType} ${selectedSubWeek}`
+    }, [horseNumberType, newHorseNumber, selectedSubWeek])
+
+    const isAllInfoSelected = useMemo(() => {
+        if (horseNumberType == HORSE_NUMBER_INPUT) {
+            return newHorseNumber && newHorseNumber != horseNumber
+        } else {
+            return horseNumberType && selectedSubWeek
+        }
+        
+    }, [horseNumberType, newHorseNumber, selectedSubWeek])
 
 
 
     const changeHorseNumberAction = async () => {
         try {
             const postData = {
-                newHorseNumber: newHorseNumber.trim(),
+                newHorseNumber: computedHorseNumber.trim(),
                 horseImageIds: selectedHorseImageIds,
             }
             fullScreenLoader.showLoader();
@@ -74,18 +127,53 @@ export default ({
             {/*  */}
             <div className='flex flex-col gap-3'>
                 <div className='font-bold text-main-color'>
-                    Selected images count: { selectedHorseImageIds.length }
+                    Selected images count: {selectedHorseImageIds.length}
                 </div>
                 <div className='font-bold text-main-color'>
                     Current horse number: {horseNumber}
                 </div>
 
+
                 <div>
-                    <div className='mb-2 font-bold text-main-color'>New horse number: { newHorseNumber }</div>
-                    <Input type="text" placeholder='Please enter the correct horse number for the selected images'
-                    value={newHorseNumber} onChange={(e) => {
-                        setNewHorseNumber(e.target.value);
-                    }}/>          
+                    <div className='mb-2 font-bold text-main-color'>New horse number: {computedHorseNumber}</div>
+                    <div className='flex gap-3 mb-3'>
+                        <Button
+                            onClick={() => { setHorseNumberType(HORSE_NUMBER_INPUT) }}
+                            className={clsx(horseNumberType == HORSE_NUMBER_INPUT && 'bg-main-color')}>Horse number</Button>
+                        <Button
+                            onClick={() => { setHorseNumberType(CANDID_PREFIX) }}
+                            className={clsx(horseNumberType == CANDID_PREFIX && 'bg-main-color')}>Candid shots</Button>
+                        <Button
+                            onClick={() => { setHorseNumberType(AWARD_PREFIX) }}
+                            className={clsx(horseNumberType == AWARD_PREFIX && 'bg-main-color')}>Award shots</Button>
+                    </div>
+                    {
+                        horseNumberType == HORSE_NUMBER_INPUT ? (
+
+                            <Input type="text" placeholder='Please enter the correct horse number for the selected images'
+                                value={newHorseNumber} onChange={(e) => {
+                                    setNewHorseNumber(e.target.value);
+                                }} />
+                        ) : (
+                            <Select
+                            value={selectedSubWeek}
+                            onValueChange={(val) => setSelectedSubWeek(val)}>
+                                <SelectTrigger>
+                                    <SelectValue placeholder='Please select specific week'></SelectValue>
+                                    <SelectContent>
+                                        {
+                                            availableFolders.map(item => (
+                                                <SelectItem value={item} key={item}>
+                                                    {item}
+                                                </SelectItem>
+                                            ))
+                                        }
+                                    </SelectContent>
+                                </SelectTrigger>
+                            </Select>
+                        )
+                    }
+
                     {/* <Select
                         onValueChange={(value) => { setNewHorseNumber(value) }}
                         defaultValue={newHorseNumber || ''}
@@ -107,7 +195,7 @@ export default ({
                 <div className='flex items-center justify-end space-x-2 pt-6'>
                     <Button variant='destructive' onClick={changeHorseNumberAction}
                         className='flex gap-2 bg-main-color'
-                        disabled={!newHorseNumber || newHorseNumber == horseNumber}>
+                        disabled={!isAllInfoSelected}>
                         Change
                     </Button>
                 </div>

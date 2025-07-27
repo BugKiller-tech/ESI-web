@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import SearchByHorseNumber from './components/SearchByHorseNumber';
 import SearchByHorseName from './components/SearchByHorseName';
 import { useEffect, useState } from 'react';
+import SearchCandidAwardBox from './components/SearchCandidAwardBox';
 
 
 export default ({
@@ -53,7 +54,7 @@ export default ({
                     onValueChange={(newval) => {
                         onTabChange(newval)
                     }}>
-                    <TabsList className='flex'>
+                    <TabsList className='flex flex-wrap'>
                         <TabsTrigger className='flex-1'
                             value='searchByHorseNumber'>
                             Search by Horse number
@@ -62,6 +63,10 @@ export default ({
                             value='searchByHorseName'>
                             Search by Horse name
                         </TabsTrigger>
+                        <TabsTrigger className='flex-1'
+                            value='candid-award'>
+                            Candid & Awards
+                        </TabsTrigger>
                     </TabsList>
                     <TabsContent value='searchByHorseNumber'>
                         <SearchByHorseNumber weeks={weeks} />
@@ -69,8 +74,12 @@ export default ({
                     <TabsContent value='searchByHorseName'>
                         <SearchByHorseName weeks={weeks} />
                     </TabsContent>
-
+                    <TabsContent value='candid-award'>
+                        <SearchCandidAwardBox weeks={weeks} />
+                    </TabsContent>
+                    
                 </Tabs>
+                
             </div>
             <div className='w-[530px] max-w-[90vw] flex flex-col gap-5'>
                 <img src="/420DI2_3665_PAGE 2.jpg" className='w-full' />

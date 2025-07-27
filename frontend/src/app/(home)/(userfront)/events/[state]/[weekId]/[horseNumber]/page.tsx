@@ -32,7 +32,9 @@ import { Button } from '@/components/ui/button';
 export default () => {
 
     const params = useParams();
-    const { state, weekId, horseNumber } = params;
+    const { state, weekId } = params;
+    const horseNumber = decodeURIComponent(params.horseNumber as string || '');
+
     const { data: session } = useSession();
 
     const router = useRouter();
@@ -127,6 +129,9 @@ export default () => {
                     Back to Search
                 </Button>
             </div>
+            {/* <div className='text-center'>
+                                
+            </div> */}
             <div className="grid-container">
                 {photos.map((photo, index) => (
                     <div className="cell" key={index}>

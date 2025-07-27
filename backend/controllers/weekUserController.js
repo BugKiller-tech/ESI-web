@@ -1,3 +1,4 @@
+const WeekModel = require('../models/WeekModel');
 const { getWeeksByState, getAllWeeksFunc } = require('../services/weekService');
 
 const getWeeksForState = async (req, res) => {
@@ -25,6 +26,23 @@ const getWeeksForState = async (req, res) => {
     }
 }
 
+const getWeekInfo = async (req, res) => {
+    try {
+        let weekId = req.params.weekId;
+        const week = await WeekModel.findById(weekId);
+        if (week) {
+            return res.json({
+                week,
+            })
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({
+            message: 'Failed to find week info',
+        })
+    }
+}
+
 
 const getAllWeeks = async (req, res) => {
     try {
@@ -45,5 +63,6 @@ const getAllWeeks = async (req, res) => {
 
 module.exports = {
     getWeeksForState,
+    getWeekInfo,
     getAllWeeks,
 }

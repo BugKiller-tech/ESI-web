@@ -9,6 +9,9 @@ router.post('/get-weeks-for-state',
     weekUserController.getWeeksForState
 );
 
+router.get('/:weekId/get-week-info',
+    weekUserController.getWeekInfo);
+
 router.get('/get-all-weeks',
     // adminCheckMiddleware,
     weekUserController.getAllWeeks
