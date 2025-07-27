@@ -14,6 +14,9 @@ import ClientUnloadHandler from '@/app/ClientUnloadHandler';
 import './globals.css';
 
 
+import { Providers as JotaiProviders } from '@/app/store/Provider';
+
+
 export const metadata: Metadata = {
   title: 'ESI',
   description: 'ESI photos'
@@ -34,20 +37,22 @@ export default async function RootLayout({
   return (
     <html lang='en' className={`${lato.className}`} suppressHydrationWarning>
       <body className={'overflow-hidden'}>
-        <ClientUnloadHandler />
-        <NextTopLoader showSpinner={false} />
-        <NuqsAdapter>
-          <Providers session={session}>
-            <AvailableHorsesProvider>
-              <CartProvider>
-                <FullScreenLoaderProvider>
-                  <Toaster />
-                  {children}
-                </FullScreenLoaderProvider>
-              </CartProvider>
-            </AvailableHorsesProvider>
-          </Providers>
-        </NuqsAdapter>
+        <JotaiProviders>
+          <ClientUnloadHandler />
+          <NextTopLoader showSpinner={false} />
+          <NuqsAdapter>
+            <Providers session={session}>
+              <AvailableHorsesProvider>
+                <CartProvider>
+                  <FullScreenLoaderProvider>
+                    <Toaster />
+                    {children}
+                  </FullScreenLoaderProvider>
+                </CartProvider>
+              </AvailableHorsesProvider>
+            </Providers>
+          </NuqsAdapter>
+        </JotaiProviders>
       </body>
     </html>
   );
