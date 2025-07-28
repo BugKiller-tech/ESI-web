@@ -86,7 +86,7 @@ export default ({
                 {/*  */}
                 <div className='flex flex-col gap-3'>
                     <h2 className="text-2xl font-bold mb-4">
-                        Please select one to see photos ( {searchedHorseNames.length} found )
+                        Please select one to see photos
                     </h2>
                     <ul className="space-y-3 max-h-[500px] overflow-y-auto">
                         {searchedHorseNames.map(h => (
