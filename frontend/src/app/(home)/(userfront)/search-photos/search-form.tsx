@@ -63,10 +63,10 @@ export default ({
                             value='searchByHorseName'>
                             Search by Horse name
                         </TabsTrigger>
-                        {/* <TabsTrigger className='flex-1'
+                        <TabsTrigger className='flex-1'
                             value='candid-award'>
                             Candid & Awards
-                        </TabsTrigger> */}
+                        </TabsTrigger>
                     </TabsList>
                     <TabsContent value='searchByHorseNumber'>
                         <SearchByHorseNumber weeks={weeks} />
