@@ -127,6 +127,35 @@ const getHorseImagesForAdmin = async (req, res) => {
     }
 };
 
+const getUnprocessedImagesForCandidAward = async (req, res) => {
+    try {
+        console.log({
+            week: req.params.weekId,
+        });
+        const horseImages = await HorsesImageModel.find({
+            week: req.params.weekId,
+            isDeleted: 0,
+            isCheckedForCandidAwardShot: {
+                $ne: 1,
+            }
+        }).sort({
+            photoTakenTime: -1,
+            createdAt: -1,
+        }).limit(100);
+
+        return res.json({
+            horseImages: horseImages,
+        });
+    } catch (error) {
+        console.log("Error fetching horse images:", error);
+        return res.status(400).json({
+            message: "Failed to get horse images",
+        });
+    }
+};
+
+
+
 const deleteHorseImage = async (req, res) => {
     try {
         const { weekId, horseImageId } = req.params;
@@ -213,6 +242,7 @@ const changeHorseNumberForImages = async (req, res) => {
         console.log(newHorseNumber);
 
         const horseImages = await HorsesImageModel.find({
+            week: weekId,
             _id: {
                 $in: horseImageIds.map(
                     (id) => new mongoose.Types.ObjectId(String(id))
@@ -236,9 +266,41 @@ const changeHorseNumberForImages = async (req, res) => {
             // horseImage.horseInfo = weekHorseInfo._id;
 
             horseImage.horseNumber = newHorseNumber;
+            horseImage.isCheckedForCandidAwardShot = 1; // admin changed horse #, it means, we don't have to list this in candid/award shot unprocessed images
             await horseImage.save();
         }
 
+        return res.json({
+            message: "Successfully changed horse number for selected images",
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({
+            message: "Failed to perform an action to change horse number",
+        });
+    }
+};
+
+const markImagesAsProcessedForCandidAwardCheck = async (req, res) => {
+    try {
+        const { weekId } = req.params;
+        const { horseImageIds } = req.body;
+
+        console.log("data received is just like");
+        console.log(horseImageIds);
+
+        const horseImages = await HorsesImageModel.find({
+            week: weekId,
+            _id: {
+                $in: horseImageIds.map(
+                    (id) => new mongoose.Types.ObjectId(String(id))
+                ),
+            },
+        });
+        for (const horseImage of horseImages) {
+            horseImage.isCheckedForCandidAwardShot = 1;
+            await horseImage.save();
+        }
         return res.json({
             message: "Successfully changed horse number for selected images",
         });
@@ -332,10 +394,12 @@ const downloadForSelectedImages = async (req, res) => {
 
 module.exports = {
     getAllHorsesForAdmin,
+    getUnprocessedImagesForCandidAward,
     getHorseImagesForAdmin,
     deleteHorseImage,
     deleteHorse,
     changeHorseNumberForImages,
+    markImagesAsProcessedForCandidAwardCheck,
     searchImagesByImageNumber,
     downloadForSelectedImages,
 };

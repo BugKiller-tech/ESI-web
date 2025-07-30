@@ -18,7 +18,7 @@ export const navItems: NavItem[] = [
   {
     title: 'Timestamp JSON Merger',
     url: '/dashboard/timestamp-merger',
-    icon: 'week',
+    icon: 'timestamp',
     isActive: false,
   },
   {

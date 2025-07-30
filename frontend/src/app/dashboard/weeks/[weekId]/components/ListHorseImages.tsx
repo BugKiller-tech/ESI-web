@@ -2,13 +2,6 @@
 // import { ImageGallery  } from 'react-image-grid-gallery';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
 import { Gallery } from '@/components/react-grid-gallery';
 import {
     Modal
@@ -29,6 +22,10 @@ import "yet-another-react-lightbox/styles.css";
 import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 
+import {
+    confirm,
+} from '@/components/esi/Confirm';
+
 import * as APIs from '@/apis';
 
 
@@ -36,6 +33,7 @@ import * as APIs from '@/apis';
 import { ThumbnailImageProps } from '@/components/react-grid-gallery';
 import { Checkbox } from '@/components/ui/checkbox';
 import { CheckIcon } from '@radix-ui/react-icons';
+import { toast } from 'sonner';
 
 const ImageComponent = (props: ThumbnailImageProps) => {
     const { key, ...otherImageProps } = props.imageProps
@@ -64,17 +62,25 @@ const ImageComponent = (props: ThumbnailImageProps) => {
 
 type compProps = {
     week: WeekInfo,
-    horseImages: HorseImageInfo[];
+    horseImages: HorseImageInfo[],
+    isForCandidIdentifying?: boolean,
 }
 
 export default function ListHorseImages({
     week,
-    horseImages
+    horseImages: initialHorseImages,
+    isForCandidIdentifying = false,
 }: compProps) {
 
 
     const { data: session } = useSession();
     const router = useRouter();
+
+    const [horseImages, setHorseImages] = useState([]);
+    useEffect(() => {
+        // Initialize local state only once from SSR props
+        setHorseImages(initialHorseImages);
+    }, [initialHorseImages]);
 
     const fullScreenLoader = useFullScreenLoader();
     const [selectedHorse, setSelectedHorse] = useState<HorseImageInfo | null>(null);
@@ -104,28 +110,54 @@ export default function ListHorseImages({
     })
 
 
-    //  const imagesInfoArray = horseImages.map(h => {
-    //     return {
-    //         id: h._id,
-    //         alt: 'test',
-    //         caption: h.thumbnailS3Link,
-    //         src: h.thumbnailS3Link,
-    //     }
-    //  })
+    const toLocalDateTimeStr = (timeStamp: string) => {
+        try {
+            if (!timeStamp) {
+                return '';
+            }
+            return (new Date(timeStamp)).toLocaleString();
+        } catch (error) {
+            return '';
+        }
+    }
 
-    const onImageSelected: ReactGridEventHandler = (index, item, event) => {
-        const horse = horseImages[index];
-        setSelectedHorse(horse);
-        console.log(index, item, event);
-        console.log('selected horse image is just', horse);
+
+
+    // const onImageSelected: ReactGridEventHandler = (index, item, event) => {
+    //     const horse = horseImages[index];
+    //     setSelectedHorse(horse);
+    //     console.log(index, item, event);
+    //     console.log('selected horse image is just', horse);
+    // }
+
+    const refreshRouterIfNeeded = () => {
+        if (!isForCandidIdentifying) {
+            router.refresh();
+        } else {
+            let needRefresh = false;
+            if (selectedHorse) {
+                const newHorseImages = horseImages.filter(h => h._id != selectedHorse._id)
+                if (newHorseImages.length == 0) needRefresh = true;
+                setHorseImages(newHorseImages);
+            }
+            if (checkedHorseImageIds.length > 0) {
+                const newHorseImages = horseImages.filter(h => !checkedHorseImageIds.includes(h._id))
+                if (newHorseImages.length == 0) needRefresh = true;
+                setHorseImages(newHorseImages);
+            }
+
+            if (needRefresh) {
+                router.refresh();
+            }
+        }
     }
 
     const deleteImageAction = async () => {
         try {
             fullScreenLoader.showLoader();
             const response = await APIs.deleteHorseImageByAdmin(selectedHorse.week, selectedHorse._id, session?.user?.accessToken);
+            refreshRouterIfNeeded();
             setSelectedHorse(null);
-            router.refresh();
         } catch (error) {
             console.log(error);
         }
@@ -145,6 +177,20 @@ export default function ListHorseImages({
                 ...checkedHorseImageIds,
                 horseId
             ])
+        }
+    }
+
+    const markImagesAsProcessedForCandidAwardCheck = async () => {
+        try {
+            const response = await APIs.markImagesAsProcessedForCandidAwardCheck({
+                weekId: week._id,
+                horseImageIds: horseImages.map(h => h._id),
+
+            }, session?.user?.accessToken);
+            toast.success('Successfully marked!');
+            router.refresh();
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -233,11 +279,37 @@ export default function ListHorseImages({
                                     backgroundSize: 'cover',
                                 }}></div>
                             <div className='bg-main-horse'>
-                                <div className='px-3 py-1 font-bold text-center border-b border-gray-400'>
-                                    {horse.originImageName}
+                                <div className='px-3 py-1 font-bold border-b border-gray-400 overflow-auto'>
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td className='text-left'>Image name: </td>
+                                                <td>{horse.originImageName}</td>
+                                            </tr>
+                                            {isForCandidIdentifying && (
+                                                <>
+                                                    <tr>
+                                                        <td className='text-left'>Horse #: </td>
+                                                        <td>{horse.horseNumber}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td className='text-left text-xs'>photo taken: </td>
+                                                        <td className='text-xs'>{toLocalDateTimeStr(horse.photoTakenTime)}</td>
+                                                    </tr>
+                                                </>
+                                            )}
+
+                                            {/* <tr>
+                                            <td></td>
+                                            <td>{horse.isCheckedForCandidAwardShot}</td>
+                                        </tr> */}
+                                        </tbody>
+                                    </table>
+
                                 </div>
                                 <div className='px-3 flex-1 flex items-center justify-between py-1 gap-2'>
-                                    <Checkbox onClick={() => toggleSelectionForImage(horse._id)}
+                                    <Checkbox className='w-6 h-6'
+                                        onClick={() => toggleSelectionForImage(horse._id)}
                                         checked={checkedHorseImageIds.includes(horse._id)}>
                                     </Checkbox>
                                     <span className='flex-1'></span>
@@ -265,16 +337,42 @@ export default function ListHorseImages({
             </div>
 
             {
-                showChangeHorseNumberModal && <ChangeImageNumberForSelectedHorsesModal
+                showChangeHorseNumberModal &&
+                <ChangeImageNumberForSelectedHorsesModal
                     week={week}
                     selectedHorseImageIds={checkedHorseImageIds}
                     hideModalAction={(isDeleted: boolean) => {
                         setShowChangeHorseNumberMmodal(false);
                         if (isDeleted) {
+                            refreshRouterIfNeeded();
                             setCheckedHorseImageIds([]);
                         }
                     }}
+                    isForCandidIdentifying={isForCandidIdentifying}
                 />
+            }
+
+            {
+                isForCandidIdentifying && (
+                    <div className='mt-20 text-center'>
+                        <Button size='lg'
+                            className='bg-main-color'
+                            onClick={async () => {
+                                console.log('testing')
+                                const result = await confirm({ 
+                                    title: 'Confirmation',
+                                    message: 'Do you want to mark all the displayed images as confirmed for the Candid/Award shots check?' });
+                                if (result) {
+                                    console.log('good');
+                                    markImagesAsProcessedForCandidAwardCheck();
+                                } else {
+                                    console.log('nope');
+                                }
+                            }}>
+                            I checked all above images and confirm no more candid/award photos
+                        </Button>
+                    </div>
+                )
             }
         </div>
     );

@@ -74,6 +74,7 @@ export interface HorseImageInfo {
   week: string;
   aspectRatio: number;
   isDeleted: number;
+  isCheckedForCandidAwardShot: number;
 }
 
 export interface CartItem {

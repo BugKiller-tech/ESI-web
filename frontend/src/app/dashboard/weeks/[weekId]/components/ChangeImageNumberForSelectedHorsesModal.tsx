@@ -28,12 +28,14 @@ type compProps = {
     week: WeekInfo,
     hideModalAction: (isDeleted: boolean) => void,
     selectedHorseImageIds: string[],
+    isForCandidIdentifying: boolean,
 }
 
 export default ({
     week,
     hideModalAction,
-    selectedHorseImageIds
+    selectedHorseImageIds,
+    isForCandidIdentifying,
 }: compProps) => {
 
     const { data: session } = useSession();
@@ -48,6 +50,12 @@ export default ({
 
     const specialHorseType = [CANDID_PREFIX, AWARD_PREFIX];
 
+    useEffect(() => {
+        if (isForCandidIdentifying && horseNumberType == HORSE_NUMBER_INPUT) {
+            setHorseNumberType(CANDID_PREFIX);
+        }
+
+    }, [isForCandidIdentifying])
     useEffect(() => {
         // fetch available horse numbers if it's needed later and udpate horseNumbers state
     }, []);
@@ -89,7 +97,7 @@ export default ({
         } else {
             return horseNumberType && selectedSubWeek
         }
-        
+
     }, [horseNumberType, newHorseNumber, selectedSubWeek])
 
 
@@ -97,6 +105,7 @@ export default ({
     const changeHorseNumberAction = async () => {
         try {
             const postData = {
+                weekId: week?._id,
                 newHorseNumber: computedHorseNumber.trim(),
                 horseImageIds: selectedHorseImageIds,
             }
@@ -104,8 +113,7 @@ export default ({
             const response = await APIs.changeHorseNumberForImages(postData, session?.user?.accessToken);
             if (response.data) {
                 toast.success('Successfully changed the horse number');
-                hideModalAction(true);
-                router.refresh();
+                hideModalAction(true);                
             }
         } catch (error) {
             console.log(error);
@@ -129,9 +137,14 @@ export default ({
                 <div className='font-bold text-main-color'>
                     Selected images count: {selectedHorseImageIds.length}
                 </div>
-                <div className='font-bold text-main-color'>
-                    Current horse number: {horseNumber}
-                </div>
+                {
+                    horseNumber &&
+                    (
+                        <div className='font-bold text-main-color'>
+                            Current horse number: {horseNumber}
+                        </div>
+                    )
+                }
 
 
                 <div>
@@ -156,8 +169,8 @@ export default ({
                                 }} />
                         ) : (
                             <Select
-                            value={selectedSubWeek}
-                            onValueChange={(val) => setSelectedSubWeek(val)}>
+                                value={selectedSubWeek}
+                                onValueChange={(val) => setSelectedSubWeek(val)}>
                                 <SelectTrigger>
                                     <SelectValue placeholder='Please select specific week'></SelectValue>
                                     <SelectContent>

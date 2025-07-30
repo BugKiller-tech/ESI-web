@@ -156,6 +156,13 @@ export const getHorseImagesByHorseNumberForAdmin = async (weekId: string, horseN
     return axios.get(`/api/v1/admin/horses/${weekId}/horses/${horseNumber}`);
 }
 
+export const getUnprocessedImagesForCandidAward = async (weekId: string, token: string = '') => {
+    const axios = await createAxiosInstance(token);
+    return axios.get(`/api/v1/admin/horses/${weekId}/horseimages-for-candid-award`);
+}
+
+
+
 export const deleteHorseImageByAdmin = async (weekId: string, horseImageId: string, token: string = '') => {
     const axios = await createAxiosInstance(token);
     return axios.delete(`/api/v1/admin/horses/${weekId}/horses/${horseImageId}/delete`);
@@ -172,6 +179,14 @@ export const changeHorseNumberForImages = async (data: any, token: string = '') 
     } = data;
     const axios = await createAxiosInstance(token);
     return axios.post(`/api/v1/admin/horses/${weekId}/horses/change-horse-number-for-images`, data);
+}
+
+export const markImagesAsProcessedForCandidAwardCheck = async (data: any, token: string = '') => {
+    const {
+        weekId
+    } = data;
+    const axios = await createAxiosInstance(token);
+    return axios.post(`/api/v1/admin/horses/${weekId}/horses/mark-images-as-processed-for-candid-award-check`, data);
 }
 
 export const searchImagesByImageNumber = async (data: any, token: string = '') => {

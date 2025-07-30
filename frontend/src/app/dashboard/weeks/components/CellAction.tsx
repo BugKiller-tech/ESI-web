@@ -9,6 +9,9 @@ import { toast } from 'sonner';
 import { Modal } from '@/components/ui/modal';
 import { useState } from 'react';
 import UploadHorseNamesExcel from './UploadHorseNamesExcel';
+import clsx from 'clsx';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Delete, Ellipsis, Eye, Menu, Sheet, Trash } from 'lucide-react';
 
 interface CellActionProps {
     data: WeekInfo;
@@ -64,20 +67,58 @@ export default function ({ data }: CellActionProps) {
         router.push(`/dashboard/weeks/${data._id}/horses`);
     }
 
+    const gotoManageCandidAwardShotPage = () => {
+        router.push(`/dashboard/weeks/${data._id}/manage-candid-award-shots`);
+        
+    }
+
 
 
     return (
         <div className='flex items-center space-x-2'>
-            {data.isDeleted != 1 && <Button size='sm' onClick={() => {
-                setIsOpenDeleteConfirmModal(true);
-            }}>Delete</Button>}
-            <Button size='sm' onClick={toggleVisibility}>{data.isHided ? 'Make visible' : 'Make hidden'}</Button>
             <Button size='sm' onClick={viewHorses}>View horses</Button>
-            <Button size='sm' className='bg-main-color font-bold'
-                onClick={() => {
-                    setIsOpenHorseNamesExcelModal(true);
-                }}>Upload horse names XLSX
+            <Button size='sm' onClick={gotoManageCandidAwardShotPage}>
+                Manage for Candid/Award shots
             </Button>
+
+
+            <DropdownMenu>
+                <DropdownMenuTrigger>
+                    <Menu className=''></Menu>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    {!data.isDeleted &&
+                        <DropdownMenuItem onClick={() => {
+                            setIsOpenDeleteConfirmModal(true);
+                        }}>
+                            <div className='flex items-center gap-2'>
+                                <Trash></Trash>
+                                <span>Delete</span>
+                            </div>
+                        </DropdownMenuItem>
+                    }
+                    <DropdownMenuItem onClick={toggleVisibility}>
+                        <div className='flex items-center gap-2'>
+                            <Eye></Eye>
+                            <span>{data.isHided ? 'Make visible' : 'Make hidden'}</span>
+                        </div>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => {
+                        setIsOpenHorseNamesExcelModal(true);
+                    }}>
+                        <div className='flex items-center gap-2'>
+                            <Sheet></Sheet>
+                            <span>Upload horse names XLSX</span>
+                        </div>
+                    </DropdownMenuItem>
+                    {/* <DropdownMenuItem onClick={() => { }}>
+                        <div className='flex items-center gap-2'>
+                            <span>Contact us</span>
+                        </div>
+                    </DropdownMenuItem> */}
+                </DropdownMenuContent>
+            </DropdownMenu>
+
 
             <Modal
                 title='Delete confirm'
@@ -103,6 +144,6 @@ export default function ({ data }: CellActionProps) {
                 }} />
 
 
-        </div>
+        </div >
     )
 }

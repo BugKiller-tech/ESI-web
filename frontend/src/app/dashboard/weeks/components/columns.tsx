@@ -17,14 +17,16 @@ export const columns: ColumnDef<WeekInfo>[] = [
         header: 'Week Number',
     },
     {
-        accessorKey: 'isDeleted',
+        accessorKey: 'isHided',
         header: 'Is visible',
         cell: ({ row }) => {
-            return row.getValue('isDeleted') ? 'No' : 'Yes';
+            return row.getValue('isHided') ? 'No' : 'Yes';
+            // return row.getValue('isDeleted') ? 'No' : 'Yes';
         }
     },
     {
         id: 'actions',
+        header: 'Actions',
         cell: ({ row }) => <CellAction data={row.original} />
     }
 ];

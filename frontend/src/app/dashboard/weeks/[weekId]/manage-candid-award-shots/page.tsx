@@ -5,7 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import * as APIs from "@/apis";
 import { toast } from 'sonner';
 
-import ListHorseImages from '../../components/ListHorseImages';
+import ListHorseImages from '../components/ListHorseImages';
 import { WeekInfo } from 'types';
 
 type pageProps = {
@@ -28,7 +28,7 @@ export default async function ({
 
     let horseImages: any[] = [];
     try {
-        const response = await APIs.getHorseImagesByHorseNumberForAdmin(weekId, horseNumber, session?.user?.accessToken);
+        const response = await APIs.getUnprocessedImagesForCandidAward(weekId, session?.user?.accessToken);
         if (response.data) {
             horseImages = response.data.horseImages;
         }
@@ -46,6 +46,11 @@ export default async function ({
         console.log(error);
     }
 
+    let weekDispName = '';
+    if (week) {
+        weekDispName = `${week.state} - ${week.year} - ${week.weekNumber}`;
+    }
+
 
 
 
@@ -54,14 +59,25 @@ export default async function ({
             <div className='flex flex-1 flex-col space-y-4'>
                 <div className='flex items-start justify-between'>
                     <Heading
-                        title={`Horse images for horse number "${horseNumber}"`}
-                        description='Horse images for the above horse number'
+                        title={`Manage Candid / Award shots for  "${weekDispName}"`}
+                        description='Listing all photos whatever horse # is. If you checked all photos, this page will be empty'
                     />
                 </div>
                 <Separator />
-                <ListHorseImages
-                    week={week}
-                    horseImages={horseImages} />
+                {horseImages.length > 0 && (
+                    <ListHorseImages
+                        week={week}
+                        horseImages={horseImages} 
+                        isForCandidIdentifying={true} />
+                )}
+
+                {
+                    horseImages.length == 0 && (
+                        <div className='pt-20 flex justify-center text-2xl text-main-color'>
+                            All good, no more photos to identify candid/award shots
+                        </div>
+                    )
+                }
             </div>
         </PageContainer>
     )
