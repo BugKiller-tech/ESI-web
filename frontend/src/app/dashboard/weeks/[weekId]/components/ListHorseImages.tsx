@@ -182,6 +182,7 @@ export default function ListHorseImages({
 
     const markImagesAsProcessedForCandidAwardCheck = async () => {
         try {
+            fullScreenLoader.showLoader();
             const response = await APIs.markImagesAsProcessedForCandidAwardCheck({
                 weekId: week._id,
                 horseImageIds: horseImages.map(h => h._id),
@@ -191,6 +192,8 @@ export default function ListHorseImages({
             router.refresh();
         } catch (error) {
             console.log(error);
+        } finally {
+            fullScreenLoader.hideLoader();
         }
     }
 
@@ -364,7 +367,7 @@ export default function ListHorseImages({
                                     message: 'Do you want to mark all the displayed images as confirmed for the Candid/Award shots check?' });
                                 if (result) {
                                     console.log('good');
-                                    markImagesAsProcessedForCandidAwardCheck();
+                                    await markImagesAsProcessedForCandidAwardCheck();
                                 } else {
                                     console.log('nope');
                                 }
