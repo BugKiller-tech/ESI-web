@@ -395,12 +395,12 @@ export default function ListHorseImages({
                                                         <td className='text-left'>Horse #: </td>
                                                         <td>{horse.horseNumber}</td>
                                                     </tr>
-                                                    <tr>
-                                                        <td className='text-left text-xs'>photo taken: </td>
-                                                        <td className='text-xs'>{toLocalDateTimeStr(horse.photoTakenTime)}</td>
-                                                    </tr>
                                                 </>
                                             )}
+                                            <tr>
+                                                <td className='text-left text-xs'>photo taken: </td>
+                                                <td className='text-xs'>{toLocalDateTimeStr(horse.photoTakenTime)}</td>
+                                            </tr>
 
                                             {/* <tr>
                                             <td></td>
