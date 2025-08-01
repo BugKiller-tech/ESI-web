@@ -132,10 +132,13 @@ const searchCandidAndAwardHorses = async (req, res) => {
 
         let matchQueries = {
             week: new ObjectId(String(weekId)),
-            $or: [
-                { horseNumber: { $regex: /^Candid\s/, $options: 'i' } },
-                { horseNumber: { $regex: /^Award\s/, $options: 'i' } }
-            ]
+            horseNumber: {
+                $regex: /^(Candid|Award)/i
+            },
+            // $or: [
+            //     { horseNumber: { $regex: /^Candid\s/, $options: 'i' } },
+            //     { horseNumber: { $regex: /^Award\s/, $options: 'i' } }
+            // ]
         }
         
         const horseNames = await HorsesImageModel.find(matchQueries).distinct('horseNumber').sort({

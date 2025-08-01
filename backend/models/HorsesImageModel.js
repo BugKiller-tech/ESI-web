@@ -44,6 +44,9 @@ const schema = new mongoose.Schema({
     }
 })
 
+schema.index({ week: 1, horseNumber: 1 })
+
+
 schema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model('HorsesImageModel', schema);

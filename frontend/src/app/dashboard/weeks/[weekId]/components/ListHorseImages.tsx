@@ -34,6 +34,7 @@ import { ThumbnailImageProps } from '@/components/react-grid-gallery';
 import { Checkbox } from '@/components/ui/checkbox';
 import { CheckIcon } from '@radix-ui/react-icons';
 import { toast } from 'sonner';
+import clsx from 'clsx';
 
 const ImageComponent = (props: ThumbnailImageProps) => {
     const { key, ...otherImageProps } = props.imageProps
@@ -89,6 +90,53 @@ export default function ListHorseImages({
 
     const [horseImageUrlToDisplayBig, setHorseImageUrlToDisplayBig] = useState<string>('');
 
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+    const [isShiftHeld, setIsShiftHeld] = useState<boolean>(false);
+    const [lastClickedCardIndex, setLastClickedCardIndex] = useState(null);
+    const [imageIdsInRangeForMultiSelect, setImageIdsInRangeForMultiSelect] = useState<string[]>([]);
+
+
+
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Shift") {
+                setIsShiftHeld(true);
+            }
+        };
+
+        const handleKeyUp = (e: KeyboardEvent) => {
+            if (e.key === "Shift") {
+                setIsShiftHeld(false);
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        window.addEventListener("keyup", handleKeyUp);
+
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+            window.removeEventListener("keyup", handleKeyUp);
+        };
+    }, []);
+
+    useEffect(() => {
+        let clearMultiVisualization = false;
+        if (hoveredIndex != null) {
+            if (isShiftHeld) {
+                const idsInRange = getIdsInRange(hoveredIndex);
+                setImageIdsInRangeForMultiSelect(idsInRange);
+            } else {
+                clearMultiVisualization = true;
+            }
+        } else {
+            clearMultiVisualization = true;
+        }
+        if (clearMultiVisualization && imageIdsInRangeForMultiSelect.length > 0) {
+            setImageIdsInRangeForMultiSelect([]);
+        }
+    }, [hoveredIndex, isShiftHeld]);
+
 
     useEffect(() => {
         if (checkedHorseImageIds.length == 0) {
@@ -97,17 +145,14 @@ export default function ListHorseImages({
     }, [checkedHorseImageIds])
 
 
-    if (horseImages.length > 0) {
 
-    }
-
-    const dispImages = horseImages.map(h => {
-        return {
-            src: h.thumbnailS3Link,
-            width: h.aspectRatio * 250,
-            height: 250,
-        }
-    })
+    // const dispImages = horseImages.map(h => {
+    //     return {
+    //         src: h.thumbnailS3Link,
+    //         width: h.aspectRatio * 250,
+    //         height: 250,
+    //     }
+    // })
 
 
     const toLocalDateTimeStr = (timeStamp: string) => {
@@ -131,6 +176,8 @@ export default function ListHorseImages({
     // }
 
     const refreshRouterIfNeeded = () => {
+        setLastClickedCardIndex(null);
+
         if (!isForCandidIdentifying) {
             router.refresh();
         } else {
@@ -197,6 +244,54 @@ export default function ListHorseImages({
         }
     }
 
+    const getIdsInRange = (index: number) => {
+        if (lastClickedCardIndex == null) {
+            return [];
+        }
+        // Select range
+        const start = Math.min(lastClickedCardIndex, index);
+        const end = Math.max(lastClickedCardIndex, index);
+        const idsInRange = horseImages.slice(start, end + 1).map(img => img._id);
+        return idsInRange;
+
+    }
+
+    const handleCardClick = (e: React.MouseEvent<HTMLDivElement>, index: number) => {
+        let newSelected = [...checkedHorseImageIds];
+
+        if (e.shiftKey && lastClickedCardIndex !== null) {
+            const idsInRange = getIdsInRange(index);
+            // Merge selected
+            newSelected = Array.from(new Set([...newSelected, ...idsInRange]));
+            setLastClickedCardIndex(null);
+        } else {
+            if (lastClickedCardIndex == index) {
+                setLastClickedCardIndex(null);
+            } else {
+                setLastClickedCardIndex(index);
+            }
+        }
+
+        setCheckedHorseImageIds(newSelected);
+    };
+
+    const handleMouseEnter = (
+        e: React.MouseEvent<HTMLDivElement>,
+        index: number
+    ) => {
+        if (lastClickedCardIndex != null) {
+            setHoveredIndex(index);
+        }
+    };
+
+    const handleMouseLeave = (
+        e: React.MouseEvent<HTMLDivElement>,
+        index: number
+    ) => {
+        if (hoveredIndex != null) {
+            setHoveredIndex(null);
+        }
+    };
 
     return (
         <div>
@@ -266,10 +361,15 @@ export default function ListHorseImages({
                 {horseImages.map((horse, index) => {
                     return (
                         <div key={horse.horseNumber + index}
-                            className='cursor-pointer
-                            rounded-lg overflow-hidden
-                            flex flex-col
-                            bg-center bg-no-repeat bg-cover'
+                            className={clsx('cursor-pointer rounded-lg overflow-hidden select-none',
+                                'flex flex-col',
+                                'bg-center bg-no-repeat bg-cover',
+                                lastClickedCardIndex == index && 'border-4 border-red-500',
+                                imageIdsInRangeForMultiSelect.includes(horse._id) && 'border-4 border-red-500'
+                            )}
+                            onClick={(event) => handleCardClick(event, index)}
+                            onMouseEnter={(event) => handleMouseEnter(event, index)}
+                            onMouseLeave={(event) => handleMouseLeave(event, index)}
 
                         // style={{ backgroundImage: `url(/horse_folder.png)` }}
                         >
@@ -312,7 +412,10 @@ export default function ListHorseImages({
                                 </div>
                                 <div className='px-3 flex-1 flex items-center justify-between py-1 gap-2'>
                                     <Checkbox className='w-6 h-6'
-                                        onClick={() => toggleSelectionForImage(horse._id)}
+                                        onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+                                            event.stopPropagation()
+                                            toggleSelectionForImage(horse._id)
+                                        }}
                                         checked={checkedHorseImageIds.includes(horse._id)}>
                                     </Checkbox>
                                     <span className='flex-1'></span>
@@ -362,9 +465,10 @@ export default function ListHorseImages({
                             className='bg-main-color'
                             onClick={async () => {
                                 console.log('testing')
-                                const result = await confirm({ 
+                                const result = await confirm({
                                     title: 'Confirmation',
-                                    message: 'Do you want to mark all the displayed images as confirmed for the Candid/Award shots check?' });
+                                    message: 'Do you want to mark all the displayed images as confirmed for the Candid/Award shots check?'
+                                });
                                 if (result) {
                                     console.log('good');
                                     await markImagesAsProcessedForCandidAwardCheck();
