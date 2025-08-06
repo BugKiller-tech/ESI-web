@@ -149,11 +149,13 @@ const createStripeCheckoutSession = async (req, res) => {
             lastName: req.body.lastName,
             email: req.body.email,
             phoneNumber: req.body.phoneNumber,
-            shippingAddress: shippingAddress || '',
-            // street: req.body.street || '',
-            // city: req.body.city || '',
-            // state: req.body.state || '',
-            // zipCode: req.body.zipCode || '',
+            
+            shippingAddress: shippingAddress || '', // combination of street, city, state
+            street: req.body.street || '',
+            city: req.body.city || '',
+            state: req.body.state || '',
+            zipCode: req.body.zipCode || '',
+            
             cartItems: cartItems,
             subTotal: subTotal,
             taxAmount: taxAmount,

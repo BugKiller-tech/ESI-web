@@ -86,7 +86,7 @@ export default () => {
                 setOrder(od);
                 toast.success('Successfully refunded the order');
             }
-            
+
         } catch (error) {
             console.log(error);
             toast.error('Failed to refund the order');
@@ -100,7 +100,7 @@ export default () => {
             toast.info('Preparing the download..');
             fullScreenLoader.showLoader();
             const response = await APIs.downloadImagesZipForOrder(order._id, session?.user?.accessToken);
-            
+
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
@@ -188,7 +188,11 @@ export default () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Shipping address</td>
-                                                    <td>{order.shippingAddress} { order.zipCode }</td>
+                                                    <td>{order.shippingAddress}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Zip code</td>
+                                                    <td>{order.zipCode}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Payment status</td>
