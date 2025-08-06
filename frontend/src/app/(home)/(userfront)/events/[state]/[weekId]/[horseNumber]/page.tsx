@@ -86,7 +86,9 @@ export default () => {
 
         setSelectedHorse(horseImages[index]);
         setIsOpenCartModal(true);
-        e.stopPropagation();
+        if (e) {
+            e.stopPropagation();
+        }
     }
 
 
@@ -160,6 +162,18 @@ export default () => {
                 index={currentImageIndex}
                 slides={images}
                 plugins={[Fullscreen, Slideshow, Thumbnails, Zoom]}
+                zoom={{
+                    maxZoomPixelRatio: 2,
+                }}
+                
+                toolbar={{
+                    buttons: [
+                        <Button key='back_to_photos'
+                            onClick={() => {
+                                setOpenImageModal(false);
+                            }}>Back to photos</Button>,
+                    ]
+                }}
             />
 
 

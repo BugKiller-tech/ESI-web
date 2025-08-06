@@ -30,4 +30,11 @@
     max-height: 100%;
     object-fit: contain;
   }
+
+  // Overrride the yet-another 
+  .yarl__toolbar {
+    align-items: center;
+    gap: 5px;
+    padding-right: 15px;
+  }
   
