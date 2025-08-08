@@ -143,8 +143,7 @@ export default () => {
                 {photos.map((photo, index) => (
                     <div className={clsx('cell',
                         currentImageIndex != index && 'border border-gray-300',
-                        currentImageIndex == index && 'border-2 border-main-color rotate-3 scale-105',
-                        'hover:rotate-3'
+                        currentImageIndex == index && 'border-2 border-main-color scale-105',
                     )} key={index}>
                         <div className="image-wrapper cursor-pointer" onClick={() => {
                             setCurrentImageIndex(index);
