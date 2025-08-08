@@ -143,7 +143,7 @@ export const AddCartModal: React.FC<AddCartModalProps> = ({
             description='Please select the product you want to purchase for the selected image'
             isOpen={isOpen}
             onClose={onClose}
-            className='max-w-full w-[600px]'
+            className='max-w-full w-[600px] z-[9999]'
         >
             <div className='flex flex-col md:flex-row gap-2'>
                 <div>

@@ -28,6 +28,7 @@ import * as APIs from '@/apis';
 
 import './style.scss';
 import { Button } from '@/components/ui/button';
+import clsx from 'clsx';
 
 export default () => {
 
@@ -45,7 +46,7 @@ export default () => {
 
     const [horseImages, setHorseImages] = useState<HorseImageInfo[]>([]);
     const [openImageModal, setOpenImageModal] = useState(false);
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [currentImageIndex, setCurrentImageIndex] = useState(null);
 
     const fetchHorseImages = async () => {
         try {
@@ -67,15 +68,19 @@ export default () => {
 
 
     const height = 200;
-    const photos = horseImages.map(h => {
+    let photos = horseImages.map(h => {
         return {
             width: h.aspectRatio * height,
             height: height,
             src: h.thumbnailS3Link,
-            originImageName: h.originImageName
+            originImageName: h.originImageName,
+
+            thumbWebS3Link: h.thumbWebS3Link,
         }
     });
-    const images = horseImages.map(h => {
+    // photos = [...photos, ...photos, ...photos, ...photos, ...photos, ...photos]  // temp code for testing. must be removed before push
+
+    const thumbWebImages = photos.map(h => {
         return {
             src: h.thumbWebS3Link
         }
@@ -136,7 +141,11 @@ export default () => {
             </div> */}
             <div className="grid-container">
                 {photos.map((photo, index) => (
-                    <div className="cell" key={index}>
+                    <div className={clsx('cell',
+                        currentImageIndex != index && 'border border-gray-300',
+                        currentImageIndex == index && 'border-2 border-main-color rotate-3 scale-105',
+                        'hover:rotate-3'
+                    )} key={index}>
                         <div className="image-wrapper cursor-pointer" onClick={() => {
                             setCurrentImageIndex(index);
                             setOpenImageModal(true);
@@ -160,14 +169,23 @@ export default () => {
                 open={openImageModal}
                 close={() => setOpenImageModal(false)}
                 index={currentImageIndex}
-                slides={images}
+                slides={thumbWebImages}
                 plugins={[Fullscreen, Slideshow, Thumbnails, Zoom]}
                 zoom={{
                     maxZoomPixelRatio: 2,
                 }}
-                
+                on={{
+                    view: ({ index }) => {
+                        setCurrentImageIndex(index);
+                    }
+                }}
                 toolbar={{
                     buttons: [
+                        <Button key='add_to_cart'
+                            className='bg-main-color font-bold text-white'
+                            onClick={() => {
+                                displayAddToCartPopup(null, currentImageIndex);
+                            }}>Add to cart</Button>,
                         <Button key='back_to_photos'
                             onClick={() => {
                                 setOpenImageModal(false);
